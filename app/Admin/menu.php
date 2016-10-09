@@ -15,34 +15,52 @@ return [
     */
 
     [
-        'title' => 'Index',
+        'title' => '控制面板',
         'url'   => '/',
         'icon'  => 'fa-bar-chart'
     ],
+
     [
-        'title' => '用户列表',
-        'url'   => 'users',
-        'icon'  => 'fa-users',
+        'title' => '文章管理',
+        'icon'  => 'fa-newspaper-o',
+        'children' => [
+            [
+                'title' => '发表文章',
+                'url'   => 'articles/create',
+                'icon'  => 'fa-pencil-square-o',
+            ],
+            [
+                'title' => '文章审核',
+                'url'   => 'articles/create',
+                'icon'  => 'fa-book',
+            ],
+        ],
     ],
+
     [
-        'title' => 'Auth',
-        'icon'  => 'fa-tasks',
+        'title' => '权限管理',
+        'icon'  => 'fa-users',
         'children' => [
                 [
-                    'title' => 'Users',
+                    'title' => '用户',
                     'url'   => 'auth/users',
                     'icon'  => 'fa-user',
                 ],
                 [
-                    'title' => 'Roles',
+                    'title' => '角色',
                     'url'   => 'auth/roles',
                     'icon'  => 'fa-user',
                 ],
                 [
-                    'title' => 'Permissions',
+                    'title' => '权限',
                     'url'   => 'auth/permissions',
                     'icon'  => 'fa-user',
                 ],
             ]
+    ],
+    [
+        'title' => '频道管理',
+        'url'   => 'channels',
+        'icon'  => 'fa-tasks',
     ],
 ];
