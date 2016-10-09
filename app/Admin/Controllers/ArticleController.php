@@ -33,13 +33,14 @@ class ArticleController extends Controller
      */
     public function create()
     {
-        return Admin::content(function (Content $content) {
-
-            $content->header('header');
-            $content->description('description');
-
-            $content->body($this->form());
-        });
+        return view('admin.article.create');
+//        return Admin::content(function (Content $content) {
+//
+//            $content->header('header');
+//            $content->description('description');
+//
+//            $content->body($this->form());
+//        });
     }
 
 
@@ -85,21 +86,23 @@ class ArticleController extends Controller
      */
     protected function form()
     {
-        return Admin::form(Article::class, function (Form $form) {
-            $form->switch('type', '图片新闻');
-            $form->text('title', '标题');
-            $form->color('title_color', '标题颜色')->default('#ccc');
-            $form->switch('title_font', '标题粗体')->states(['on' => 1, 'off' => 0]);
-            $form->text('subtitle', '副标题');
-            $form->image('cover_pic', '封面图');
-            $form->multipleSelect('keyword', '关键字')->options();
-            $form->dateTime('created_at', trans('admin::lang.created_at'));
-            $form->textarea('description', '内容简介');
-            $form->editor('content', '正文内容');
-            $form->text('source', '信息来源');
-            $form->switch('is_top', '头条');
-            //$form->number('slide_position', '幻灯片位置');
-            $form->slider('slide_position', '幻灯片位置')->options(['max' => 6, 'min' => 1, 'step' => 1]);
-        });
+        return date("Y-m-d H:i:s");
+        //return view('welcome');
+//        return Admin::form(Article::class, function (Form $form) {
+//            $form->switch('type', '图片新闻');
+//            $form->text('title', '标题');
+//            $form->color('title_color', '标题颜色')->default('#ccc');
+//            $form->switch('title_font', '标题粗体')->states(['on' => 1, 'off' => 0]);
+//            $form->text('subtitle', '副标题');
+//            $form->image('cover_pic', '封面图');
+//            $form->multipleSelect('keyword', '关键字')->options();
+//            $form->dateTime('created_at', trans('admin::lang.created_at'));
+//            $form->textarea('description', '内容简介');
+//            $form->editor('content', '正文内容');
+//            $form->text('source', '信息来源');
+//            $form->switch('is_top', '头条');
+//            //$form->number('slide_position', '幻灯片位置');
+//            $form->slider('slide_position', '幻灯片位置')->options(['max' => 6, 'min' => 1, 'step' => 1]);
+//        });
     }
 }
