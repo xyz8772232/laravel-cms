@@ -86,13 +86,20 @@ class ArticleController extends Controller
     protected function form()
     {
         return Admin::form(Article::class, function (Form $form) {
-
-            $form->display('id', 'ID');
-            $form->text('name', '频道名');
-            $form->text('parent_id', '父频道名');
-
+            $form->switch('type', '图片新闻');
+            $form->text('title', '标题');
+            $form->color('title_color', '标题颜色')->default('#ccc');
+            $form->switch('title_font', '标题粗体')->states(['on' => 1, 'off' => 0]);
+            $form->text('subtitle', '副标题');
+            $form->image('cover_pic', '封面图');
+            $form->multipleSelect('keyword', '关键字')->options();
             $form->dateTime('created_at', trans('admin::lang.created_at'));
-            $form->dateTime('updated_at', trans('admin::lang.updated_at'));
+            $form->textarea('description', '内容简介');
+            $form->editor('content', '正文内容');
+            $form->text('source', '信息来源');
+            $form->switch('is_top', '头条');
+            //$form->number('slide_position', '幻灯片位置');
+            $form->slider('slide_position', '幻灯片位置')->options(['max' => 6, 'min' => 1, 'step' => 1]);
         });
     }
 }
