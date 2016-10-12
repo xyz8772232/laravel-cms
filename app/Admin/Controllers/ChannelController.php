@@ -133,7 +133,7 @@ class ChannelController extends Controller
 
             $form->display('id', 'ID');
             $form->text('name', '频道名');
-            $form->text('parent_id', '父频道名');
+            $form->text('administrate_id', '父频道名');
 
             $form->dateTime('created_at', trans('admin::lang.created_at'));
             $form->dateTime('updated_at', trans('admin::lang.updated_at'));

@@ -6,7 +6,7 @@ return [
 
     'directory' => app_path('Admin'),
 
-    'title'  => 'Admin',
+    'title'  => '后台管理系统',
 
     'auth' => [
         'driver'   => 'session',
