@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateContentsTable extends Migration
+class CreateArticleInfosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,16 @@ class CreateContentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('contents', function (Blueprint $table) {
+        Schema::create('article_infos', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('article_id');
-            $table->text('content');
+            $table->unsignedBigInteger('view_num')->default(0);
+            $table->unsignedBigInteger('comment_num')->default(0);
 
-            //index
             $table->unique('article_id');
+            $table->index('view_num');
+            $table->index('comment_num');
+
         });
     }
 
@@ -30,6 +33,6 @@ class CreateContentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('contents');
+        Schema::dropIfExists('article_infos');
     }
 }

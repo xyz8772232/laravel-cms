@@ -11,7 +11,9 @@ class RolesTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('roles')->insert(
+        \Encore\Admin\Auth\Database\Role::truncate();
+        \Encore\Admin\Auth\Database\Role::create(['name' => '管理员', 'slug'=> 'administrator']);
+        \Encore\Admin\Auth\Database\Role::create(
             ['name' => '责任编辑', 'slug' => 'responsible_editor']
         );
         \Encore\Admin\Auth\Database\Role::create(

@@ -109,30 +109,10 @@
                                     </div>
                                 </div>
                                 <div class="form-group 1">
-
-                                    <label for="keyword" class="col-sm-2 control-label">关键字</label>
-
+                                    {!! Form::label('keywords','关键字', ['class' => 'col-sm-2 control-label']) !!}
                                     <div class="col-sm-6">
 
-
-                                        <select class="form-control" id="keyword" name="keyword[]" multiple="multiple"
-                                                data-placeholder="选择关键字">
-                                        </select>
-                                        <input type="hidden" name="keyword[]">
-                                    </div>
-                                </div>
-                                <div class="form-group 1">
-
-                                    <label for="created_at" class="col-sm-2 control-label">创建时间</label>
-
-                                    <div class="col-sm-6">
-
-
-                                        <div class="input-group">
-                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                            <input type="text" id="created_at" name="created_at" value=""
-                                                   class="form-control" placeholder="输入 创建时间" style="width: 160px"/>
-                                        </div>
+                                        {!! Form::select('keywords[]',$keywords,null,['class'=>'form-control','multiple'=>'multiple', 'data-placeholder' => '选择关键字', 'id' => 'keywords']) !!}
                                     </div>
                                 </div>
                                 <div class="form-group 1">
@@ -183,17 +163,22 @@
 
                                     </div>
                                 </div>
+
                                 <div class="form-group 1">
 
-                                    <label for="slide_position" class="col-sm-2 control-label">幻灯片位置</label>
+                                    <label for="published_at" class="col-sm-2 control-label">发布时间</label>
 
                                     <div class="col-sm-6">
 
 
-                                        <input type="text" id="slide_position" name="slide_position" data-from="">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                            <input type="text" id="published_at" name="published_at"
+                                                   value="{{ date('Y-m-d H:i:s') }}"
+                                                   class="form-control" placeholder="输入 发布时间" style="width: 160px"/>
+                                        </div>
                                     </div>
                                 </div>
-
                             </div>
                             <!-- /.box-body -->
                             <div class="box-footer">
@@ -224,7 +209,7 @@
         </section>
 @endsection
 
-@section('js')
+@section('admin_js')
     <script data-exec-on-popstate>
 
         $(function () {
@@ -247,7 +232,7 @@
                 onSwitchChange: function(event, state) {
                     $('#type').val(state ? 'on' : 'off');
                 }
-            });;
+            });
 
             $('#title_color').colorpicker();
 
@@ -256,7 +241,7 @@
                 onSwitchChange: function(event, state) {
                     $('#title_font').val(state ? 'on' : 'off');
                 }
-            });;
+            });
 
 
             $("#cover_pic").fileinput({"overwriteInitial":true,"showUpload":false,"language":"zh_CN","allowedFileTypes":["image"],"initialCaption":""});
@@ -265,8 +250,8 @@
                 $("#cover_pic_action").val(1);
             });
 
-            $("#keyword").select2({allowClear: true});
-            $('#created_at').datetimepicker({"format":"YYYY-MM-DD HH:mm:ss","locale":"zh_CN"});
+            $("#keywords").select2({allowClear: true});
+            $('#published_at').datetimepicker({"format":"YYYY-MM-DD HH:mm:ss","locale":"zh_CN"});
             CKEDITOR.replace('content');
 
             $('#is_top_checkbox').bootstrapSwitch({
@@ -274,9 +259,7 @@
                 onSwitchChange: function(event, state) {
                     $('#is_top').val(state ? 'on' : 'off');
                 }
-            });;
-
-            $('#slide_position').ionRangeSlider({"type":"single","prettify":false,"hasGrid":true,"max":6,"min":1,"step":1})
+            });
         });
     </script>
 @endsection

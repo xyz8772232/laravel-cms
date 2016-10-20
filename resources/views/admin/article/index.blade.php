@@ -58,21 +58,20 @@
                                 <th>标题</th>
                                 <th>作者</th>
                                 <th>创建时间</th>
-                                <th>更新时间</th>
                                 <th>操作</th>
                             </tr>
-
+                            @foreach($articles as $article)
                             <tr >
-                                <td><input type="checkbox" class="grid-item" data-id="1"></td>
-                                <td>1</td>
-                                <td>122</td>
-                                <td>0</td>
-                                <td>2016-10-15 16:51:44</td>
-                                <td>2016-10-15 16:51:44</td>
+                                <td><input type="checkbox" class="grid-item" data-id="{{ $article->id }}"></td>
+                                <td>{{ $article->id }}</td>
+                                <td>{{ $article->title }}</td>
+                                <td>{{ $article->author_id }}</td>
+                                <td>{{ $article->created_at }}</td>
                                 <td>
-                                    <a href="/admin/articles/1/edit"><i class="fa fa-edit"></i></a>  <a href="javascript:void(0);" data-id="1" class="_delete"><i class="fa fa-trash"></i></a>
+                                    <a href="{{route('articles.edit', [$article->id])}}"><i class="fa fa-edit"></i></a>  <a href="javascript:void(0);" data-id="{{ $article->id }}" class="_delete"><i class="fa fa-trash"></i></a>
                                 </td>
                             </tr>
+                                @endforeach
                         </table>
                     </div>
                     <div class="box-footer clearfix">
@@ -80,19 +79,7 @@
 
                         <a class="btn btn-sm btn-primary grid-refresh"><i class="fa fa-refresh"></i></a>
 
-                        <ul class="pagination pagination-sm no-margin pull-right">
-                            <!-- Previous Page Link -->
-                            <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
-
-                            <!-- Pagination Elements -->
-                            <!-- "Three Dots" Separator -->
-
-                            <!-- Array Of Links -->
-                            <li class="page-item active"><span class="page-link">1</span></li>
-
-                            <!-- Next Page Link -->
-                            <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
-                        </ul>
+                        {{ $articles->appends(['sort' => 'votes'])->links('admin::pagination') }}
 
                     </div>
                     <!-- /.box-body -->
