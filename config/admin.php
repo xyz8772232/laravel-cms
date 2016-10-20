@@ -6,7 +6,7 @@ return [
 
     'directory' => app_path('Admin'),
 
-    'title'  => '后台管理系统',
+    'title'  => 'Admin',
 
     'auth' => [
         'driver'   => 'session',
@@ -20,17 +20,21 @@ return [
     ],
 
     'database' => [
-        'users_table' => 'administrators',
+        'users_table' => 'admin_users',
         'users_model' => Encore\Admin\Auth\Database\Administrator::class,
 
-        'roles_table' => 'roles',
+        'roles_table' => 'admin_roles',
         'roles_model' => Encore\Admin\Auth\Database\Role::class,
 
-        'permissions_table' => 'permissions',
+        'permissions_table' => 'admin_permissions',
         'permissions_model' => Encore\Admin\Auth\Database\Permission::class,
 
-        'role_users_table'       => 'role_administrators',
-        'role_permissions_table' => 'role_permissions',
+        'menu_table'  => 'admin_menu',
+        'menu_model'  => Encore\Admin\Auth\Database\Menu::class,
+
+        'role_users_table'       => 'admin_role_users',
+        'role_permissions_table' => 'admin_role_permissions',
+        'role_menu_table'        => 'admin_role_menu',
     ],
 
     /*

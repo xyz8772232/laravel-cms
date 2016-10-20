@@ -225,6 +225,8 @@
 @endsection
 
 @section('js')
+    {{-- <script src="/packages/vue.js"></script>
+    <script src="http://localhost:8080/dist/js/articles-create.js"></script> --}}
     <script data-exec-on-popstate>
 
         $(function () {

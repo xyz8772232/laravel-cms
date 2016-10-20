@@ -124,11 +124,14 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        return Admin::content(function(Content $content) {
-            $content->header('header');
-            $content->description('description');
-            $content->body($this->grid());
-        });
+         $header = '文章列表';
+                $description = '描述';
+                return view('admin.article.index', ['header' => $header, 'description' => $description]);
+        //        return Admin::content(function(Content $content) {
+        //            $content->header('header');
+        //            $content->description('description');
+        //            $content->body($this->grid());
+        //        });
     }
 
     /**
@@ -138,16 +141,16 @@ class ArticleController extends Controller
      */
     public function create()
     {
-//        $header = '发表文章';
-//        $description = '描述';
-//        return view('admin.article.create', ['header' => $header, 'description' => $description]);
-        return Admin::content(function (Content $content) {
-
-            $content->header('header');
-            $content->description('description');
-
-            $content->body($this->form());
-        });
+        $header = '发表文章';
+        $description = '描述';
+        return view('admin.article.create', ['header' => $header, 'description' => $description]);
+//        return Admin::content(function (Content $content) {
+//
+//            $content->header('header');
+//            $content->description('description');
+//
+//            $content->body($this->form());
+//        });
     }
 
 
