@@ -168,6 +168,8 @@ return [
          */
         Encore\Admin\Providers\AdminServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
+        Collective\Html\HtmlServiceProvider::class,
+
 
         /*
          * Application Service Providers...
@@ -228,6 +230,8 @@ return [
 
         //package service provide
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
+        'Form' => Collective\Html\FormFacade::class,
+        'Html' => Collective\Html\HtmlFacade::class,
 
     ],
 

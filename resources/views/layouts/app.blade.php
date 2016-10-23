@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/plugins/ionslider/ion.rangeSlider.css") }}">
     <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/plugins/ionslider/ion.rangeSlider.skinNice.css") }}">
     <link rel="stylesheet" href="{{ asset("/packages/admin/codemirror/lib/codemirror.css") }}">
+    <link rel="stylesheet" href="{{ asset("/packages/admin/nestable/nestable.css") }}">
 
     <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/dist/css/AdminLTE.min.css") }}">
     @yield('css')
@@ -48,8 +49,10 @@
     @include('admin::partials.sidebar')
 
     <div class="content-wrapper" id="pjax-container">
+        @include('include.error')
         @yield('content')
         {!! Admin::script() !!}
+        @yield('admin_js')
     </div>
 
     @include('admin::partials.footer')
@@ -78,16 +81,18 @@
 <script src="{{ asset ("/packages/admin/codemirror/lib/codemirror.js") }}"></script>
 <script src="{{ asset ("/packages/admin/codemirror/mode/javascript/javascript.js") }}"></script>
 <script src="{{ asset ("/packages/admin/codemirror/addon/edit/matchbrackets.js") }}"></script>
-
-@if(config('app.locale') == 'zh_CN')
-    <script src="{{ asset ("http://map.qq.com/api/js?v=2.exp") }}"></script>
-@else
-    <script src="{{ asset ("https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false") }}"></script>
-@endif
+<script src="{{ asset ("/packages/admin/nestable/jquery.nestable.js") }}"></script>
 
 <script>
 
-    $(document).pjax('a:not(a[target="_blank"])', '#pjax-container');
+    $(document).pjax('a:not(a[target="_blank"])', {
+        timeout: 5000,
+        container: '#pjax-container'
+    });
+
+    $(document).on('submit', 'form[pjax-container]', function(event) {
+        $.pjax.submit(event, '#pjax-container')
+    })
 
     $(document).on("pjax:popstate", function() {
 

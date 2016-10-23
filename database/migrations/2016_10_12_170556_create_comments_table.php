@@ -20,8 +20,13 @@ class CreateCommentsTable extends Migration
             $table->string('ip',50)->nullable();
             $table->unsignedInteger('user_id')->comment('评论者id');
             $table->unsignedInteger('user_nick')->comment('评论者昵称');
+            $table->unsignedInteger('reply_to_id')->comment('被评论的id');
             $table->softDeletes();
             $table->timestamps();
+
+            $table->index('article_id');
+            $table->index('reply_to_id');
+            $table->index('user_id');
         });
     }
 

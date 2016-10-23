@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Article;
 use App\Keyword;
+use App\Tool;
 use Encore\Admin\Auth\Permission;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -13,12 +14,12 @@ use Encore\Admin\Layout\Content;
 use Encore\Admin\Grid;
 use Encore\Admin\Form;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Input;
 
 class ArticleController extends Controller
 {
-    use AdminController;
-
     /**
      * Store a new article.
      *
@@ -56,6 +57,12 @@ class ArticleController extends Controller
         if (is_array($request->keywords)) {
             $keywords = array_filter($request->keywords);
         }
+//        $exception = DB::transaction(function() use ($article, $keywords, $content) {
+//            $article->save();
+//            $article->keywords()->sync($keywords);
+//            $article->content()->save(new \App\Content(['content' => $content]));
+//        });
+//        dd($article);
 
         try {
         $exception = DB::transaction(function() use ($article, $keywords, $content) {
@@ -71,7 +78,7 @@ class ArticleController extends Controller
         }
 
         if ($result) {
-            return redirect($this->resource())
+            return redirect(Tool::resource())
                 ->withSuccess('New article Successfully Created.');
         }
 
@@ -100,14 +107,14 @@ class ArticleController extends Controller
 //        })->store();
     }
 
-    public function resource()
+
+
+    public function update($id, Request $request)
     {
-        $route = app('router')->current();
-        $prefix = $route->getPrefix();
-
-        $resource = trim(preg_replace("#$prefix#", '', $route->getUri(), 1), '/').'/';
-
-        return "/$prefix/".substr($resource, 0, strpos($resource, '/'));
+        $this->validate($request, [
+            'id' => 'required|exists:articles,id',
+        ]);
+        return $this->form()->update($id);
     }
 
     /**输出
@@ -116,22 +123,46 @@ class ArticleController extends Controller
      */
     public function destroy($id)
     {
-
+        $result = Article::findOrFail($id)->delete();
+        if ($result) {
+            return Tool::showSuccess('删除成功');
+        }
+        return Tool::showError('删除失败');
+        //return redirect()->back()->withInput()->withErrors('删除成功！');
     }
     /**
      * Index interface.
      * @return Content
      */
-    public function index()
+    public function index(Request $request)
     {
-         $header = '文章列表';
-                $description = '描述';
-                return view('admin.article.index', ['header' => $header, 'description' => $description]);
-        //        return Admin::content(function(Content $content) {
-        //            $content->header('header');
-        //            $content->description('description');
-        //            $content->body($this->grid());
-        //        });
+        $header = '文章列表';
+        $description = '描述';
+        $pageSize = $request->get('pageSize', 20);
+        $query = Input::all();
+        $articles = Article::paginate($pageSize)->appends($query);
+
+        return view('admin.article.index', ['header' => $header, 'description' => $description, 'articles' => $articles, 'pageSize' => $pageSize]);
+//        return Admin::content(function(Content $content) {
+//            $content->header('header');
+//            $content->description('description');
+//            $content->body($this->grid());
+//        });
+    }
+
+    public function link(Request $request)
+    {
+        $this->validate($request, [
+            'channel' => 'required|exists:channels,id,grade,4',
+            'title' => 'required|max:50',
+        ]);
+        $channel = $request->get('channel');
+        $title=  $request->get('title');
+        $result = Article::create(['channel' => $channel, 'title' => $title, 'is_link' => 1]);
+        if ($result) {
+            Tool::showSuccess('创建链接成功');
+        }
+        Tool::showError('创建链接失败');
     }
 
     /**
@@ -143,13 +174,38 @@ class ArticleController extends Controller
     {
         $header = '发表文章';
         $description = '描述';
-        return view('admin.article.create', ['header' => $header, 'description' => $description]);
+        $keywords = Keyword::pluck('name', 'id');
+
+        return view('admin.article.create', ['header' => $header, 'description' => $description, 'keywords' => $keywords]);
 //        return Admin::content(function (Content $content) {
 //
 //            $content->header('header');
 //            $content->description('description');
 //
 //            $content->body($this->form());
+//        });
+    }
+
+    /**
+     * Edit interface.
+     *
+     * @param $id
+     * @return Content
+     */
+    public function edit($id)
+    {
+        $header = '编辑文章';
+        $description = '描述';
+        $article = Article::with('keywords','content')->findOrFail($id);
+        $keywords = Keyword::pluck('name', 'id');
+        //dd($keywords, $article->keywords);
+        return view('admin.article.edit', ['header' => $header, 'description' => $description, 'article' => $article, 'keywords' => $keywords]);
+//        return Admin::content(function (Content $content) use ($id) {
+//
+//            $content->header('header');
+//            $content->description('description');
+//
+//            $content->body($this->form()->edit($id));
 //        });
     }
 
@@ -195,8 +251,8 @@ class ArticleController extends Controller
             $form->switch('title_font', '标题粗体');
             $form->text('subtitle', '副标题');
             $form->image('cover_pic', '封面图');
-            $form->multipleSelect('keywords', '关键字')->options(Keyword::all()->pluck('name', 'id'));
-            $form->dateTime('created_at', trans('admin::lang.created_at'));
+            //$form->multipleSelect('keywords', '关键字')->options(Keyword::all()->pluck('name', 'id'));
+           // $form->dateTime('created_at', trans('admin::lang.created_at'));
             $form->textarea('description', '内容简介');
             $form->editor('content', '正文内容');
             $form->text('source', '信息来源');

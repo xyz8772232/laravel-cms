@@ -17,6 +17,7 @@ use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\AdminController;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Request;
 
 class ChannelController extends Controller
 {
@@ -26,8 +27,12 @@ class ChannelController extends Controller
      * Index interface.
      * @return Content
      */
-    public function index()
+    public function index(Request $request)
     {
+//        $grade = $request->get('grade', 0);
+//        $header = '频道';
+//        $description = 'description';
+//        $channels = Channel::where('parent_id', $grade);
 
         return Admin::content(function(Content $content) {
           $content->header('header');
@@ -76,13 +81,13 @@ class ChannelController extends Controller
 
     public function store()
     {
-        if (empty(Input::get('parent_id'))) {
-            Input::merge(['parent_id' => 0]);
+        $parent_id = Input::get('parent_id', 0);
+        if (empty($parent_id)) {
+            $grade = 0;
         } else {
-
+            $grade = Channel::find($parent_id)->grade + 1;
         }
-        //dd(Input::all());exit;
-
+        Input::merge(['parent_id' => $parent_id, 'grade' => $grade]);
 
         return $this->form()->store();
     }
@@ -107,18 +112,18 @@ class ChannelController extends Controller
             });
 
             $grid->created_at(trans('admin::lang.created_at'));
-            $grid->updated_at(trans('admin::lang.updated_at'));
-            $grid->filter(function($filter){
-
-                // sql: ... WHERE `user.name` LIKE "%$name%";
-                $filter->like('name', '频道名');
-
-                // sql: ... WHERE `user.email` = $email;
-                $filter->is('parent_id', '父频道');
-
-                // sql: ... WHERE `user.created_at` BETWEEN $start AND $end;
-                $filter->between('created_at', trans('admin::lang.created_at'))->datetime();
-            });
+            //$grid->updated_at(trans('admin::lang.updated_at'));
+//            $grid->filter(function($filter){
+//
+//                // sql: ... WHERE `user.name` LIKE "%$name%";
+//                $filter->like('name', '频道名');
+//
+//                // sql: ... WHERE `user.email` = $email;
+//                $filter->is('parent_id', '父频道');
+//
+//                // sql: ... WHERE `user.created_at` BETWEEN $start AND $end;
+//                $filter->between('created_at', trans('admin::lang.created_at'))->datetime();
+//            });
         });
     }
 
@@ -133,10 +138,7 @@ class ChannelController extends Controller
 
             $form->display('id', 'ID');
             $form->text('name', '频道名');
-            $form->text('administrate_id', '父频道名');
-
-            $form->dateTime('created_at', trans('admin::lang.created_at'));
-            $form->dateTime('updated_at', trans('admin::lang.updated_at'));
+            $form->select('parent_id', '父频道')->options(Channel::pluck('name', 'id'));
         });
     }
 

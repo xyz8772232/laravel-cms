@@ -126,6 +126,6 @@
     <link rel="stylesheet" href="/css/index.css">
 @endsection
 
-@section('js')
+@section('admin_js')
     <script data-exec-on-popstate src="/js/index.js"></script>
 @endsection

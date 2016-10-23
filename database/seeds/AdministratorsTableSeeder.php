@@ -12,7 +12,7 @@ class AdministratorsTableSeeder extends Seeder
     public function run()
     {
         \Encore\Admin\Auth\Database\Administrator::create(
-            ['username' => 'admin', 'password' => bcrypt('admin'), 'name' => 'Administrator']
+            ['username' => '812250076@qq.com', 'password' => bcrypt('xiaotie'), 'name' => 'xiaotie']
         );
     }
 }

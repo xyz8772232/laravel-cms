@@ -20,8 +20,8 @@ return [
         'icon'  => 'fa-bar-chart'
     ],
     [
-        'title' => '权限管理',
-        'icon'  => 'fa-users',
+        'title' => '权限控制',
+        'icon'  => 'fa-user',
         'children' => [
             [
                 'title' => '用户',
@@ -42,8 +42,8 @@ return [
     ],
 
     [
-        'title' => '文章管理',
-        'icon'  => 'fa-newspaper-o',
+        'title' => '文章',
+        'icon'  => 'fa-book',
         'children' => [
             [
                 'title' => '发表文章',
@@ -53,21 +53,14 @@ return [
             [
                 'title' => '文章审核',
                 'url'   => 'articles',
-                'icon'  => 'fa-book',
+                'icon'  => 'fa-newspaper-o',
+            ],
+            [
+                'title' => '操作日志',
+                'url'   => 'article_logs',
+                'icon'  => 'fa-link',
             ],
         ],
-    ],
-
-    [
-        'title' => '评论管理',
-        'url' => 'comments',
-        'icon' => 'fa-comment',
-    ],
-
-    [
-        'title' => '投票管理',
-        'url' => 'votes',
-        'icon' => 'fa-calculator',
     ],
 
     [
@@ -76,24 +69,42 @@ return [
         'children' => [
             [
                 'title' => '文字链接',
-                'url'   => 'linksort',
+                'url'   => 'sortlinks',
                 'icon'  => 'fa-rocket',
             ],
             [
                 'title' => '焦点图',
-                'url'   => 'picsort',
+                'url'   => 'sortphotos',
                 'icon'  => 'fa-plane',
             ],
         ],
     ],
 
     [
-        'title' => '素材管理',
+        'title' => '用户互动',
+        'icon' => 'fa-users',
+        'children' => [
+            [
+                'title' => '评论',
+                'url' => 'comments',
+                'icon' => 'fa-comment',
+            ],
+
+            [
+                'title' => '投票',
+                'url' => 'votes',
+                'icon' => 'fa-calculator',
+            ],
+        ]
+    ],
+
+    [
+        'title' => '素材',
         'icon' => 'fa-image',
         'children' => [
             [
                 'title' => '图片',
-                'url'   => 'pictures',
+                'url'   => 'photos',
                 'icon'  => 'fa-image',
             ],
             [
@@ -104,7 +115,7 @@ return [
         ],
     ],
     [
-        'title' => '频道管理',
+        'title' => '频道',
         'url'   => 'channels',
         'icon'  => 'fa-tasks',
     ],
@@ -113,10 +124,20 @@ return [
         'url'   => 'keywords',
         'icon'  => 'fa-info',
     ],
-
     [
-        'title' => '系统日志',
-        'url'   => 'syslog',
-        'icon'  => 'fa-linux',
+        'title' => 'APP',
+        'icon' => 'fa-linux',
+        'children' => [
+            [
+                'title' => '启动幻灯片',
+                'url'   => 'app_photos',
+                'icon'  => 'fa-rocket',
+            ],
+            [
+                'title' => '消息推送',
+                'url'   => 'app_messages',
+                'icon'  => 'fa-plane',
+            ],
+        ],
     ],
 ];

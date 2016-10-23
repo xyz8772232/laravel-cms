@@ -2,26 +2,24 @@
 
 namespace App\Admin\Controllers;
 
-use Carbon\Carbon;
-use Encore\Admin\Controllers\AdminController;
 use App\Http\Controllers\Controller;
-use App\Keyword;
-use Encore\Admin\Form;
-use Encore\Admin\Grid;
+use Encore\Admin\Auth\Database\Administrator;
+use Encore\Admin\Controllers\AdminController;
+use App\Photo;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
+use Encore\Admin\Form;
+use Encore\Admin\Grid;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Auth;
 
-class KeywordController extends Controller
+
+
+class PhotoController extends Controller
 {
     use AdminController;
 
-    /**
-     * Index interface.
-     * @return Content
-     */
-    public function index()
-    {
+    public function index() {
         return Admin::content(function(Content $content) {
             $content->header('header');
             $content->description('description');
@@ -58,8 +56,10 @@ class KeywordController extends Controller
             $content->header('header');
             $content->description('description');
 
-            $content->body(Admin::form(Keyword::class, function (Form $form) {
-                $form->text('name', '关键词');
+            $content->body(Admin::form(Photo::class, function (Form $form) {
+                //$form->display('id', 'ID');
+                $form->text('title', '标题');
+                $form->image('path', '图像');
             }));
         });
     }
@@ -72,7 +72,7 @@ class KeywordController extends Controller
     public function store()
     {
         if (empty(Input::get('administrate_id'))) {
-            Input::merge(['admin_user_id' => (string)Admin::user()->id]);
+            Input::merge(['administrate_id' => (string)Auth::guard('admin')->user()->id]);
         }
         return $this->form()->store();
     }
@@ -84,21 +84,23 @@ class KeywordController extends Controller
      */
     protected function grid()
     {
-        return Admin::grid(Keyword::class, function (Grid $grid) {
+        return Admin::grid(Photo::class, function (Grid $grid) {
 
             $grid->id('ID')->sortable();
 
-            $grid->name('关键词')->value(function ($name) {
-                return "<span class='label label-success'>{$name}</span>";
+            $grid->title('标题');
+            $grid->path('图像')->value(function($path) {
+                return '<img style="max-width:200px;max-height:200px" class="img" src="'.asset($path).'">';
+            });
+            $grid->administrator_id('上传者')->value(function($id) {
+                return Administrator::find($id)->name;
             });
 
-            $grid->created_at(trans('admin::lang.created_at'))->value(function ($date) {
-                    return Carbon::parse($date)->diffForHumans();
-                });
+            $grid->created_at(trans('admin::lang.created_at'));
             $grid->filter(function($filter){
 
                 // sql: ... WHERE `user.name` LIKE "%$name%";
-                $filter->like('name', '关键词');
+                $filter->like('title', '标题');
 
                 // sql: ... WHERE `user.created_at` BETWEEN $start AND $end;
                 $filter->between('created_at', trans('admin::lang.created_at'))->datetime();
@@ -113,10 +115,11 @@ class KeywordController extends Controller
      */
     protected function form()
     {
-        return Admin::form(Keyword::class, function (Form $form) {
+        return Admin::form(Photo::class, function (Form $form) {
             $form->display('id', 'ID');
-            $form->text('name', 'name')->rules('required|unique:keywords');
-            $form->hidden('admin_user_id');
+            $form->text('title', '标题')->rules('required|unique:photos');
+            $form->image('path', '图像');
+            $form->hidden('administrate_id');
         });
     }
 }
