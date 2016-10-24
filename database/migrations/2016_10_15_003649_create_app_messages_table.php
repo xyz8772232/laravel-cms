@@ -16,8 +16,9 @@ class CreateAppMessagesTable extends Migration
         Schema::create('app_messages', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('article_id');
+            $table->unsignedInteger('admin_user_id')->comment('发布人id');
             $table->string('content', 200);
-            $table->unsignedTinyInteger('status')->comment('状态');
+            $table->unsignedTinyInteger('status')->default(0)->comment('状态');
             $table->timestamps();
             $table->softDeletes();
 

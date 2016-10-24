@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Article;
 use App\ArticleLog;
 use Carbon\Carbon;
 use Encore\Admin\Auth\Database\Administrator;
@@ -75,7 +76,13 @@ class ArticleLogController extends Controller
         return Admin::grid(ArticleLog::class, function (Grid $grid) {
 
             $grid->id('ID')->sortable();
-            $grid->article_id('文章id');
+            $grid->article_id('文章id')->value(function ($articleId) {
+                if (Article::find($articleId)) {
+                    $editUrl = route('articles.edit', $articleId);
+                    return "<a href='$editUrl'>$articleId</a>";
+                }
+                return $articleId;
+            });
             $grid->admin_user_id('操作者')->value(function($userId) {
                 return Administrator::find($userId)->name;
             });
@@ -83,10 +90,10 @@ class ArticleLogController extends Controller
                     return array_flip(config('article.operation'))[$id];
                 });
 
-            $grid->created_at(trans('admin::lang.created_at'))->value(function($date) {
-//                if (Carbon::now() < Carbon::parse($date)->addDays(1)) {
-//                    return  Carbon::parse($date)->toDateTimeString();
-//                }
+            $grid->created_at('时间')->value(function($date) {
+                if (Carbon::now() < Carbon::parse($date)->addDays(1)) {
+                    return  Carbon::parse($date)->toDateTimeString();
+                }
                 return Carbon::parse($date)->diffForHumans();
             });
             //$grid->paginate(2);
@@ -112,8 +119,19 @@ class ArticleLogController extends Controller
 //            });
 
 
-            $grid->rows(function($row){
-                $row->actions('delete');
+//            $grid->rows(function($row){
+//                $row->actions('delete');
+//            });
+            $grid->disableCreation();
+            $grid->disableActions();
+            $grid->disableBatchDeletion();
+
+            $grid->filter(function($filter){
+
+                // sql: ... WHERE `user.name` LIKE "%$name%";
+                $filter->is('article_id', '文章id');
+                $filter->between('created_at', trans('时间'))->datetime();
+
             });
 
         });

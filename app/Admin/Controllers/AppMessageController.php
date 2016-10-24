@@ -2,15 +2,16 @@
 
 namespace App\Admin\Controllers;
 
+use App\AppMessage;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\AdminController;
-use App\Comment;
+use Illuminate\Support\Facades\Input;
 
-class CommentController extends Controller
+class AppMessageController extends Controller
 {
     use AdminController;
 
@@ -28,6 +29,12 @@ class CommentController extends Controller
 
             $content->body($this->grid());
         });
+    }
+
+    public function store()
+    {
+        Input::merge(['admin_user_id' => (string)Admin::user()->id]);
+        return $this->form()->store();
     }
 
     /**
@@ -70,17 +77,12 @@ class CommentController extends Controller
      */
     protected function grid()
     {
-        return Admin::grid(Comment::class, function (Grid $grid) {
+        return Admin::grid(AppMessage::class, function (Grid $grid) {
 
             $grid->id('ID')->sortable();
             $grid->article_id('文章ID')->sortable();
             $grid->content('内容');
-            $grid->created_at(trans('admin::lang.created_at'));
-            $grid->ip('评论者IP');
-            $grid->user_id('评论者ID');
-            $grid->user_nick('评论者昵称');
-
-            $grid->disableCreation();
+            $grid->created_at();
         });
     }
 
@@ -91,16 +93,11 @@ class CommentController extends Controller
      */
     protected function form()
     {
-        return Admin::form(Comment::class, function (Form $form) {
+        return Admin::form(AppMessage::class, function (Form $form) {
 
-            $form->display('id', 'ID');
-            $form->text('article_id');
-            $form->textarea('content');
-            $form->display('ip', 'IP');
-            $form->text('user_id');
-            $form->text('user_nick');
-            $form->display('created_at', 'Created At');
-            $form->display('updated_at', 'Updated At');
+            $form->textarea('content', '内容')->rules('required');
+            $form->text('article_id', '文章id')->rules('required|exists:articles,id');
+            $form->hidden('admin_user_id', '发布人id');
         });
     }
 }

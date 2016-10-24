@@ -19,6 +19,7 @@ class CreateChannelsTable extends Migration
             $table->string('name', 255);
             $table->unsignedTinyInteger('grade')->default(0)->comment('频道等级,共四级');
             $table->unsignedInteger('parent_id')->default(0);
+            $table->unsignedInteger('order')->default(0)->comment('顺序');
             $table->timestamps();
             $table->softDeletes();
 

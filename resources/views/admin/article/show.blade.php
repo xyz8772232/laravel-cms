@@ -73,13 +73,13 @@
                             </div>
                             <div class="form-group 1">
 
-                                <label for="title_bold" class="col-sm-2 control-label">标题粗体</label>
+                                <label for="title_font" class="col-sm-2 control-label">标题粗体</label>
 
                                 <div class="col-sm-6">
 
 
-                                    <input type="checkbox" id="title_bold_checkbox"/>
-                                    <input type="hidden" id="title_bold" name="title_bold" class="" value="off">
+                                    <input type="checkbox" id="title_font_checkbox"/>
+                                    <input type="hidden" id="title_font" name="title_font" class="" value="off">
 
                                 </div>
                             </div>
@@ -94,6 +94,45 @@
                                         <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
                                         <input type="text" id="subtitle" name="subtitle" value=""
                                                class="form-control" placeholder="输入 副标题">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group 1">
+
+                                <label for="author" class="col-sm-2 control-label">作者</label>
+
+                                <div class="col-sm-6">
+                                    <div class="box box-solid box-info no-margin">
+                                        <!-- /.box-header -->
+                                        <div class="box-body">
+                                            {{ $article->author->name }}
+                                        </div><!-- /.box-body -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group 1">
+
+                                <label for="author" class="col-sm-2 control-label">浏览数</label>
+
+                                <div class="col-sm-6">
+                                    <div class="box box-solid box-info no-margin">
+                                        <!-- /.box-header -->
+                                        <div class="box-body">
+                                            {{ $article->view_num }}
+                                        </div><!-- /.box-body -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group 1">
+
+                                <label for="author" class="col-sm-2 control-label">评论数</label>
+
+                                <div class="col-sm-6">
+                                    <div class="box box-solid box-info no-margin">
+                                        <!-- /.box-header -->
+                                        <div class="box-body">
+                                            {{ $article->comment_num }}
+                                        </div><!-- /.box-body -->
                                     </div>
                                 </div>
                             </div>
@@ -238,10 +277,10 @@
 
             $('#title_color').colorpicker();
 
-            $('#title_bold_checkbox').bootstrapSwitch({
+            $('#title_font_checkbox').bootstrapSwitch({
                 size: 'small',
                 onSwitchChange: function (event, state) {
-                    $('#title_bold').val(state ? 'on' : 'off');
+                    $('#title_font').val(state ? 'on' : 'off');
                 }
             });
 
