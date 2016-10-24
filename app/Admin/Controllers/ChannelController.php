@@ -10,6 +10,7 @@ namespace app\Admin\Controllers;
 
 
 use App\Channel;
+use App\Tool;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Facades\Admin;
@@ -41,6 +42,25 @@ class ChannelController extends Controller
       });
     }
 
+    public function tree($id = 0)
+    {
+        return Channel::toTree([], $id);
+    }
+
+    public function save()
+    {
+        if (Input::has('_tree')) {
+            $serialize = Input::get('_tree');
+            $tree = json_decode($serialize, true);
+            if (json_last_error() != JSON_ERROR_NONE) {
+                Tool::showError('参数错误');
+            }
+            Channel::saveTree($tree);
+            Tool::showSuccess();
+        }
+        Tool::showError('参数错误');
+    }
+
     /**
      * Edit interface.
      *
@@ -57,6 +77,9 @@ class ChannelController extends Controller
             $content->body($this->form()->edit($id));
         });
     }
+
+
+
 
     /**
      * Create interface.
@@ -93,6 +116,31 @@ class ChannelController extends Controller
     }
 
     /**
+     * 删除,有子频道或频道有文章都不允许，只有在空的状态下才能删除，给个类似的提示：请清空频道或文章后再删除
+     * @param $id 文章id
+     * @return mixed
+     */
+    public function destroy($id)
+    {
+        dd(Channel::toTree());
+        $channel = Channel::findOrFail($id);
+        $children_channel = $channel->children_channel->first();
+        if ($children_channel) {
+            return Tool::showError('请清空子频道后再删除');
+        }
+        $articles = $channel->articles->first();
+
+        if ($articles) {
+            return Tool::showError('请清空频道下的文章后再删除');
+        }
+        $rs = $channel->delete();
+        if ($rs) {
+            return Tool::showSuccess();
+        }
+        return Tool::showError();
+    }
+
+    /**
      * Make a grid builder.
      *
      * @return Grid
@@ -102,6 +150,7 @@ class ChannelController extends Controller
         return Admin::grid(Channel::class, function (Grid $grid) {
 
             $grid->id('ID')->sortable();
+            $grid->grade('等级')->sortable();
 
             $grid->name('频道名');
             $grid->parent_id('父频道')->value(function($channelId) {
@@ -138,7 +187,8 @@ class ChannelController extends Controller
 
             $form->display('id', 'ID');
             $form->text('name', '频道名');
-            $form->select('parent_id', '父频道')->options(Channel::pluck('name', 'id'));
+            $form->select('parent_id', '父频道')->options(Channel::pluck('name', 'id')->prepend('无'));
+            $form->hidden('grade');
         });
     }
 

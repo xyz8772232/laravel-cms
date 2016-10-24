@@ -42,4 +42,24 @@ class ArticleObserver
             'admin_user_id' => Admin::user()->id,
         ]);
     }
+
+    public function updating(Article $article) {
+        $admin_user_id = Admin::user()->id;
+        if ($article->state == 1 && $article->getOriginal('state') == 0) {
+            ArticleLog::create([
+                'operation' => config('article.operation.audit'),
+                'article_id' => $article->id,
+                'admin_user_id' => $admin_user_id,
+            ]);
+        }
+
+        if ($article->channel_id != $article->getOriginal('channel_id')) {
+            ArticleLog::create([
+                'operation' => config('article.operation.move'),
+                'article_id' => $article->id,
+                'admin_user_id' => $admin_user_id,
+            ]);
+        }
+
+    }
 }

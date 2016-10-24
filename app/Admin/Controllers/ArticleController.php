@@ -48,6 +48,7 @@ class ArticleController extends Controller
 
         //封面图处理
         !empty($request->file('cover_pic')) && $article->cover_pic = $request->file('cover_pic')->store('cover_pic');
+        $article->author_id = Admin::user()->id;
 
         //内容存储
         $content = $request->get('content');
@@ -114,7 +115,25 @@ class ArticleController extends Controller
         $this->validate($request, [
             'id' => 'required|exists:articles,id',
         ]);
-        return $this->form()->update($id);
+        $article = Article::find($id);
+//        $originalField = $article->getOriginal();
+//        dd($originalField);
+        foreach (Input::all() as $key => $value) {
+            if (substr($key, 0, 1) == '_') {
+                continue;
+            }
+            $article->$key = $value;
+        }
+        $result = $article->save();
+        if ($request->ajax()) {
+            if ($result) {
+                return Tool::showSuccess();
+            }
+            return Tool::showError();
+        } else {
+            return redirect(Tool::resource());
+        }
+
     }
 
     /**输出
@@ -140,7 +159,7 @@ class ArticleController extends Controller
         $description = '描述';
         $pageSize = $request->get('pageSize', 20);
         $query = Input::all();
-        $articles = Article::paginate($pageSize)->appends($query);
+        $articles = Article::with('articleInfo', 'author')->orderBy('id')->orderBy('title')->paginate($pageSize)->appends($query);
 
         return view('admin.article.index', ['header' => $header, 'description' => $description, 'articles' => $articles, 'pageSize' => $pageSize]);
 //        return Admin::content(function(Content $content) {
@@ -200,6 +219,29 @@ class ArticleController extends Controller
         $keywords = Keyword::pluck('name', 'id');
         //dd($keywords, $article->keywords);
         return view('admin.article.edit', ['header' => $header, 'description' => $description, 'article' => $article, 'keywords' => $keywords]);
+//        return Admin::content(function (Content $content) use ($id) {
+//
+//            $content->header('header');
+//            $content->description('description');
+//
+//            $content->body($this->form()->edit($id));
+//        });
+    }
+
+    /**
+     * show interface.
+     *
+     * @param $id
+     * @return Content
+     */
+    public function show($id)
+    {
+        $header = '编辑文章';
+        $description = '描述';
+        $article = Article::with('keywords','content', 'articleInfo')->findOrFail($id);
+        $keywords = Keyword::pluck('name', 'id');
+        //dd($keywords, $article->keywords);
+        return view('admin.article.show', ['header' => $header, 'description' => $description, 'article' => $article, 'keywords' => $keywords]);
 //        return Admin::content(function (Content $content) use ($id) {
 //
 //            $content->header('header');

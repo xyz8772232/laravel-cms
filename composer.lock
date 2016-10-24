@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "91a19424cde62b27662b85dc62b5b2ec",
-    "content-hash": "3f0c897df6d4ee7ff7dbc5903d2a40c6",
+    "hash": "819bad1ea75115cb99adbcb674ded685",
+    "content-hash": "00ac0bfd2f53e4fcf5bacd21913d4938",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -167,12 +167,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/z-song/laravel-admin.git",
-                "reference": "a950f1bc3880620520932a06738fd80c9bd434f7"
+                "reference": "73b734dfe072052e82973a17e8a18d18afdf3ee8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://packagist.phpcomposer.com/files/z-song/laravel-admin/a950f1bc3880620520932a06738fd80c9bd434f7.zip",
-                "reference": "a950f1bc3880620520932a06738fd80c9bd434f7",
+                "url": "https://packagist.phpcomposer.com/files/z-song/laravel-admin/73b734dfe072052e82973a17e8a18d18afdf3ee8.zip",
+                "reference": "73b734dfe072052e82973a17e8a18d18afdf3ee8",
                 "shasum": ""
             },
             "require": {
@@ -214,7 +214,7 @@
                 "grid",
                 "laravel"
             ],
-            "time": "2016-10-19 08:57:07"
+            "time": "2016-10-24 04:43:16"
         },
         {
             "name": "guzzlehttp/psr7",
@@ -665,16 +665,16 @@
         },
         {
             "name": "league/flysystem",
-            "version": "1.0.30",
+            "version": "1.0.32",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "75138bb14160f3ba963750aa95e08d1d394fb198"
+                "reference": "1b5c4a0031697f46e779a9d1b309c2e1b24daeab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://packagist.phpcomposer.com/files/thephpleague/flysystem/75138bb14160f3ba963750aa95e08d1d394fb198.zip",
-                "reference": "75138bb14160f3ba963750aa95e08d1d394fb198",
+                "url": "https://packagist.phpcomposer.com/files/thephpleague/flysystem/1b5c4a0031697f46e779a9d1b309c2e1b24daeab.zip",
+                "reference": "1b5c4a0031697f46e779a9d1b309c2e1b24daeab",
                 "shasum": ""
             },
             "require": {
@@ -744,7 +744,7 @@
                 "sftp",
                 "storage"
             ],
-            "time": "2016-10-18 16:20:02"
+            "time": "2016-10-19 20:38:46"
         },
         {
             "name": "monolog/monolog",

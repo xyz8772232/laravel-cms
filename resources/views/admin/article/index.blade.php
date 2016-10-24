@@ -59,38 +59,24 @@
                 <th>评论数<a class="fa fa-fw fa-sort" href=""></a></th>
                 <th>操作</th>
               </tr>
-              <tr>
-                <td><input type="checkbox" class="grid-item" data-id="1"></td>
-                <td><i class="fa fa-star text-primary"></i></td>
-                <td>1</td>
-                <td>上线</td>
-                <td>新闻1</td>
-                <td>张三</td>
-                <td>2016-10-15 16:51:44</td>
-                <td>200</td>
-                <td>3</td>
-                <td>
-                  <a href="/admin/articles/1/edit"><i class="fa fa-edit"></i></a>
-                  <a href="javascript:void(0);" data-id="1" class="_delete"><i
-                  class="fa fa-trash"></i></a>
-                </td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" class="grid-item" data-id="1"></td>
-                <td><i class="fa fa-star-o text-primary"></i></td>
-                <td>2</td>
-                <td>-</td>
-                <td>新闻2</td>
-                <td>李四</td>
-                <td>2016-10-16 16:51:44</td>
-                <td>1000</td>
-                <td>16</td>
-                <td>
-                  <a href="/admin/articles/1/edit"><i class="fa fa-edit"></i></a>
-                  <a href="javascript:void(0);" data-id="1" class="_delete"><i
-                  class="fa fa-trash"></i></a>
-                </td>
-              </tr>
+                @foreach($articles as $article)
+                    <tr >
+                        <td><input type="checkbox" class="grid-item" data-id="{{ $article->id }}"></td>
+                        <td><i class="fa @if($article->is_important) fa-star @else fa-star-o @endif text-primary"></i></td>
+                        <td>{{ $article->id }}</td>
+                        <td>@if($article->state == 1)上线@else - @endif</td>
+                        <td>{{ $article->title }}</td>
+                        <td>{{ $article->author_name }}</td>
+                        <td>{{ $article->created_at }}</td>
+                        <td>{{ $article->view_num }}</td>
+                        <td>{{ $article->comment_num }}</td>
+                        <td>
+                            {{--<a href='/url/1'><i class='fa fa-eye'></i></a> <a href='/url/1'><i class='fa fa-gear'></i>--}}
+                            <a href="{{route('articles.show', [$article->id])}}"><i class='fa fa-eye'></i></a>
+                            <a href="{{route('articles.edit', [$article->id])}}"><i class="fa fa-edit"></i></a>  <a href="javascript:void(0);" data-id="{{ $article->id }}" class="_delete"><i class="fa fa-trash"></i></a>
+                        </td>
+                    </tr>
+                @endforeach
             </table>
           </div>
           <div class="box-footer clearfix">
@@ -109,11 +95,7 @@
                 共<span class="text-primary">1000</span>篇文章
               </span>
             </form>
-            <ul class="pagination pagination-sm">
-              <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
-              <li class="page-item active"><span class="page-link">1</span></li>
-              <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
-            </ul>
+              {{ $articles->appends(['sort' => 'votes'])->links('admin::pagination') }}
           </div>
           <!-- /.box-body -->
         </div>
