@@ -123,9 +123,9 @@
 @endsection
 
 @section('css')
-    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/article.index.css">
 @endsection
 
 @section('admin_js')
-    <script data-exec-on-popstate src="/js/index.js"></script>
+    <script data-exec-on-popstate src="/js/article.index.js"></script>
 @endsection

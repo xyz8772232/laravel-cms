@@ -1,0 +1,72 @@
+.channel-wrapper {
+  border-radius: 3px;
+  background: #ffffff;
+  border-top: 3px solid #d2d6de;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.channel-header {
+  padding: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #444;
+}
+
+.channel-header .channel-edit {
+  float: right;
+  margin-top: -2px;
+}
+
+.channel-box {
+  padding: 10px 0;
+  background-color: #f5f5f5;
+}
+
+.channel-box.editable {
+  background-color: #e7f5ea;
+}
+
+.channel-box.editable .channel-btn-del {
+  visibility: visible;
+}
+
+.channel {
+  position: relative;
+  float: left;
+  margin: 10px;
+  padding: 0 5px;
+  width: 100px;
+  height: 30px;
+  border: 1px solid #EEEEEE;
+  background-color: #fff;
+}
+
+.channel-selected {
+  border: 1px dashed cornflowerblue;
+}
+
+.channel-add {
+  background-color: #fff;
+  text-align: center;
+}
+
+.channel-ipt {
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+}
+
+.channel-btn-del {
+  visibility: hidden;
+  position: absolute;
+  top: -9px;
+  right: -9px;
+  font-size: 20px;
+}
+
+.channel-btn-add {
+  margin-top: 10px;
+  color: #999999;
+}
