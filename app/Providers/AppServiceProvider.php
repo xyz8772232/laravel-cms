@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Article;
+use App\FileUpload;
 use App\Observers\ArticleObserver;
 use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
@@ -27,6 +28,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->singleton('fileUpload', function () {
+            return new FileUpload();
+        });
     }
 }
