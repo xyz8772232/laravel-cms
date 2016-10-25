@@ -83,17 +83,17 @@
             <form class="form-inline">
               <a class="btn btn-sm btn-danger batch-delete">批量删除</a>
               <a class="btn btn-sm btn-success batch-check">审核通过</a>
-              <span class="pull-right">
-                每页显示
-                <select class="form-control input-sm show-count">
-                  <option>10</option>
-                  <option>20</option>
-                  <option>30</option>
-                  <option>40</option>
-                  <option>50</option>
-                </select>
-                共<span class="text-primary">1000</span>篇文章
-              </span>
+              {{--<span class="pull-right">--}}
+                {{--每页显示--}}
+                {{--<select class="form-control input-sm show-count">--}}
+                  {{--<option>10</option>--}}
+                  {{--<option>20</option>--}}
+                  {{--<option>30</option>--}}
+                  {{--<option>40</option>--}}
+                  {{--<option>50</option>--}}
+                {{--</select>--}}
+                {{--共<span class="text-primary">1000</span>篇文章--}}
+              {{--</span>--}}
             </form>
               {{ $articles->appends(['sort' => 'votes'])->links('admin::pagination') }}
           </div>

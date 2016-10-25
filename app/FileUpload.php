@@ -5,6 +5,7 @@ namespace App;
 use Encore\Admin\Form\Field;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -50,7 +51,7 @@ class FileUpload
         return $this;
     }
 
-    public function prepare(UploadedFile $file = null)
+    public function prepare(UploadedFile $file = null, $addWatermark = false)
     {
         if (is_null($file)) {
             return '';
@@ -62,7 +63,16 @@ class FileUpload
 
         $this->original = $file->getRealPath();
 
-        return $this->uploadAndDeleteOriginal($file);
+        $originalPicPath =  $this->uploadAndDeleteOriginal($file);
+
+        if ($addWatermark) {
+            $img = Image::make(config('filesystems.disks.admin.root').'/'.$originalPicPath);
+            $watermarkPath = config('filesystems.disks.admin.root').'/'.Watermark::find(1)->path;
+            $img->insert($watermarkPath, 'bottom-right', 15, 10);
+            $img->save();
+        }
+
+        return $originalPicPath;
     }
 
     /**
