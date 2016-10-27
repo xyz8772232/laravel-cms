@@ -150,8 +150,9 @@ class ArticleController extends Controller
         //return redirect()->back()->withInput()->withErrors('删除成功！');
     }
     /**
-     * Index interface.
-     * @return Content
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(Request $request)
     {

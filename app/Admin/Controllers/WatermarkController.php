@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Tool;
 use App\Watermark;
 use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Controllers\AdminController;
@@ -11,21 +12,51 @@ use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Auth;
-
 
 
 class WatermarkController extends Controller
 {
     use AdminController;
 
-    public function index() {
-        return Admin::content(function(Content $content) {
-            $content->header('header');
-            $content->description('description');
-            $content->body($this->grid());
-        });
+    public function index()
+    {
+        $header = '水印图';
+        $description = '描述';
+        $watermark = Watermark::find(1);
+        return view('admin.watermark.index', ['header' => $header, 'description' => $description, 'watermark' => $watermark]);
+
+//        return Admin::content(function(Content $content) {
+//            $content->header('header');
+//            $content->description('description');
+//            $content->body($this->grid());
+//        });
+    }
+
+    public function save(Request $request)
+    {
+        $this->validate($request, [
+           'watermark_pic' => 'required|image'
+        ]);
+
+        $file = $request->file('watermark_pic');
+        $uid = Admin::user()->id;
+
+        $path = app('fileUpload')->prepare($file);
+        $watermark = Watermark::find(1);
+        if (!$watermark) {
+            $watermark = new Watermark();
+            $watermark->status = 1;
+        }
+        $watermark->path = $path;
+        $watermark->admin_user_id = $uid;
+
+        if ($watermark->save()) {
+            return Tool::showSuccess();
+        }
+        return Tool::showError();
     }
 
     /**

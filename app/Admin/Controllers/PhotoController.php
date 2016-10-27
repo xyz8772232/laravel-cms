@@ -3,43 +3,28 @@
 namespace App\Admin\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Tool;
 use Encore\Admin\Auth\Database\Administrator;
+use Encore\Admin\Auth\Permission;
 use Encore\Admin\Controllers\AdminController;
 use App\Photo;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
-use Intervention\Image\Facades\Image;
-
 
 class PhotoController extends Controller
 {
     use AdminController;
 
     public function index() {
-        // 修改指定图片的大小
-        //$img = Image::make('upload/image/tumblr_ocmcitG9C81v6dx7ro1_500.jpg');
-
-// 插入水印, 水印位置在原图片的右下角, 距离下边距 10 像素, 距离右边距 15 像素
-        //$img->insert('upload/image/watermark.png', 'bottom-right', 15, 10);
-
-// 将处理后的图片重新保存到其他路径
-        //$img->save('upload/image/new_avatar.jpg');
-        //return $img->response('jpg');
         $header = '图片列表';
         $description = '描述';
-        $pageSize = Input::get('pageSize', 20);
-        $photos = [];
-
-        return view('admin.photo.index', ['header' => $header, 'description' => $description, 'photos' => $photos, 'pageSize' => $pageSize]);
-
-        return Admin::content(function(Content $content) {
-            $content->header('header');
-            $content->description('description');
-            $content->body($this->grid());
-        });
+        $photos = Photo::orderBy('id', 'desc')->paginate(20);
+        return view('admin.photo.index', ['header' => $header, 'description' => $description, 'photos' => $photos]);
     }
 
     /**
@@ -84,11 +69,51 @@ class PhotoController extends Controller
         return $this->form()->update($id);
     }
 
-    public function store()
+    /**
+     * 上传图片
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function store(Request $request)
     {
-        Input::merge(['admin_user_id' => (string)Admin::user()->id]);
+        $this->validate($request, [
+            'photos.*' => 'required|image']);
+        $photos = $request->file('photos');
+        $uid = Admin::user()->id;
+        $time  = date('Y-m-d H:i:s');
+        $add_watermark = (boolean)$request->get('add_watermark', 0);
 
-        return $this->form()->store();
+        //上传图片并加水印
+        $photosInfo = collect($photos)->map(function($photo) use ($uid, $time, $add_watermark){
+            $path = app('fileUpload')->prepare($photo, $add_watermark);
+            if ($path) {
+                $item = [
+                    'path' => $path,
+                    'admin_user_id' => $uid,
+                    'created_at' => $time,
+                    'updated_at' => $time,
+                ];
+                return $item;
+            }
+        })->all();
+
+        $result = DB::table('photos')->insert($photosInfo);
+
+        if ($result) {
+            return Tool::showSuccess();
+        }
+        return Tool::showError();
+    }
+
+
+    public function destroy($id) {
+        Permission::allow(['administrator', 'responsible_editor']);
+        $result = Photo::destroy($id);
+        if ($result) {
+            return Tool::showSuccess();
+        }
+        return Tool::showError();
     }
 
     /**
