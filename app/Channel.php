@@ -21,7 +21,7 @@ class Channel extends Model
     /**
      * @var array
      */
-    //protected static $branchOrder = [];
+    protected static $branchOrder = [];
 
 
     public function parent_channel()

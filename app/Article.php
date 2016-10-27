@@ -27,7 +27,7 @@ class Article extends Model
      */
     public function keywords()
     {
-        return $this->belongsToMany('App\Keyword');
+        return $this->belongsToMany('App\Keyword')->withTimestamps();
     }
 
     public function comments()

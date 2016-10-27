@@ -28,18 +28,20 @@ class ChannelController extends Controller
      * Index interface.
      * @return Content
      */
-    public function index(Request $request)
+    public function index()
     {
-//        $grade = $request->get('grade', 0);
-//        $header = '频道';
-//        $description = 'description';
-//        $channels = Channel::where('parent_id', $grade);
+        $header = '频道';
+        $description = 'description';
+        $channels = Channel::toTree([], 0);
+        dd($channels);
 
-        return Admin::content(function(Content $content) {
-          $content->header('header');
-          $content->description('description');
-          $content->body($this->grid());
-      });
+        return view('admin.channel.index', ['header' => $header, 'description' => $description, 'channels' => $channels]);
+
+//        return Admin::content(function(Content $content) {
+//          $content->header('header');
+//          $content->description('description');
+//          $content->body($this->grid());
+//      });
     }
 
     public function tree($id = 0)
