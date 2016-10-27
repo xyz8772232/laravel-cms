@@ -10,7 +10,9 @@ $router->post('channels/save', 'ChannelController@save');
 
 $router->resource('channels', ChannelController::class);
 
+$router->post('articles/{id}/change', 'ArticleController@change');
 $router->resource('articles', ArticleController::class);
+
 $router->resource('logs', ArticleLogController::class);
 $router->resource('keywords', KeywordController::class);
 

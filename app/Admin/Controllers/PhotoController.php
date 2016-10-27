@@ -108,7 +108,19 @@ class PhotoController extends Controller
 
 
     public function destroy($id) {
-        Permission::allow(['administrator', 'responsible_editor']);
+        $changeableField = [
+            'channel',
+            'state',
+            'is_headline',
+            'is_soft',
+            'is_political',
+            'is_international',
+            'is_important',
+        ];
+
+
+        $this->authorizeForUser(Admin::user(), 'delete', Photo::class);
+        //Permission::allow('responsible_editor');
         $result = Photo::destroy($id);
         if ($result) {
             return Tool::showSuccess();
