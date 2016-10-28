@@ -13,6 +13,7 @@ use Encore\Admin\Layout\Content;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 
@@ -23,7 +24,7 @@ class PhotoController extends Controller
     public function index() {
         $header = '图片列表';
         $description = '描述';
-        $photos = Photo::orderBy('id', 'desc')->paginate(20);
+        $photos = Photo::orderBy('id', 'desc')->paginate(12);
         return view('admin.photo.index', ['header' => $header, 'description' => $description, 'photos' => $photos]);
     }
 
