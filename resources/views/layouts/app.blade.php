@@ -74,7 +74,7 @@
 <script src="{{ asset ("/packages/admin/number-input/bootstrap-number-input.js") }}"></script>
 <script src="{{ asset ("/packages/admin/AdminLTE/plugins/iCheck/icheck.min.js") }}"></script>
 <script src="{{ asset ("/packages/admin/bootstrap-switch/dist/js/bootstrap-switch.min.js") }}"></script>
-<script src="//cdn.ckeditor.com/4.5.10/standard/ckeditor.js"></script>
+<script src="{{ asset ("/packages/admin/ckeditor/ckeditor.js") }}"></script>
 <script src="{{ asset ("/packages/admin/AdminLTE/plugins/chartjs/Chart.min.js") }}"></script>
 <script src="{{ asset ("/packages/admin/AdminLTE/plugins/ionslider/ion.rangeSlider.min.js") }}"></script>
 

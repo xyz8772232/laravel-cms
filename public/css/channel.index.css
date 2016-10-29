@@ -8,27 +8,23 @@
 
 .channel-header {
   padding: 10px;
+  line-height: 30px;
   font-size: 18px;
   font-weight: bold;
   color: #444;
 }
 
-.channel-header .channel-edit {
-  float: right;
-  margin-top: -2px;
+.channel-header .btn {
+  margin-left: 5px;
+}
+
+.channel-done {
+  display: none;
 }
 
 .channel-box {
   padding: 10px 0;
   background-color: #f5f5f5;
-}
-
-.channel-box.editable {
-  background-color: #e7f5ea;
-}
-
-.channel-box.editable .channel-btn-del {
-  visibility: visible;
 }
 
 .channel {
@@ -46,11 +42,6 @@
   border: 1px dashed cornflowerblue;
 }
 
-.channel-add {
-  background-color: #fff;
-  text-align: center;
-}
-
 .channel-ipt {
   width: 100%;
   height: 100%;
@@ -58,15 +49,25 @@
   outline: none;
 }
 
-.channel-btn-del {
-  visibility: hidden;
+.channel-del {
   position: absolute;
   top: -9px;
   right: -9px;
   font-size: 20px;
 }
 
-.channel-btn-add {
-  margin-top: 10px;
-  color: #999999;
+.channel-group.sort .channel-del {
+  visibility: hidden;
+}
+
+.channel-group.sort .channel-add {
+  display: none;
+}
+
+.channel-group.sort .channel-done {
+  display: block;
+}
+
+.channel-group.sort .channel-box {
+  background-color: #d8f5e4;
 }
