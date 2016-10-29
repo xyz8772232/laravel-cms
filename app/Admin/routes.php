@@ -3,18 +3,28 @@
 $router = app('admin.router');
 
 $router->get('/', 'HomeController@index');
-$router->post('link/{id}', 'ArticleController@link');
+
+//频道管理相关
 $router->get('channels/tree/{id?}', 'ChannelController@tree');
 $router->post('channels/save', 'ChannelController@save');
-
-
 $router->resource('channels', ChannelController::class);
 
-$router->post('articles/{id}/change', 'ArticleController@change');
+//文章管理相关
+$router->post('articles/change/{id}', 'ArticleController@change');
+$router->post('link/{id}', 'ArticleController@link');
 $router->resource('articles', ArticleController::class);
 
 $router->resource('logs', ArticleLogController::class);
 $router->resource('keywords', KeywordController::class);
+
+//Route::group([
+//    'prefix'        => config('admin.prefix'),
+//    'namespace'     => Admin::controllerNamespace(),
+//    'middleware'    => ['web', 'admin.auth', 'admin.pjax'],
+//], function ($router) {
+//    $router->post('comments/block/{$id}', 'CommentController@block')->name('comments.block');
+//});
+$router->post('comments/block/{$id}',['uses' => 'CommentController@block' ,'as' => 'comments.block']);
 
 $router->resource('comments', CommentController::class);
 $router->resource('ballots', BallotController::class);
