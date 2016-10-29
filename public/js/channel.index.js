@@ -1,50 +1,3 @@
-var CHANNEL = [
-  {
-    id: 'A',
-    name: 'A',
-    children: [
-      {
-        id: 'A1',
-        name: 'A1',
-        children: [
-          {
-            id: 'A11',
-            name: 'A11',
-            deletable: true
-          },
-          {
-            id: 'A12',
-            name: 'A12'
-          }
-        ]
-      },
-      {
-        id: 'A2',
-        name: 'A2',
-        children: [
-          {
-            id: 'A21',
-            name: 'A21'
-          },
-          {
-            id: 'A22',
-            name: 'A22',
-            deletable: true
-          },
-          {
-            id: 'A23',
-            name: 'A23'
-          }
-        ]
-      }
-    ]
-  },
-  {
-    id: 'B',
-    name: 'B'
-  }
-];
-
 $(function () {
   var channelEditInstance;
   var channelLevelStack = [];
@@ -145,14 +98,14 @@ $(function () {
       }).on('click', '.channel-del', function () {
         //TODO
       }).on('blur', '.channel-ipt', function () {
-        var inputValue = $.trim(this.value);
-        if (inputValue === '') {
-          swal('名称不能为空');
-        } else if (self.channelNameList.indexOf(inputValue) >= 0) {
-          swal('名称已存在');
-        } else {
-          self._save();
-        }
+        //var inputValue = $.trim(this.value);
+        //if (inputValue === '') {
+        //  swal('名称不能为空');
+        //} else if (self.channelNameList.indexOf(inputValue) >= 0) {
+        //  swal('名称已存在');
+        //} else {
+        //  self._save();
+        //}
       });
     },
     _unbindEvents: function () {
