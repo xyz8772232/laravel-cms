@@ -22,14 +22,11 @@ $(function () {
   $selectList.on('change', function () {
     var $this = $(this);
     if (keyControlIsActive) {
-      console.log('control');
       selectInterval[0] = +$this.attr('data-index');
     } else if (keyShiftIsActive) {
-      console.log('shift');
       var selectIntervalBySort;
       $selectList.prop("checked", false);
       selectInterval[1] = +$this.attr('data-index');
-      console.log(selectInterval);
       selectIntervalBySort = selectInterval.slice().sort(function (a, b) {
         return a - b;
       });
@@ -63,7 +60,6 @@ $(function () {
    */
   $('.box-body').on('click', '.img-copy-url', function (e) {
     var url = this.parentNode.previousElementSibling.src;
-    console.log(e);
     if (e.clipboardData) {
       e.clipboardData.setData("text/plain", url);
     } else if (window.clipboardData) {
@@ -79,36 +75,66 @@ $(function () {
    * 上传新图片
    */
   $('.img-upload').on('click', function () {
+    var $upload;
+    var $swal;
+
     swal({
-      title: '上传',
-      text: '<input type="file" id="cover_pic" name="cover_pic"/><input type="hidden" id="cover_pic_action" name="cover_pic_action" value="0"/>',
+      title: '',
+      text: '<input type="file" id="imgUpload" multiple>',
       html: true,
       allowOutsideClick: true,
-      confirmButtonText: "上传"
-    }, function(isConfirm){
-      console.log(isConfirm);
+      closeOnConfirm: false,
+      confirmButtonText: '上传图片'
+    }, function (isConfirm) {
+      if (isConfirm) {
+        var files = $upload.fileinput('getFileStack');
+        if (files && files.length) {
+          $swal = null;
+          uploadImg(files);
+        }
+      } else {
+        $swal = null;
+        disableImgUpload($upload);
+      }
     });
-    $('#cover_pic').fileinput({
-      "overwriteInitial": true,
-      "showUpload": false,
-      "language": "zh_CN",
-      "allowedFileTypes": ["image"],
-      "initialCaption": "",
-      minFileCount: 0
-    }).on('filecleared', function (event) {
-      $("#cover_pic_action").val(1);
-    });
+    $swal = $('.sweet-alert');
+    $upload = $('#imgUpload');
+    enableImgUpload($upload, $swal);
   });
 
-  function upload() {
-    
+  function uploadImg(files) {
+    console.log(files);
+    swal({
+      title: '上传中',
+      text: ''
+    });
+    swal.disableButtons();
+    // TODO 提交
+    setTimeout(function () {
+      swal('上传成功', '', 'success');
+    }, 1000);
   }
 
-  function enableImgUpload() {
-    
+  function enableImgUpload($el, $swal) {
+    $el.fileinput({
+      overwriteInitial: true,
+      showUpload: false,
+      language: 'zh_CN',
+      allowedFileTypes: ['image'],
+      initialCaption: '',
+      minFileCount: 0
+    }).on('filecleared', function (event) {
+      fixSwalStyle($swal);
+    }).on('change', function () {
+      fixSwalStyle($swal);
+    });
   }
 
-  function disableImgUpload() {
-    
+  function disableImgUpload($el) {
+    $el.fileinput('destroy');
+  }
+
+  function fixSwalStyle($swal) {
+    $swal.css('marginTop',  - $swal.height() / 2 + 'px');
   }
 });
