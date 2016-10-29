@@ -33,7 +33,6 @@ class ChannelController extends Controller
         $header = '频道';
         $description = 'description';
         $channels = Channel::toTree([], 0);
-        dd($channels);
 
         return view('admin.channel.index', ['header' => $header, 'description' => $description, 'channels' => $channels]);
 
