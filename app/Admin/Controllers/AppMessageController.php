@@ -22,6 +22,10 @@ class AppMessageController extends Controller
      */
     public function index()
     {
+        $header = 'APP消息';
+        $description = '描述';
+        return view('admin.app.message', ['header' => $header, 'description' => $description]);
+
         return Admin::content(function (Content $content) {
 
             $content->header('header');

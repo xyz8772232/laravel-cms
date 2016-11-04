@@ -26,7 +26,9 @@ class WatermarkController extends Controller
         $header = '水印图';
         $description = '描述';
         $watermark = Watermark::find(1);
-        return view('admin.watermark.index', ['header' => $header, 'description' => $description, 'watermark' => $watermark]);
+        $image['path'] = asset('upload/'.$watermark->path);
+        $image['caption'] = pathinfo($watermark->path, PATHINFO_BASENAME);
+        return view('admin.watermark.index', ['header' => $header, 'description' => $description, 'watermark' => $image]);
 
 //        return Admin::content(function(Content $content) {
 //            $content->header('header');
@@ -38,10 +40,10 @@ class WatermarkController extends Controller
     public function save(Request $request)
     {
         $this->validate($request, [
-           'watermark_pic' => 'required|image'
+           'path' => 'required|image'
         ]);
 
-        $file = $request->file('watermark_pic');
+        $file = $request->file('path');
         $uid = Admin::user()->id;
 
         $path = app('fileUpload')->prepare($file);

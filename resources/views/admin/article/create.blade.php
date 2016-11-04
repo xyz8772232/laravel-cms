@@ -138,12 +138,8 @@
                                     </div>
                                 </div>
                                 <div class="form-group 1">
-
                                     <label for="source" class="col-sm-2 control-label">信息来源</label>
-
                                     <div class="col-sm-6">
-
-
                                         <div class="input-group">
                                             <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
                                             <input type="text" id="source" name="source" value="" class="form-control"

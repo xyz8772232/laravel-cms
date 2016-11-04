@@ -51,7 +51,6 @@
     <div class="content-wrapper" id="pjax-container">
         @include('include.error')
         @yield('content')
-        {!! Admin::script() !!}
         @yield('admin_js')
     </div>
 
@@ -82,6 +81,7 @@
 <script src="{{ asset ("/packages/admin/codemirror/mode/javascript/javascript.js") }}"></script>
 <script src="{{ asset ("/packages/admin/codemirror/addon/edit/matchbrackets.js") }}"></script>
 <script src="{{ asset ("/packages/admin/nestable/jquery.nestable.js") }}"></script>
+<script src="{{ asset ("/packages/admin/noty/jquery.noty.packaged.min.js") }}"></script>
 
 <script>
 
@@ -92,7 +92,28 @@
 
     $(document).on('submit', 'form[pjax-container]', function(event) {
         $.pjax.submit(event, '#pjax-container')
-    })
+    });
+
+    $.noty.defaults.layout = 'topRight';
+    $.noty.defaults.theme = 'relax';
+
+    $(document).on('pjax:error', function(event, xhr) {
+        noty({
+            text: "<strong>Warning!</strong><br/>"+xhr.responseText,
+            type:'warning',
+            timeout: 3000
+        });
+        return false;
+    });
+
+//    $(document).on("pjax:success", function(event) {
+//        $(event.target).find("script[data-exec-on-popstate]").each(function() {
+//            var src = this.getAttribute('src');
+//            if (!src) {
+//                $.globalEval(this.text || this.textContent || this.innerHTML || '');
+//            }
+//        })
+//    });
 
     $(document).on("pjax:popstate", function() {
 

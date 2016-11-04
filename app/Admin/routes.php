@@ -32,6 +32,8 @@ $router->resource('ballots', BallotController::class);
 $router->resource('photos', PhotoController::class);
 $router->get('watermarks', 'WatermarkController@index');
 $router->post('watermarks/save', 'WatermarkController@save');
+$router->get('watermarks/create', 'WatermarkController@create');
+
 
 $router->resource('sort_links', SortLinkController::class);
 $router->resource('sort_photos', SortPhotoController::class);

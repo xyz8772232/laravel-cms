@@ -64,7 +64,7 @@
                         <td><input type="checkbox" class="grid-item" data-id="{{ $article->id }}"></td>
                         <td><i class="fa @if($article->is_important) fa-star @else fa-star-o @endif text-primary"></i></td>
                         <td>{{ $article->id }}</td>
-                        <td>@if($article->state == 1)上线@else - @endif</td>
+                        <td><i @if($article->state == 1) class="fa fa-close" style="color:green" @else class="fa fa-check" style="color:red" @endif></i></td>
                         <td>{{ $article->title }}</td>
                         <td>{{ $article->author_name }}</td>
                         <td>{{ $article->created_at }}</td>

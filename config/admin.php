@@ -44,6 +44,8 @@ return [
         'role_users_table'       => 'admin_role_users',
         'role_permissions_table' => 'admin_role_permissions',
         'role_menu_table'        => 'admin_role_menu',
+
+        'operation_log_table' => 'admin_operation_log',
     ],
 
     /*
@@ -56,7 +58,7 @@ return [
     |               | skin-green                              |
     |---------------------------------------------------------|
      */
-    'skin'    => 'skin-blue',
+    'skin'    => 'skin-yellow',
 
     /*
     |---------------------------------------------------------|

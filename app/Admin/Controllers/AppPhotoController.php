@@ -22,6 +22,10 @@ class AppPhotoController extends Controller
      */
     public function index()
     {
+        $header = '启动幻灯片';
+        $description = '描述';
+        $appPhotos = AppPhoto::all();
+        return view('admin.app.photo', compact('header', 'description', 'appPhotos'));
         return Admin::content(function (Content $content) {
 
             $content->header('header');

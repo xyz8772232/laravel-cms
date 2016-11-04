@@ -41,7 +41,7 @@
 @endsection
 
 @section('css')
-    <link rel="stylesheet" href="/css/photo.index.css">
+    <link data-exec-on-popstate rel="stylesheet" href="/css/photo.index.css">
     <link rel="stylesheet" href="/packages/admin/sweetalert/sweetalert.css">
 @endsection
 
