@@ -21,8 +21,8 @@ class SortLinkController extends Controller
      */
     public function index()
     {
-        $header = '图片列表';
-        $description = '描述';
+        $header = '热推文章排序';
+        $description = '';
         $links = SortLink::orderBy('order', 'asc');
         return view('admin.sort.link', ['header' => $header, 'description' => $description, 'links' => $links]);
 

@@ -21,10 +21,10 @@ class SortPhotoController extends Controller
      */
     public function index()
     {
-        $header = '图片列表';
-        $description = '描述';
+        $header = '幻灯片排序';
+        $description = '';
         $photos = SortPhoto::orderBy('order', 'asc');
-        return view('admin.sort.link', ['header' => $header, 'description' => $description, 'photos' => $photos]);
+        return view('admin.sort.photo', ['header' => $header, 'description' => $description, 'photos' => $photos]);
 
         return Admin::content(function (Content $content) {
 
