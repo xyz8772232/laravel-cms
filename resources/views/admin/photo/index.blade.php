@@ -41,11 +41,13 @@
 @endsection
 
 @section('css')
-    <link data-exec-on-popstate rel="stylesheet" href="/css/photo.index.css">
-    <link rel="stylesheet" href="/packages/admin/sweetalert/sweetalert.css">
+  <link rel="stylesheet" href="{{ asset("/packages/admin/bootstrap-fileinput/css/fileinput.min.css") }}">
+  <link rel="stylesheet" href="{{ asset("/packages/admin/sweetalert/sweetalert.css") }}">
+  <link rel="stylesheet" href="{{ asset("/css/photo.index.css") }}">
 @endsection
 
 @section('admin_js')
-    <script data-exec-on-popstate src="/packages/admin/sweetalert/sweetalert.min.js"></script>
-    <script data-exec-on-popstate src="/js/photo.index.js"></script>
+  <script src="{{ asset("/packages/admin/bootstrap-fileinput/js/fileinput.min.js") }}"></script>
+  <script src="{{ asset("/packages/admin/sweetalert/sweetalert.min.js") }}"></script>
+  <script src="{{ asset("/js/photo.index.js") }}"></script>
 @endsection

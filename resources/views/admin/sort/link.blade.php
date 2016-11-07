@@ -31,7 +31,7 @@
 @endsection
 
 @section('css')
-  <link rel="stylesheet" href="/packages/admin/dragula/dragula.min.css">
+  <link rel="stylesheet" href="{{ asset("/packages/admin/dragula/dragula.min.css") }}">
   <style>
     .sort-box {
       margin: 0 20px 20px;
@@ -60,7 +60,7 @@
 @endsection
 
 @section('admin_js')
-  <script data-exec-on-popstate src="/packages/admin/dragula/dragula.min.js"></script>
+  <script src="{{ asset("/packages/admin/dragula/dragula.min.js") }}"></script>
   <script>
     $(function () {
       dragula([document.getElementById('sortBox')])
