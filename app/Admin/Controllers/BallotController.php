@@ -74,9 +74,21 @@ class BallotController extends Controller
         return Admin::grid(Ballot::class, function (Grid $grid) {
 
             $grid->id('ID')->sortable();
+            $grid->article_id('文章id');
+            $grid->type('种类')->value(function($id) {
+                $names = ['投票', 'PK'];
+                return $names[$id];
+            });
 
-            $grid->created_at();
-            $grid->updated_at();
+            $grid->status('状态')->value(function($id) {
+                $names = ['未开始', '进行中', '已结束'];
+                return $names[$id];
+            });
+
+            $grid->start_at('开始时间');
+            $grid->end_at('结束时间');
+
+            $grid->created_at(trans('admin::lang.created_at'));
         });
     }
 

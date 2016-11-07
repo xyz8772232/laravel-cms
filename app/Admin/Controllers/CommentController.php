@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Tool;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Facades\Admin;
@@ -9,6 +10,8 @@ use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\AdminController;
 use App\Comment;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 
 class CommentController extends Controller
 {
@@ -64,6 +67,24 @@ class CommentController extends Controller
     }
 
     /**
+     * 屏蔽
+     * @param                          $id
+     * @param \Illuminate\Http\Request $request
+     */
+    public function block($id, Request $request)
+    {
+        $this->validate($request, [
+            'id' => 'required|exists:comment,id',
+        ]);
+
+        $comment = Comment::find($id);
+        $comment->blocked = 1;
+        $comment->save();
+
+        Tool::showSuccess();
+    }
+
+    /**
      * Make a grid builder.
      *
      * @return Grid
@@ -80,7 +101,19 @@ class CommentController extends Controller
             $grid->user_id('评论者ID');
             $grid->user_nick('评论者昵称');
 
+            $grid->rows(function($row) {
+                $row->actions('delete')->add(function($row) {
+                    if (!$row->is_blocked) {
+                        $blockUrl = route('comments.block', $row->id);
+                        return "<a href='$blockUrl'><i class='fa fa-chain'></i></a>";
+                    } else {
+                        return "<i class='fa fa-chain blocked'></i>";
+                    }
+                });
+            });
+
             $grid->disableCreation();
+
         });
     }
 
