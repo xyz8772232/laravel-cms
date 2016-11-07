@@ -18,6 +18,9 @@ $api = app('Dingo\Api\Routing\Router');
 $api->version('v1', function ($api) {
     $api->group(['namespace' => 'App\Api\Controllers'], function($api) {
         $api->get('comments', 'CommentController@index');
+        $api->get('channels', 'ChannelController@index');
+        $api->get('articles/channel/{id}', 'ArticleController@channel');
+        $api->get('articles/show/{id}', 'ArticleController@show');
     });
 });
 

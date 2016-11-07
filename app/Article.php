@@ -75,4 +75,8 @@ class Article extends Model
         }
         return 0;
     }
+
+    public function getContentAttribute() {
+        return $this->content()->content;
+    }
 }

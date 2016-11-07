@@ -234,19 +234,25 @@ class ArticleController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index(Request $request)
+    public function index()
     {
         $header = '文章列表';
         $description = '描述';
-        $pageSize = $request->get('pageSize', 20);
         $query = Input::all();
-        $articles = Article::with('articleInfo', 'author')->orderBy('id')->orderBy('title')->paginate($pageSize)->appends($query);
+        $articles = Article::with('articleInfo', 'author')->orderBy('id')->paginate()->appends($query);
+        return view('admin.article.index', compact('header', 'description', 'articles'));
+    }
 
-        return view('admin.article.index', ['header' => $header, 'description' => $description, 'articles' => $articles, 'pageSize' => $pageSize]);
+    public function channel($id)
+    {
+        $header = '文章列表';
+        $description = '描述';
+        $query = Input::all();
+        $articles =  Article::with('articleInfo', 'author')->orderBy('id')->paginate($query);
+        return view('admin.article.index', compact('header', 'description', 'articles'));
     }
 
     /**
