@@ -18,6 +18,8 @@ class Channel extends Model
 
     protected $visible = ['id', 'name', 'parent_id', 'deletable'];
 
+    protected $fillable = ['name', 'admin_user_id', 'grade', 'order', 'parent_id'];
+
     /**
      * @var array
      */

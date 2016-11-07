@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Article;
+use App\Channel;
 use App\Keyword;
 use App\Tool;
 use Encore\Admin\Auth\Permission;
@@ -248,11 +249,14 @@ class ArticleController extends Controller
 
     public function channel($id)
     {
+        $childChannelInfo = Channel::with('children_channel')->find($id)->children_channel;
+        $childIds = $childChannelInfo->pluck('id');
+        $childChannels = $childChannelInfo->pluck('name', 'id');
         $header = '文章列表';
         $description = '描述';
-        $query = Input::all();
-        $articles =  Article::with('articleInfo', 'author')->orderBy('id')->paginate($query);
-        return view('admin.article.index', compact('header', 'description', 'articles'));
+        $query = Input::except('_pjax');
+        $articles =  Article::with('articleInfo', 'author')->whereIn('channel_id', $childIds )->orderBy('published_at', 'desc')->paginate($query);
+        return view('admin.article.index', compact('header', 'description', 'childChannels', 'articles'));
     }
 
     /**
