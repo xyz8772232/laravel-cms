@@ -12,11 +12,22 @@
       <div class="col-md-12">
         <div class="box">
           <div class="box-header">
-            <span class="btn btn-sm btn-primary">新闻编辑</span>
+          <form>
+            <a href="" class="btn btn-sm btn-primary link-create-news">新闻编辑</a>
+            <label class="label-type">分类</label>
+            <select class="btn-choose-type" data-placeholder="选择关键字" id="type" name="type">
+              <option value="1">全部</option>
+              <option value="2">经济</option>
+              <option value="3">科学</option>
+              <option value="4">心理</option>
+              <option value="5">数学</option>
+              <option value="6">蓝莓</option>
+            </select>
+          </form>
           </div>
           <!-- /.box-header -->
           <div class="box-body table-responsive no-padding">
-            <table class="table table-hover">
+            <table class="news-list table table-hover">
               <tr>
                 <th><input type="checkbox" class="grid-select-all"></th>
                 <th>重要<a class="fa fa-fw fa-sort" href=""></a></th>
@@ -35,7 +46,7 @@
                     <td><i class="fa @if($article->is_important) fa-star @else fa-star-o @endif text-primary"></i></td>
                     <td>{{ $article->id }}</td>
                     <td><i @if($article->state == 1) class="fa fa-close" style="color:green" @else class="fa fa-check" style="color:red" @endif></i></td>
-                    <td>{{ $article->title }}</td>
+                    <td class="news-title"><span class="news-sign">[头]</span><i class="fa fa-file-image-o"></i>{{ $article->title }}</td>
                     <td>{{ $article->author_name }}</td>
                     <td>{{ $article->created_at }}</td>
                     <td>{{ $article->view_num }}</td>
@@ -53,7 +64,7 @@
             </table>
           </div>
           <div class="box-footer clearfix">
-            <form class="form-inline">
+            <form class="form-news">
               <span class="btn btn-sm btn-danger batch-delete">删除</span>
               <span class="btn btn-sm btn-success batch-check">上线</span>
               <span class="btn btn-sm btn-default">设置头条</span>
@@ -73,17 +84,56 @@
 @endsection
 
 @section('css')
+  <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/plugins/select2/select2.min.css") }}">
   <style>
-    .pagination{display: block; margin: 10px 0; text-align: center;}
-    .pagination .page-item{display: inline-block;}
+    .link-create-news{
+      display: inline-block;
+      margin-right: 25px;
+    }
+    .btn-choose-type{
+      display: inline-block;
+      margin-left: 10px;
+      width: 100px;
+      height: 30px;
+    }
+    .label-type{
+      margin-bottom: 0;
+      vertical-align: middle;
+      color: #666;
+    }
+    .news-list,
+    .news-list th{
+      text-align: center;
+    }
+    .news-list .news-title{
+      text-align: left;
+      min-width: 300px;
+    }
+    .news-list .news-sign{
+      font-weight: bold;
+      color: #337ab7;
+    }
+    .news-list .fa-file-image-o{
+      margin: 4px 3px 0;
+    }
+    .form-news{
+      line-height: 30px;
+      margin-bottom: 5px;
+    }
+    .box-footer .btn{
+      margin-right: 3px;
+    }
     .show-count{width: 50px!important; margin: 0 5px;}
   </style>
 @endsection
 
 @section('admin_js')
+  <script src="{{ asset ("/packages/admin/AdminLTE/plugins/select2/select2.full.min.js") }}"></script>
   <script>
     $(function () {
-
+       $("#type").select2({
+        minimumResultsForSearch: Infinity
+       });
     });
   </script>
 @endsection

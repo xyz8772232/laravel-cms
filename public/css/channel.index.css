@@ -54,6 +54,7 @@
   top: -9px;
   right: -9px;
   font-size: 20px;
+  cursor: pointer;
 }
 
 .channel-group.sort .channel-del {
@@ -69,5 +70,9 @@
 }
 
 .channel-group.sort .channel-box {
-  background-color: #d8f5e4;
+  background-color: #ababab;
+}
+.channel-group.sort .channel,
+.channel-group.sort .channel-ipt {
+  cursor: move;
 }

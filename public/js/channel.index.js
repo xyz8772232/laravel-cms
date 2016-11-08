@@ -1,11 +1,18 @@
 $(function () {
-  var channelEditInstance;
   var channelLevelStack = [];
+
+  // 设置X-CSRF-TOKEN
+  $.ajaxSetup({
+    headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+  });
 
   function ChannelGenerate(subChannels, elChannel) {
     this.subChannels = subChannels;
     this.elChannel = elChannel;
     this.channelNameList = [];
+    this.channelElList = [];
     this.channelLevel = null;
     this._init();
   }
@@ -54,7 +61,8 @@ $(function () {
           showCancelButton: true,
           closeOnConfirm: false,
           animation: 'slide-from-top',
-          inputPlaceholder: '字数请控制在2-5内'
+          inputPlaceholder: '字数请控制在2-5内',
+          showLoaderOnConfirm: true
         }, function (inputValue) {
           if (inputValue === false) return false;
           inputValue = $.trim(inputValue);
@@ -64,7 +72,7 @@ $(function () {
           } else if (self.channelNameList.indexOf(inputValue) >= 0) {
             swal.showInputError('名称已存在');
           } else {
-            self._save();
+            self._add(inputValue);
           }
           return false;
         });
@@ -80,7 +88,7 @@ $(function () {
           self.drake = dragula([self.elBox]);
         }
       }).on('click', '.channel-done', function () {
-        self._save();
+        self._sort();
       });
 
       $(this.elBox).on('click', '.channel', function () {
@@ -93,25 +101,140 @@ $(function () {
           }
           channelLevelStack.push(channel);
           this.classList.add('channel-selected');
-          new ChannelGenerate(subChannels, this)
+          channelLevelStack.length < 4 && new ChannelGenerate(subChannels, this)
         }
-      }).on('click', '.channel-del', function () {
-        //TODO
-      }).on('blur', '.channel-ipt', function () {
-        //var inputValue = $.trim(this.value);
-        //if (inputValue === '') {
-        //  swal('名称不能为空');
-        //} else if (self.channelNameList.indexOf(inputValue) >= 0) {
-        //  swal('名称已存在');
-        //} else {
-        //  self._save();
-        //}
+      })
+      .on('click', '.channel-del', function () {
+        self._del(this.parentNode.channelId);
+        return false;
+      })
+      .on('blur', '.channel-ipt', function () {
+        var inputValue = $.trim(this.value);
+        var _this = this;
+
+        if (inputValue === this.orgVal) {
+          this.value = this.orgVal;
+        } else if (inputValue === '') {
+          dialogError('名称不能为空');
+        } else if (self.channelNameList.indexOf(inputValue) >= 0) {
+          dialogError('名称已存在');
+        } else {
+          self._modify(this.parentNode.channelId, inputValue, handlerModifyError);
+        }
+
+        function dialogError(errorMsg) {
+          swal({
+            title: errorMsg,
+            type: 'error',
+            showCancelButton: true,
+            confirmButtonColor: '#DD6B55',
+            confirmButtonText: '确定',
+            cancelButtonText: '取消'
+          }, function (isConfirm) {
+            handlerModifyError(isConfirm);
+          });
+        }
+
+        function handlerModifyError(isConfirm) {
+          if (isConfirm) {
+            _this.focus();
+          } else {
+            _this.value = _this.orgVal;
+          }
+        }
+
+        return false;
       });
     },
     _unbindEvents: function () {
       $(this.elHeader).off();
       $(this.elBox).off();
       this.elGroup.parentNode.removeChild(this.elGroup);
+    },
+    _add: function (channelName) {
+      var self = this;
+      $.post('/admin/channels', {
+        name: channelName,
+        parent_id: this.elChannel && this.elChannel.channelId
+      })
+      .done(function (res) {
+        self._actionSuccess('添加', res);
+      })
+      .fail(function () {
+        self._actionFail('添加');
+      });
+    },
+    _del: function (channelId) {
+      var self = this;
+      swal({
+        title: '确定删除?',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#DD6B55',
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        closeOnConfirm: false,
+        showLoaderOnConfirm: true
+      }, function (isConfirm) {
+        if (isConfirm) {
+          $.post('/admin/channels/' + channelId, {
+            _method: 'DELETE'
+          })
+          .done(function (res) {
+            self._actionSuccess('删除', res);
+          })
+          .fail(function () {
+            self._actionFail('删除');
+          });
+        }
+      });
+    },
+    _modify: function (channelId, channelName, handlerModifyError) {
+      var self = this;
+      swal({
+        title: '确定修改?',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#DD6B55',
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        closeOnConfirm: false,
+        showLoaderOnConfirm: true
+      }, function (isConfirm) {
+        if (isConfirm) {
+          $.post('/admin/channels/' + channelId, {
+            name: channelName,
+            _method: 'PUT'
+          })
+          .done(function (res) {
+            self._actionSuccess('修改', res, handlerModifyError);
+          })
+          .fail(function () {
+            self._actionFail('修改', '', handlerModifyError);
+          });
+        } else {
+          handlerModifyError(false);
+        }
+      });
+    },
+    _actionSuccess: function (actionName, res, failCallback) {
+      if (res && res.result.status.code === 0) {
+        swal({
+          title: actionName + '成功',
+          type: 'success'
+        }, function () {
+          location.reload();
+        });
+      } else {
+        this._actionFail(actionName, res && res.result.status.msg, failCallback);
+      }
+    },
+    _actionFail: function (actionName, failMsg, callback) {
+      swal({
+        title: actionName + '失败',
+        text: failMsg || '',
+        type: 'error'
+      }, callback)
     },
     _save: function () {
 
@@ -127,10 +250,11 @@ $(function () {
       var elChannel = this.channelOriginalNode.cloneNode(true);
       elChannel.channelId = channel.id;
       elChannel.channelPos = index;
-      elChannel.children[0].value = channel.name;
+      elChannel.children[0].value = elChannel.children[0].orgVal = channel.name;
       channel.deletable || elChannel.removeChild(elChannel.children[1]);
       (elBox || this.elBox).appendChild(elChannel);
       this.channelNameList.push(channel.name);
+      this.channelElList.push(elChannel);
       return elChannel;
     },
     destroy: function () {
