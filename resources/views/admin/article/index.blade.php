@@ -14,14 +14,11 @@
           <div class="box-header">
           <form>
             <a href="{{ route('articles.create') }}" class="btn btn-sm btn-primary link-create-news">新闻编辑</a>
-            <label class="label-type">分类</label>
-            <select class="btn-choose-type" data-placeholder="选择关键字" id="type" name="type">
-              <option value="1">全部</option>
-              <option value="2">经济</option>
-              <option value="3">科学</option>
-              <option value="4">心理</option>
-              <option value="5">数学</option>
-              <option value="6">蓝莓</option>
+            <label class="label-type">频道</label>
+            <select class="btn-choose-type" data-placeholder="选择关键字" id="channel_id" name="channel_id">
+              @foreach( $options as $key => $option)
+              <option value="{{ $key }}">{{ $option }}</option>
+              @endforeach
             </select>
           </form>
           </div>
@@ -131,8 +128,9 @@
   <script src="{{ asset ("/packages/admin/AdminLTE/plugins/select2/select2.full.min.js") }}"></script>
   <script>
     $(function () {
-       $("#type").select2({
-        minimumResultsForSearch: Infinity
+       $("#channel_id").select2({
+        minimumResultsForSearch: Infinity,
+        allowClear: true
        });
     });
   </script>

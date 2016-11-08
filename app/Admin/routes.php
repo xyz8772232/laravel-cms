@@ -10,7 +10,7 @@ $router->post('channels/save', 'ChannelController@save');
 $router->resource('channels', ChannelController::class);
 
 //文章管理相关
-$router->get('articles/channel/{id}', ['uses' => 'ArticleController@channel', 'as' => 'articles.channel']);
+$router->get('articles/channel/{id?}', ['uses' => 'ArticleController@channel', 'as' => 'articles.channel']);
 $router->post('articles/change/{id}', 'ArticleController@change');
 $router->post('link/{id}', 'ArticleController@link');
 $router->resource('articles', ArticleController::class);

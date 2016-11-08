@@ -247,8 +247,22 @@ class ArticleController extends Controller
         return view('admin.article.index', compact('header', 'description', 'articles'));
     }
 
-    public function channel($id)
+    public function channel($id = 1)
     {
+        $options = [0 => 'Root'] + Channel::buildSelectOptions([], $id, '&nbsp;&nbsp;');
+
+//        $select = new Form\Field\Select('channel_id', '频道');
+//        $select->options($options);
+//
+//        ob_start();
+//
+//        echo $select->render();
+//
+//        $channelSelect = ob_get_contents();
+//
+//        ob_end_clean();
+        //dd($options, $channelSelect);
+
         $childChannelInfo = Channel::with('children_channel')->find($id)->children_channel;
         $childIds = $childChannelInfo->pluck('id');
         $childChannels = $childChannelInfo->pluck('name', 'id');
@@ -256,7 +270,7 @@ class ArticleController extends Controller
         $description = '描述';
         $query = Input::except('_pjax');
         $articles =  Article::with('articleInfo', 'author')->whereIn('channel_id', $childIds )->orderBy('published_at', 'desc')->paginate($query);
-        return view('admin.article.index', compact('header', 'description', 'childChannels', 'articles'));
+        return view('admin.article.index', compact('header', 'description', 'childChannels', 'articles', 'options'));
     }
 
     /**

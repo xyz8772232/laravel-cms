@@ -50,6 +50,7 @@
         @include('include.error')
         @yield('content')
         @yield('admin_js')
+        {!! Admin::script() !!}
     </div>
 
     @include('admin::partials.footer')
