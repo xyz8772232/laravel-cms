@@ -21,6 +21,7 @@ $api->version('v1', function ($api) {
         $api->get('channels', 'ChannelController@index');
         $api->get('articles/channel/{id}', 'ArticleController@channel');
         $api->get('articles/show/{id}', 'ArticleController@show');
+        $api->post('ballots/answer/{id}', 'BallotController@answer');
     });
 });
 

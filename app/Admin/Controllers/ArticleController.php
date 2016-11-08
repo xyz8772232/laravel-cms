@@ -249,12 +249,14 @@ class ArticleController extends Controller
 
     public function channel($id)
     {
-        $childIds = Channel::with('children_channel')->find($id)->children_channel->pluck('id')->all();
+        $childChannelInfo = Channel::with('children_channel')->find($id)->children_channel;
+        $childIds = $childChannelInfo->pluck('id');
+        $childChannels = $childChannelInfo->pluck('name', 'id');
         $header = '文章列表';
         $description = '描述';
-        $query = Input::all();
+        $query = Input::except('_pjax');
         $articles =  Article::with('articleInfo', 'author')->whereIn('channel_id', $childIds )->orderBy('published_at', 'desc')->paginate($query);
-        return view('admin.article.index', compact('header', 'description', 'articles'));
+        return view('admin.article.index', compact('header', 'description', 'childChannels', 'articles'));
     }
 
     /**

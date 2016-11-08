@@ -10,7 +10,7 @@ $router->post('channels/save', 'ChannelController@save');
 $router->resource('channels', ChannelController::class);
 
 //文章管理相关
-$router->get('articles/channel/{id}', 'ArticleController@channel');
+$router->get('articles/channel/{id}', ['uses' => 'ArticleController@channel', 'as' => 'articles.channel']);
 $router->post('articles/change/{id}', 'ArticleController@change');
 $router->post('link/{id}', 'ArticleController@link');
 $router->resource('articles', ArticleController::class);
@@ -28,6 +28,8 @@ $router->resource('keywords', KeywordController::class);
 $router->post('comments/block/{$id}',['uses' => 'CommentController@block' ,'as' => 'comments.block']);
 
 $router->resource('comments', CommentController::class);
+
+$router->post('ballots/choice/{$id}', 'BallotController@addChoice');
 $router->resource('ballots', BallotController::class);
 
 $router->resource('photos', PhotoController::class);

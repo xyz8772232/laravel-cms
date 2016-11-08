@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Channel;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Column;
@@ -18,11 +19,60 @@ use Encore\Admin\Widgets\Collapse;
 use Encore\Admin\Widgets\InfoBox;
 use Encore\Admin\Widgets\Tab;
 use Encore\Admin\Widgets\Table;
+use Illuminate\Support\Facades\Cache;
 
 class HomeController extends Controller
 {
     public function index()
     {
+        $header = '111';
+        $description = '111';
+        $newsChannelId = Channel::where('name', '新闻')->first()->id;
+        $channels = Channel::toTree([], $newsChannelId);
+
+        //dd($channels);
+        $articleNums = Cache::get(config('redis.articleNums'));
+        //return view('admin.home.index', compact('header', 'description', 'channels', 'articleNums'));
+
+
+
+        return Admin::content(function(Content $content) use($channels, $articleNums) {
+            $content->header('文章统计');
+            $content->description('Description...');
+            $content->row(function ($row) use($articleNums) {
+                $row->column(6, new InfoBox('未审核文章', 'book', 'red', '/admin/articles', $articleNums['unaudited']));
+                $row->column(6, new InfoBox('商业软文', 'file', 'yellow', '/admin/orders', $articleNums['soft']));
+            });
+
+            //dd($channels);
+            foreach ($channels as $channel) {
+                $headers = $rows = [];
+                $headers = [$channel['name'], $articleNums[$channel['id']]];
+                if (isset($channel['children'])) {
+                    foreach ($channel['children'] as $child) {
+                        $route = route('articles.channel', ['id' => $child['id']]);
+                        $link = '<a href="'.$route.'">'.$child["name"].'</a>';
+                        $rows[] =  [$link, $articleNums[$child['id']]];
+                    }
+                }
+                $tables[] = new Table($headers, $rows);
+            }
+
+
+            for ($i =0; $i < count($tables); $i+=2) {
+                $content->row(
+                    function ($row) use ($tables, $i) {
+                        $row->column(6, (new Box('二级频道', $tables[$i]))->style('info')->solid());
+                        if ($i+1 < count($tables)) {
+                            $row->column(6, (new Box('二级频道', $tables[$i+1]))->style('info')->solid());
+                        }
+                    }
+                );
+            }
+
+        });
+
+
         return Admin::content(function (Content $content) {
 
             $content->header('Dashboard');

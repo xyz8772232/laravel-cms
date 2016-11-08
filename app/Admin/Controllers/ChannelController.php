@@ -19,6 +19,7 @@ use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\AdminController;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ChannelController extends Controller
 {
@@ -56,7 +57,7 @@ class ChannelController extends Controller
             if (json_last_error() != JSON_ERROR_NONE) {
                 Tool::showError('参数错误');
             }
-            Channel::saveTree($tree);
+            Channel::saveTree($tree['children'], $tree['id']);
             Tool::showSuccess();
         }
         Tool::showError('参数错误');
@@ -100,7 +101,26 @@ class ChannelController extends Controller
 
     public function update($id)
     {
-        return $this->form()->update($id);
+        Validator::make(Input::all(), [
+            'name' => 'required',
+        ])->validate();
+
+        $name = Input::get('name');
+        $channel = Channel::findOrFail($id);
+        $nameUsed = Channel::where('parent_id', $channel->parent_id)->where('name', Input::get('name'))->first();
+        if ($nameUsed) {
+            return Tool::showError('该名称已被使用');
+        }
+
+        $channel->name = $name;
+        $result = $channel->save();
+
+        if ($result) {
+            return Tool::showSuccess();
+        }
+
+        return Tool::showError();
+
     }
 
     public function store()
@@ -111,9 +131,21 @@ class ChannelController extends Controller
         } else {
             $grade = Channel::find($parent_id)->grade + 1;
         }
-        Input::merge(['parent_id' => $parent_id, 'grade' => $grade]);
 
-        return $this->form()->store();
+        $nameUsed = Channel::where('parent_id', $parent_id)->where('name', Input::get('name'))->first();
+        if ($nameUsed) {
+            return Tool::showError('该名称已被使用');
+        }
+
+        Input::merge(['parent_id' => $parent_id, 'grade' => $grade, 'admin_user_id' => Admin::user()->id ]);
+
+        $channel = Channel::create(Input::all());
+
+        if ($channel) {
+            return Tool::showSuccess();
+        }
+
+        return Tool::showError();
     }
 
     /**
@@ -123,7 +155,6 @@ class ChannelController extends Controller
      */
     public function destroy($id)
     {
-        dd(Channel::toTree());
         $channel = Channel::findOrFail($id);
         $children_channel = $channel->children_channel->first();
         if ($children_channel) {
@@ -190,6 +221,7 @@ class ChannelController extends Controller
             $form->text('name', '频道名');
             $form->select('parent_id', '父频道')->options(Channel::pluck('name', 'id')->prepend('无'));
             $form->hidden('grade');
+            $form->hidden('admin_user_id');
         });
     }
 
