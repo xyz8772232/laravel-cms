@@ -129,4 +129,40 @@ class Channel extends Model
                 }
             }
     }
+
+    /**
+     * Build options of select field in form.
+     *
+     * @param array  $elements
+     * @param int    $parentId
+     * @param string $prefix
+     *
+     * @return array
+     */
+    public static function buildSelectOptions(array $elements = [], $parentId = 0, $prefix = '')
+    {
+        $prefix = $prefix ?: str_repeat('&nbsp;', 6);
+
+        $options = [];
+
+        if (empty($elements)) {
+            $elements = static::orderByRaw('`order` = 0,`order`')->get(['id', 'parent_id', 'name'])->toArray();
+        }
+
+        foreach ($elements as $element) {
+            $element['name'] = $prefix.'&nbsp;'.$element['name'];
+            if ($element['parent_id'] == $parentId) {
+                $children = static::buildSelectOptions($elements, $element['id'], $prefix.$prefix);
+
+                $options[$element['id']] = $element['name'];
+
+                if ($children) {
+                    $options += $children;
+                }
+            }
+        }
+
+        return $options;
+    }
+
 }
