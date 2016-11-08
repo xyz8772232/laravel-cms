@@ -13,7 +13,7 @@
         <div class="box">
           <div class="box-header">
           <form>
-            <a href="" class="btn btn-sm btn-primary link-create-news">新闻编辑</a>
+            <a href="{{ route('articles.create') }}" class="btn btn-sm btn-primary link-create-news">新闻编辑</a>
             <label class="label-type">分类</label>
             <select class="btn-choose-type" data-placeholder="选择关键字" id="type" name="type">
               <option value="1">全部</option>
