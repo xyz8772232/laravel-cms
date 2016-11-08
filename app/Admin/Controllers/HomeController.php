@@ -55,21 +55,21 @@ class HomeController extends Controller
                         $rows[] =  [$link, $articleNums[$child['id']]];
                     }
                 }
-                $unauditedTable[] = new Table($headers, $rows);
+                $tables[] = new Table($headers, $rows);
             }
 
-            for ($i =0; $i < count($unauditedTable); $i+=2) {
+
+            for ($i =0; $i < count($tables); $i+=2) {
                 $content->row(
-                    function ($row) use ($unauditedTable, $i) {
-                        $row->column(6, (new Box('二级频道', $unauditedTable[$i]))->style('info')->solid());
-                        if ($i+1 <= count($unauditedTable)) {
-                            $row->column(6, (new Box('二级频道', $unauditedTable[$i+1]))->style('info')->solid());
+                    function ($row) use ($tables, $i) {
+                        $row->column(6, (new Box('二级频道', $tables[$i]))->style('info')->solid());
+                        if ($i+1 < count($tables)) {
+                            $row->column(6, (new Box('二级频道', $tables[$i+1]))->style('info')->solid());
                         }
                     }
                 );
             }
 
-            //(new Box('二级频道', $unauditedTable))->style('info')->solid()
         });
 
 

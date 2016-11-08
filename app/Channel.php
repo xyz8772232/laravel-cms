@@ -89,26 +89,22 @@ class Channel extends Model
         return $branch;
     }
 
+
     /**
      * Set the order of branches in the tree.
      *
-     * @param array $tree
+     * @param array $order
      *
-     * @return array
+     * @return void
      */
-    protected static function setBranchOrder(array &$tree)
+
+    protected static function setBranchOrder(array $order)
     {
-//        static::$branchOrder = array_flip(array_flatten($order));
-//
-//        static::$branchOrder = array_map(function ($item) {
-//            return ++$item;
-//        }, static::$branchOrder);
-        foreach ($tree as $key => &$branch) {
-            $branch['order'] = $key;
-            if (isset($branch['children'])) {
-               self::setBranchOrder($branch['children']);
-            }
-        }
+        static::$branchOrder = array_flip(array_flatten($order));
+
+        static::$branchOrder = array_map(function ($item) {
+            return ++$item;
+        }, static::$branchOrder);
     }
 
     /**
@@ -121,28 +117,16 @@ class Channel extends Model
     {
             static::setBranchOrder($tree);
 
-//        foreach ($tree as $branch) {
-//            $node = static::find($branch['id']);
-//
-//            $node->parent_id = $parentId;
-//            $node->order = static::$branchOrder[$branch['id']];
-//            $node->save();
-//
-//            if (isset($branch['children'])) {
-//                static::saveTree($branch['children'], $branch['id']);
-//            }
-//        }
+            foreach ($tree as $branch) {
+                $node = static::find($branch['id']);
 
-        foreach ($tree as $branch) {
-            if ($branch['id']) {
-                $node =static::findOrFail($branch['id']);
-                $node->name = $branch['name'];
-                $node->order = $branch['order'];
+                $node->parent_id = $parentId;
+                $node->order = static::$branchOrder[$branch['id']];
                 $node->save();
-            } else {
-                static::create(['name' => $branch['name'], 'order' => $branch['order'], '']);
-            }
-        }
 
+                if (isset($branch['children'])) {
+                    static::saveTree($branch['children'], $branch['id']);
+                }
+            }
     }
 }

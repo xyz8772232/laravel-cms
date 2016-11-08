@@ -64,6 +64,11 @@ class BallotController extends Controller
         });
     }
 
+    public function store()
+    {
+
+    }
+
     /**
      * Make a grid builder.
      *

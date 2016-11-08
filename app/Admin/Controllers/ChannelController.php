@@ -57,7 +57,7 @@ class ChannelController extends Controller
             if (json_last_error() != JSON_ERROR_NONE) {
                 Tool::showError('参数错误');
             }
-            Channel::saveTree($tree);
+            Channel::saveTree($tree['children'], $tree['id']);
             Tool::showSuccess();
         }
         Tool::showError('参数错误');

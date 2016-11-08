@@ -28,6 +28,8 @@ $router->resource('keywords', KeywordController::class);
 $router->post('comments/block/{$id}',['uses' => 'CommentController@block' ,'as' => 'comments.block']);
 
 $router->resource('comments', CommentController::class);
+
+$router->post('ballots/choice/{$id}', 'BallotController@addChoice');
 $router->resource('ballots', BallotController::class);
 
 $router->resource('photos', PhotoController::class);

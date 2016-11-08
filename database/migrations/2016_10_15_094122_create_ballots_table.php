@@ -16,10 +16,11 @@ class CreateBallotsTable extends Migration
         $tableName = 'ballots';
         Schema::create($tableName, function (Blueprint $table) {
             $table->increments('id');
-            $table->boolean('type')->default(0)->comment('0:投票 1:pk');
-            $table->unsignedInteger('article_id')->default(0)->comment('0:投票 1:pk');
+            $table->boolean('type')->default(0)->comment('0:单选 1:多选 2:PK');
+            $table->unsignedTinyInteger('max_num')->default(1)->comment('最多选择数量');
+            $table->unsignedInteger('article_id');
             $table->unsignedTinyInteger('status')->default(0)->comment('0:进行 1:结束');
-            $table->string('content')->comment('投票的内容');
+            $table->string('title')->comment('投票的标题');
             $table->timestamp('start_at')->nullable();
             $table->timestamp('end_at')->nullable();
             $table->string('result')->nullable();
