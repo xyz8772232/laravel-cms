@@ -80,15 +80,18 @@ $(function () {
         if (self.drake) {
           this.innerText = '排序';
           self.elGroup.classList.remove('sort');
+          restSort();
+          $(self.channelElList).children('channel-ipt').prop('readonly', false);
           self.drake.destroy();
           self.drake = null;
         } else {
           this.innerText = '取消';
           self.elGroup.classList.add('sort');
+          $(self.channelElList).children('channel-ipt').prop('readonly', true);
           self.drake = dragula([self.elBox]);
         }
       }).on('click', '.channel-done', function () {
-        self._sort();
+        self._sort(restSort);
       });
 
       $(this.elBox).on('click', '.channel', function () {
@@ -119,7 +122,7 @@ $(function () {
         } else if (self.channelNameList.indexOf(inputValue) >= 0) {
           dialogError('名称已存在');
         } else {
-          self._modify(this.parentNode.channelId, inputValue, handlerModifyError);
+          self._modify(this.parentNode.channelId, inputValue, handlerModifyFail);
         }
 
         function dialogError(errorMsg) {
@@ -131,11 +134,11 @@ $(function () {
             confirmButtonText: '确定',
             cancelButtonText: '取消'
           }, function (isConfirm) {
-            handlerModifyError(isConfirm);
+            handlerModifyFail(isConfirm);
           });
         }
 
-        function handlerModifyError(isConfirm) {
+        function handlerModifyFail(isConfirm) {
           if (isConfirm) {
             _this.focus();
           } else {
@@ -145,6 +148,10 @@ $(function () {
 
         return false;
       });
+
+      function restSort() {
+        $(self.elBox).html('').append(self.channelElList);
+      }
     },
     _unbindEvents: function () {
       $(this.elHeader).off();
@@ -189,7 +196,7 @@ $(function () {
         }
       });
     },
-    _modify: function (channelId, channelName, handlerModifyError) {
+    _modify: function (channelId, channelName, handlerModifyFail) {
       var self = this;
       swal({
         title: '确定修改?',
@@ -207,15 +214,37 @@ $(function () {
             _method: 'PUT'
           })
           .done(function (res) {
-            self._actionSuccess('修改', res, handlerModifyError);
+            self._actionSuccess('修改', res, handlerModifyFail);
           })
           .fail(function () {
-            self._actionFail('修改', '', handlerModifyError);
+            self._actionFail('修改', '', handlerModifyFail);
           });
         } else {
-          handlerModifyError(false);
+          handlerModifyFail(false);
         }
       });
+    },
+    _sort: function (handlerSortFail) {
+      var self = this;
+      var tree = {
+        id: this.elChannel.channelId,
+        children: Array.prototype.reduce.call(this.elBox.children, function (per, cur) {
+          per.push({
+            id: cur.channelId
+          });
+          return per;
+        }, [])
+      };
+      $.post('/admin/channels/save', {
+        _tree: JSON.stringify(tree)
+      })
+      .done(function (res) {
+        self._actionSuccess('排序', res, handlerSortFail);
+      })
+      .fail(function () {
+        self._actionFail('排序', '', handlerSortFail);
+      });
+
     },
     _actionSuccess: function (actionName, res, failCallback) {
       if (res && res.result.status.code === 0) {
@@ -235,9 +264,6 @@ $(function () {
         text: failMsg || '',
         type: 'error'
       }, callback)
-    },
-    _save: function () {
-
     },
     insertChannel: function (channel, index, elBox) {
       if (!this.channelOriginalNode) {
