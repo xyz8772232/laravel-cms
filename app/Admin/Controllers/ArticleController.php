@@ -242,9 +242,10 @@ class ArticleController extends Controller
     {
         $header = '文章列表';
         $description = '描述';
+        $options = [0 => 'Root'] + Channel::buildSelectOptions([], 0, '&nbsp;&nbsp;');
         $query = Input::all();
-        $articles = Article::with('articleInfo', 'author')->orderBy('id')->paginate()->appends($query);
-        return view('admin.article.index', compact('header', 'description', 'articles'));
+        $articles = Article::with('articleInfo', 'author')->where('state', 0)->orderBy('id')->paginate()->appends($query);
+        return view('admin.article.index', compact('header', 'description', 'articles', 'options'));
     }
 
     public function channel($id = 1)
