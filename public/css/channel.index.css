@@ -57,7 +57,8 @@
   cursor: pointer;
 }
 
-.channel-group.sort .channel-del {
+.channel-group.sort .channel-del,
+.channel.gu-mirror .channel-del {
   visibility: hidden;
 }
 
@@ -72,7 +73,10 @@
 .channel-group.sort .channel-box {
   background-color: #ababab;
 }
+
 .channel-group.sort .channel,
-.channel-group.sort .channel-ipt {
+.channel-group.sort .channel-ipt,
+.channel.gu-mirror,
+.channel.gu-mirror .channel-ipt {
   cursor: move;
 }
