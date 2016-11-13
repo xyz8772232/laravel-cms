@@ -242,7 +242,7 @@ class ArticleController extends Controller
     {
         $header = '文章列表';
         $description = '描述';
-        $options = [0 => 'Root'] + Channel::buildSelectOptions([], 0, '&nbsp;&nbsp;');
+        $options = [0 => '全部'] + Channel::buildSelectOptions([], 0, '&nbsp;&nbsp;');
         $query = Input::all();
         $articles = Article::with('articleInfo', 'author')->where('state', 0)->orderBy('id')->paginate()->appends($query);
         return view('admin.article.index', compact('header', 'description', 'articles', 'options'));
@@ -250,7 +250,9 @@ class ArticleController extends Controller
 
     public function channel($id = 1)
     {
-        $options = [0 => 'Root'] + Channel::buildSelectOptions([], $id, '&nbsp;&nbsp;');
+        $options = [0 => '全部'] + Channel::buildSelectOptions([], $id, '&nbsp;&nbsp;');
+
+        $channelIds = Channel::branchIds([], $id);
 
 //        $select = new Form\Field\Select('channel_id', '频道');
 //        $select->options($options);
@@ -264,13 +266,11 @@ class ArticleController extends Controller
 //        ob_end_clean();
         //dd($options, $channelSelect);
 
-        $childChannelInfo = Channel::with('children_channel')->find($id)->children_channel;
-        $childIds = $childChannelInfo->pluck('id');
-        $childChannels = $childChannelInfo->pluck('name', 'id');
+        $childChannels = Channel::with('children_channel')->find($id)->children_channel->pluck('name', 'id');
         $header = '文章列表';
         $description = '描述';
         $query = Input::except('_pjax');
-        $articles =  Article::with('articleInfo', 'author')->whereIn('channel_id', $childIds )->orderBy('published_at', 'desc')->paginate($query);
+        $articles =  Article::with('articleInfo', 'author')->whereIn('channel_id', $channelIds )->orderBy('published_at', 'desc')->paginate($query);
         return view('admin.article.index', compact('header', 'description', 'childChannels', 'articles', 'options'));
     }
 

@@ -89,6 +89,33 @@ class Channel extends Model
         return $branch;
     }
 
+    /**
+     * Get the ids of the branches in the tree
+     * @param array $elements
+     * @param int $parentId
+     * @return array
+     */
+    public static function branchIds($elements = [], $parentId = 0)
+    {
+        $branch = [];
+
+        if (empty($elements)) {
+            $elements = static::orderByRaw('`order` = 0,`order`')->select('id', 'parent_id')->get();
+        }
+
+
+        foreach ($elements as $element) {
+            if ($element['parent_id'] == $parentId) {
+                $branch[] = $element['id'];
+                $children = static::branchIds($elements, $element['id']);
+                if ($children) {
+                    $branch = array_merge($branch, $children);
+                }
+            }
+        }
+        return $branch;
+    }
+
 
     /**
      * Set the order of branches in the tree.
@@ -113,7 +140,7 @@ class Channel extends Model
      * @param array $tree
      * @param int   $parentId
      */
-    public static function saveTree($tree = [], $parentId = 0)
+    public static function saveTree(array $tree = [], $parentId = 0)
     {
             static::setBranchOrder($tree);
 
@@ -139,14 +166,14 @@ class Channel extends Model
      *
      * @return array
      */
-    public static function buildSelectOptions(array $elements = [], $parentId = 0, $prefix = '')
+    public static function buildSelectOptions($elements = [], $parentId = 0, $prefix = '')
     {
         $prefix = $prefix ?: str_repeat('&nbsp;', 6);
 
         $options = [];
 
         if (empty($elements)) {
-            $elements = static::orderByRaw('`order` = 0,`order`')->get(['id', 'parent_id', 'name'])->toArray();
+            $elements = static::orderByRaw('`order` = 0,`order`')->get(['id', 'parent_id', 'name']);
         }
 
         foreach ($elements as $element) {

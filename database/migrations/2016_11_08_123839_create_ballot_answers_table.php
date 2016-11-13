@@ -16,7 +16,7 @@ class CreateBallotAnswersTable extends Migration
         Schema::create('ballot_answers', function(Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('ballot_id')->comment('所属ballot');
-            $table->string('choice_id')->comment('所属选项');
+            $table->unsignedInteger('choice_id')->comment('所属选项');
             $table->unsignedInteger('user_id')->comment('用户id');
             $table->timestamps();
             $table->softDeletes();
@@ -34,6 +34,6 @@ class CreateBallotAnswersTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('ballot_answers');
     }
 }

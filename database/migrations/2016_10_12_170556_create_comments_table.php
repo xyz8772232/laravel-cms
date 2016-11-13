@@ -14,9 +14,12 @@ class CreateCommentsTable extends Migration
     public function up()
     {
         Schema::create('comments', function (Blueprint $table) {
+//            $table->charset = 'utf8mb4';
+//            $table->collation = 'utf8mb4_unicode_ci';
             $table->increments('id');
             $table->unsignedInteger('article_id');
-            $table->string('content');
+            $table->string('content')->charset('utf8mb4')->collate('utf8mb4_unicode_ci');
+            //$table->string('content');
             $table->ipAddress('ip')->nullable();
             $table->unsignedInteger('user_id')->comment('评论者id');
             $table->string('user_nick')->comment('评论者昵称');
