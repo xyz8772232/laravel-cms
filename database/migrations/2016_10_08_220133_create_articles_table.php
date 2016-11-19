@@ -25,7 +25,7 @@ class CreateArticlesTable extends Migration
             $table->unsignedInteger('auditor_id')->default(0)->comment('审核人');
             $table->unsignedInteger('channel_id')->default(0);
             $table->boolean('title_bold')->default(0)->comment('是否粗体');
-            $table->string('title_color', 255)->default('#ccc');
+            $table->string('title_color', 255)->default('#333333');
             $table->string('subtitle', 255)->default('');
             $table->string('cover_pic', 1000)->nullable()->comment('封面图');
             $table->unsignedtinyInteger('top_grade')->default(0)->comment('置顶级别');

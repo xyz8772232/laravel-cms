@@ -14,4 +14,5 @@ return
         'audit' => 4,
         'move' => 5,
     ],
+    'sortMaxNum' => 6,
 ];
