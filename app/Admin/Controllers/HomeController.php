@@ -45,8 +45,9 @@ class HomeController extends Controller
             });
 
             //dd($channels);
+            $tables = [];
             foreach ($channels as $channel) {
-                $headers = $rows = [];
+                $rows = [];
                 $headers = [$channel['name'], $articleNums[$channel['id']]];
                 if (isset($channel['children'])) {
                     foreach ($channel['children'] as $child) {

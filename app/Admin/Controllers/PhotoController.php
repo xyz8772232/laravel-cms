@@ -111,8 +111,8 @@ class PhotoController extends Controller
     {
         $this->validate($request, [
             'photo' => 'required|image']);
-        $photo =  $request->file('photo');
 
+        $photo =  $request->file('photo');
         $uid = Admin::user()->id;
         $path = app('fileUpload')->prepare($photo);
         $result = Photo::create(['admin_user_id' => $uid, 'path' => $path]);
@@ -121,7 +121,6 @@ class PhotoController extends Controller
             return Tool::showSuccess('上传成功', ['path' => $path]);
         }
         return Tool::showError();
-
     }
 
 

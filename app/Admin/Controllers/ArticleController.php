@@ -306,8 +306,15 @@ class ArticleController extends Controller
         $header = '发表文章';
         $description = '描述';
         $keywords = Keyword::pluck('name', 'id');
+        $channels = Channel::toTree([], 0);
 
-        return view('admin.article.create', ['header' => $header, 'description' => $description, 'keywords' => $keywords]);
+        return view('admin.article.create',
+            [
+                'header' => $header,
+                'description' => $description,
+                'keywords' => $keywords,
+                'channels' => $channels
+            ]);
     }
 
     /**

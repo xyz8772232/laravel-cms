@@ -38,6 +38,8 @@ $router->get('watermarks', 'WatermarkController@index');
 $router->post('watermarks/save', 'WatermarkController@save');
 $router->get('watermarks/create', 'WatermarkController@create');
 
+$router->any('ueditor', 'UploadController@ueditorUpload');
+
 
 $router->resource('sort_links', SortLinkController::class);
 $router->resource('sort_photos', SortPhotoController::class);
