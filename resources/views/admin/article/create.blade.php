@@ -97,7 +97,7 @@
               </div>
               <div class="form-group" id="normalArticle">
                 <label for="content" class="col-sm-2 control-label">正文内容</label>
-                <div class="col-sm-6">
+                <div class="col-sm-8">
                   <script id="content" name="content" type="text/plain">
                     初始化内容
                   </script>
@@ -132,8 +132,7 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">文字连接</label>
                 <div class="col-sm-6">
-                  <input type="checkbox" class="sub-form-switch"/>
-                  <input type="hidden" name="newsLink[effective]" value="0">
+                  <input type="checkbox" name="newsLink[effective]" checked class="sub-form-switch"/>
                   <div class="sub-form" id="newsLinkSubForm">
                     <div class="sub-form-add e-add">+新增文字连接</div>
                   </div>
@@ -142,9 +141,8 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">PK</label>
                 <div class="col-sm-6">
-                  <input type="checkbox" class="sub-form-switch"/>
-                  <input type="hidden" name="pk[effective]" value="0">
-                  <div class="sub-form">
+                  <input type="checkbox" name="pk[effective]" class="sub-form-switch" id="pkSFS"/>
+                  <div class="sub-form" id="pkSubForm">
                     <div class="sub-form-group clearfix">
                       <div class="sub-form-group-l">
                         <label class="control-label">标题</label>
@@ -170,8 +168,7 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">投票</label>
                 <div class="col-sm-6">
-                  <input type="checkbox" class="sub-form-switch"/>
-                  <input type="hidden" name="vote[effective]" value="0">
+                  <input type="checkbox" name="vote[effective]" class="sub-form-switch" id="voteSFS"/>
                   <div class="sub-form" id="voteSubForm">
                     <div class="vote-type">
                       <input class="vote-type-radio" type="radio" name="vote_type" value="0" checked>单选
@@ -202,14 +199,11 @@
               </div>
               <div class="form-group">
                 <label class="col-sm-2 control-label">所属频道</label>
-                <div class="col-sm-6 input-line-group">
-                  <select class="select-line" name="">
-                    <option>房产经济</option>
-                    <option>房产</option>
-                  </select>
-                  <select class="select-line" name=""></select>
-                  <select class="select-line" name=""></select>
-                  <select class="select-line" name=""></select>
+                <div class="col-sm-6 input-line-group" id="channel">
+                  <select class="select-line e-channel" name="channel1"></select>
+                  <select class="select-line e-channel" name="channel2"></select>
+                  <select class="select-line e-channel" name="channel3"></select>
+                  <select class="select-line e-channel" name="channel4"></select>
                 </div>
               </div>
             </div>
@@ -255,5 +249,11 @@
   <script src="{{ asset("/packages/admin/dragula/dragula.min.js") }}"></script>
   <script src="{{ asset("/packages/admin/ueditor-utf8-php/ueditor.config.js") }}"></script>
   <script src="{{ asset("/packages/admin/ueditor-utf8-php/ueditor.all.min.js") }}"></script>
+  <script>
+    var CHANNEL = {!! json_encode($channels) !!};
+    var PAGE_CONFIG = {
+
+    };
+  </script>
   <script src="{{ asset ("/js/article-edit.js") }}"></script>
 @endsection

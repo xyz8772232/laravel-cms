@@ -20,21 +20,92 @@ $(function () {
    * sub form
    */
   $('.sub-form-switch').each(function () {
-    var $switchIpt = $(this.nextElementSibling);
-    var $subForm = $(this.nextElementSibling.nextElementSibling);
+    var $subForm = $(this).siblings('.sub-form');
     $(this).bootstrapSwitch({
       size: 'small',
-      onSwitchChange: function (event, state) {
-        if (state) {
-          $switchIpt.val('1');
-          $subForm.show();
-        } else {
-          $switchIpt.val('0');
-          $subForm.hide();
-        }
-      }
+      onInit: switchSubForm,
+      onSwitchChange: switchSubForm
     });
+    function switchSubForm(e, state) {
+      $subForm[state ? 'show' : 'hide']();
+    }
   });
+
+  /**
+   * channel
+   */
+  function Channel(root, channelPath) {
+    this.$root = $(root);
+    this._$channels = this.$root.children('.e-channel');
+    this._channelLevelStack = [];
+    this._init(channelPath);
+  }
+
+  Channel.prototype = {
+    constructor: Channel,
+    _init: function (channelPath) {
+      var self = this;
+
+      // 标识频道级别
+      this._$channels.each(function (index) {
+        this.channelLevel = index + 1;
+        self._addOptions(this);
+      });
+      // 读取初始化频道
+      if (channelPath) {
+        var parPath;
+        channelPath.forEach(function (path, index) {
+          var el = self._$channels[index];
+          self._readChannel(el, parPath);
+          parPath = path;
+          el.selectedIndex = path + 1;
+        });
+      } else {
+        this._readChannel(this._$channels[0]);
+      }
+      // 绑定事件
+      this._bindEvent();
+    },
+    _readChannel: function (el, parPath) {
+      var channelLevelStack = this._channelLevelStack;
+      var channels;
+
+      channels = parPath !== undefined ? (parPath < 0 ? null : channelLevelStack[0].channels[parPath].children) : CHANNEL;
+      this._addOptions(el, channels);
+      channels && channelLevelStack.unshift({
+        el: el,
+        channels: channels
+      });
+    },
+    _addOptions: function (elChannel, channels) {
+      var channelLevel = elChannel.channelLevel;
+      var chanelLevelNameTable = ['一', '二', '三', '四'];
+      var strHtml = '<option>' + chanelLevelNameTable[channelLevel - 1] + '级频道</option>';
+
+      channels && channels.forEach(function (channel) {
+        strHtml += '<option value="' + channel.id + '">' + channel.name + '</option>';
+      });
+      elChannel.innerHTML = strHtml;
+    },
+    _bindEvent: function () {
+      var self = this;
+      this.$root.on('change', '.e-channel', function () {
+        var channelLevel = this.channelLevel;
+        var channelLevelItem;
+
+        while (channelLevel < self._channelLevelStack.length) {
+          channelLevelItem = self._channelLevelStack.shift();
+          self._addOptions(channelLevelItem.el);
+        }
+
+        // 读取下一级的频道
+        this.nextElementSibling && self._readChannel(this.nextElementSibling, this.selectedIndex - 1);
+      });
+    },
+    destroy: function () {
+      this.$root.off('change');
+    }
+  };
 
   /**
    * 切换普通新闻和图片新闻
@@ -189,14 +260,17 @@ $(function () {
           noticeError($item, '每张图片大小不超过10M');
         } else {
           // 提交图片文件,并在接受到结果后进行处理
-          self._uploadFile(file).done(function (res) {
-            if (res && res.status.code === 0) {
+          var $progressBar = $item.find('.imgup-progress-bar');
+          self._uploadFile(file, function (percentComplete) {
+            $progressBar.width(percentComplete * 100 + '%');
+          }).done(function (res) {
+            if (res && res.result.status.code === 0) {
+              var path = res.result.data.path;
               $item
               .removeClass('uploading')
-              .find('.imgup-preview').attr('src', res.url)
-              .siblings('.imgup-img-form').val(res.url);
+              .siblings('.imgup-img-form').val(path);
             } else {
-              noticeError($item, res.status.msg);
+              noticeError($item, res.result.status.msg);
             }
           }).fail(function () {
             noticeError($item, '上传失败');
@@ -219,7 +293,7 @@ $(function () {
         return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
       }
     },
-    _uploadFile: function (file) {
+    _uploadFile: function (file, progress) {
       var fd = new FormData();
       fd.append('photo', file);
       return $.ajax({
@@ -228,7 +302,16 @@ $(function () {
         cache: false,
         data: fd,
         processData: false,
-        contentType: false
+        contentType: false,
+        xhr: progress && function () {
+          var xhr = new window.XMLHttpRequest();
+          xhr.upload.addEventListener("progress", function (evt) {
+            if (evt.lengthComputable) {
+              progress(evt.loaded / evt.total)
+            }
+          }, false);
+          return xhr;
+        }
       });
     },
     destroy: function () {
@@ -247,10 +330,13 @@ $(function () {
   $newsLinkSubForm
   .on('click', '.e-add', function () {
     var strHtml = createSubForm_NewsLink();
-    $newsLinkSubForm.children().eq(-1).before(strHtml);
+    var $el = $(strHtml);
+    $el[0].channelInstance = new Channel($el.find('.select-group')[0]);
+    $newsLinkSubForm.children().eq(-1).before($el);
   })
   .on('click', '.e-delete', function () {
     $(this).parent('.sub-form-group').slideUp(250, function () {
+      this.channelInstance && this.channelInstance.destroy();
       $(this).remove();
     })
   });
@@ -266,10 +352,10 @@ $(function () {
       + '</div>'
       + '<label class="control-label">频道</label>'
       + '<div class="select-group">'
-      + '<select class="form-control news-link-select" name="newsLink[' + randomId + '][channel1]"></select>'
-      + '<select class="form-control news-link-select" name="newsLink[' + randomId + '][channel2]"></select>'
-      + '<select class="form-control news-link-select" name="newsLink[' + randomId + '][channel3]"></select>'
-      + '<select class="form-control news-link-select" name="newsLink[' + randomId + '][channel4]"></select>'
+      + '<select class="form-control news-link-select e-channel" name="newsLink[' + randomId + '][channel1]"></select>'
+      + '<select class="form-control news-link-select e-channel" name="newsLink[' + randomId + '][channel2]"></select>'
+      + '<select class="form-control news-link-select e-channel" name="newsLink[' + randomId + '][channel3]"></select>'
+      + '<select class="form-control news-link-select e-channel" name="newsLink[' + randomId + '][channel4]"></select>'
       + '</div>'
       + '</div>'
       + '<div class="sub-form-group-r e-delete"><i class="fa fa-trash-o"></i></div>'
@@ -277,9 +363,26 @@ $(function () {
   }
 
   /**
-   * 投票
+   * pk,投票切换 & 增删投票选项
    */
+  var $pkSFS = $('#pkSFS');
+  var $voteSFS = $('#voteSFS');
+  var $pkSubForm = $('#pkSubForm');
   var $voteSubForm = $('#voteSubForm');
+
+  $pkSFS.on('switchChange.bootstrapSwitch', function(event, state) {
+    if (state) {
+      $voteSFS.bootstrapSwitch('state', false);
+      $voteSubForm.hide();
+    }
+  });
+  $voteSFS.on('switchChange.bootstrapSwitch', function(event, state) {
+    if (state) {
+      $pkSFS.bootstrapSwitch('state', false);
+      $pkSubForm.hide();
+    }
+  });
+
   $voteSubForm
   .on('click', '.e-add', function () {
     var strHtml = createSubForm_Vote();
@@ -304,4 +407,9 @@ $(function () {
       + '<div class="sub-form-group-r e-delete"><i class="fa fa-trash-o"></i></div>'
       + '</div>';
   }
+
+  /**
+   * 所属频道
+   */
+  new Channel($('#channel'), [0, 0, 1, 0]);
 });
