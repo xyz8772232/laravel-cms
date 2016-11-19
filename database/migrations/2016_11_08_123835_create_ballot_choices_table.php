@@ -31,6 +31,7 @@ class CreateBallotChoicesTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('ballot_choices');
+
     }
 }

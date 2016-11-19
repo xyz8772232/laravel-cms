@@ -107,6 +107,23 @@ class PhotoController extends Controller
         return Tool::showError();
     }
 
+    public function upload(Request $request)
+    {
+        $this->validate($request, [
+            'photo' => 'required|image']);
+        $photo =  $request->file('photo');
+
+        $uid = Admin::user()->id;
+        $path = app('fileUpload')->prepare($photo);
+        $result = Photo::create(['admin_user_id' => $uid, 'path' => $path]);
+
+        if ($result) {
+            return Tool::showSuccess('上传成功', ['path' => $path]);
+        }
+        return Tool::showError();
+
+    }
+
 
     public function destroy($id) {
         $changeableField = [

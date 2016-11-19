@@ -32,6 +32,7 @@ $router->resource('comments', CommentController::class);
 $router->post('ballots/choice/{$id}', 'BallotController@addChoice');
 $router->resource('ballots', BallotController::class);
 
+$router->post('photos/upload', 'PhotoController@upload');
 $router->resource('photos', PhotoController::class);
 $router->get('watermarks', 'WatermarkController@index');
 $router->post('watermarks/save', 'WatermarkController@save');

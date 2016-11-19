@@ -55,12 +55,12 @@ class ChannelController extends Controller
             $serialize = Input::get('_tree');
             $tree = json_decode($serialize, true);
             if (json_last_error() != JSON_ERROR_NONE) {
-                Tool::showError('参数错误');
+                return Tool::showError('参数错误');
             }
             Channel::saveTree($tree['children'], $tree['id']);
-            Tool::showSuccess();
+            return Tool::showSuccess();
         }
-        Tool::showError('参数错误');
+        return Tool::showError('参数错误');
     }
 
     /**

@@ -42,8 +42,8 @@
                     <td><input type="checkbox" class="grid-item" data-id="{{ $article->id }}"></td>
                     <td><i class="fa @if($article->is_important) fa-star @else fa-star-o @endif text-primary"></i></td>
                     <td>{{ $article->id }}</td>
-                    <td><i @if($article->state == 1) class="fa fa-close" style="color:green" @else class="fa fa-check" style="color:red" @endif></i></td>
-                    <td class="news-title"><span class="news-sign">[头]</span><i class="fa fa-file-image-o"></i>{{ $article->title }}</td>
+                    <td><i @if($article->state == 0) class="fa fa-close" style="color:green" @else class="fa fa-check" style="color:red" @endif></i></td>
+                    <td class="news-title"><span class="news-sign">[头]</span> @if($article->type == 1) <i class="fa fa-file-image-o"></i> @endif {{ $article->title }}</td>
                     <td>{{ $article->author_name }}</td>
                     <td>{{ $article->created_at }}</td>
                     <td>{{ $article->view_num }}</td>

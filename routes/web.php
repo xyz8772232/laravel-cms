@@ -11,12 +11,16 @@
 |
 */
 
-Route::get('/', function()
-{
-    $img = Image::make('upload/image/1.png');
-
-    return $img->response('png');
-});
-//Route::get('/', function () {
-//    return view('welcome');
+//Route::get('/', function()
+//{
+//    $img = Image::make('upload/image/1.png');
+//
+//    return $img->response('png');
 //});
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::get('articles/{id}', 'ArticleController@show');
+
+Route::resource('comments', CommentController::class);
