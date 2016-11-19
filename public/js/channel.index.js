@@ -1,13 +1,6 @@
 $(function () {
   var channelLevelStack = [];
 
-  // 设置X-CSRF-TOKEN
-  $.ajaxSetup({
-    headers: {
-      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-  });
-
   function ChannelGenerate(subChannels, elChannel) {
     this.subChannels = subChannels;
     this.elChannel = elChannel;
