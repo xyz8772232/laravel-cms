@@ -49,7 +49,7 @@
                     <div class="title-color-label">颜色:</div>
                     <div class="title-color input-group" id="titleColor">
                       <span class="input-group-addon"><i></i></span>
-                      <input class="form-control" type="text" name="title[color]" value="#ccc" placeholder="输入标题颜色"/>
+                      <input class="form-control" type="text" name="title[color]" value="#333" placeholder="输入标题颜色"/>
                     </div>
                   </div>
                 </div>
@@ -204,6 +204,12 @@
                   <select class="select-line e-channel" name="channel2"></select>
                   <select class="select-line e-channel" name="channel3"></select>
                   <select class="select-line e-channel" name="channel4"></select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">上线</label>
+                <div class="col-sm-6 input-line-group">
+                  <input class="input-line" type="checkbox" name=""/>
                 </div>
               </div>
             </div>
