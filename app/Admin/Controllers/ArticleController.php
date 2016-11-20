@@ -314,7 +314,7 @@ class ArticleController extends Controller
         $description = '描述';
         $options = [0 => '全部'] + Channel::buildSelectOptions([], 0, '&nbsp;&nbsp;');
         $query = Input::all();
-        $articles = Article::with('articleInfo', 'author')->where('state', 0)->orderBy('id')->paginate()->appends($query);
+        $articles = Article::with('articleInfo', 'author')->where('state', 0)->orderBy('id', 'desc')->paginate()->appends($query);
         return view('admin.article.index', compact('header', 'description', 'articles', 'options'));
     }
 
@@ -323,19 +323,6 @@ class ArticleController extends Controller
         $options = [0 => '全部'] + Channel::buildSelectOptions([], $id, '&nbsp;&nbsp;');
 
         $channelIds = Channel::branchIds([], $id);
-
-//        $select = new Form\Field\Select('channel_id', '频道');
-//        $select->options($options);
-//
-//        ob_start();
-//
-//        echo $select->render();
-//
-//        $channelSelect = ob_get_contents();
-//
-//        ob_end_clean();
-        //dd($options, $channelSelect);
-
         $childChannels = Channel::with('children_channel')->find($id)->children_channel->pluck('name', 'id');
         $header = '文章列表';
         $description = '描述';
@@ -359,7 +346,7 @@ class ArticleController extends Controller
         $channel = $request->get('channel');
         $title = $request->get('title');
         $linked_id = $request->get('linked_id');
-        $result = Article::create(['channel' => $channel, 'title' => $title, 'is_link' => 1, 'linked_id' => $linked_id]);
+        $result = Article::create(['channel' => $channel, 'title' => $title, 'is_link' => 1, 'linked_id' => $linked_id, 'author_id' => Admin::user()->id]);
         if ($result) {
             Tool::showSuccess('创建链接成功');
         }
@@ -398,7 +385,17 @@ class ArticleController extends Controller
         $description = '描述';
         $article = Article::with('keywords', 'content')->findOrFail($id);
         $keywords = Keyword::pluck('name', 'id');
-        return view('admin.article.edit', ['header' => $header, 'description' => $description, 'article' => $article, 'keywords' => $keywords]);
+        $channels = Channel::toTree([], 0);
+
+        return view('admin.article.edit',
+            [
+            'header' => $header,
+            'description' => $description,
+            'article' => $article,
+            'keywords' => $keywords,
+            'channels' => $channels
+            ]
+        );
     }
 
     /**

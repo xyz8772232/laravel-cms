@@ -88,6 +88,6 @@ class Article extends Model
     }
 
     public function getContentAttribute() {
-        return $this->content()->content;
+        return $this->content()->first()->content;
     }
 }
