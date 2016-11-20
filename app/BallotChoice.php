@@ -3,11 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class BallotChoice extends Model
 {
-    use SoftDeletes;
+
+    protected $fillable = ['ballot_id', 'content'];
 
     public function ballot()
     {

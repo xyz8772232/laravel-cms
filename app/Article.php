@@ -36,6 +36,14 @@ class Article extends Model
     }
 
     /**
+     * pk or vote
+     */
+    public function ballot()
+    {
+        return $this->hasOne('App\Ballot');
+    }
+
+    /**
      * 获取文章作者
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -59,7 +67,10 @@ class Article extends Model
     }
 
     public function getAuthorNameAttribute() {
-        return $this->author->name;
+        if ($this->author) {
+            return $this->author->name;
+        }
+        return '';
     }
 
     public function getViewNumAttribute() {

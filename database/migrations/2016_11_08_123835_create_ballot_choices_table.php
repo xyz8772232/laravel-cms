@@ -18,7 +18,6 @@ class CreateBallotChoicesTable extends Migration
             $table->unsignedInteger('ballot_id')->comment('所属ballot');
             $table->string('content')->comment('选项内容');
             $table->timestamps();
-            $table->softDeletes();
 
             $table->index('ballot_id');
         });
