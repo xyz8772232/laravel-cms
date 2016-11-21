@@ -30,7 +30,8 @@ class Tool extends Model
 
     }
 
-    public static function formatData($code, $msg, $data = array(), $otherData = array()) {
+    public static function formatData($code, $msg, $data = array(), $otherData = array())
+    {
         $code = intval($code);
         $outArr = array();
         if (!is_array($msg)) {
@@ -49,6 +50,17 @@ class Tool extends Model
             $outArr = $msg;
         }
         return $outArr;
+    }
+
+    /**
+     * 通过前端传入的数组返回最后一层有效的channelId
+     * @param $channels
+     * @return int
+     */
+    public static function getChannelId($channels)
+    {
+        $channels = array_filter($channels);
+        return (int)array_pop($channels);
     }
 
 }

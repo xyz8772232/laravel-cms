@@ -18,7 +18,7 @@ class CreateArticlesTable extends Migration
         {
             $table->increments('id');
             $table->tinyInteger('state')->default(0)->comment('状态');
-            $table->unsignedInteger('linked_id')->default(0)->comment('0为正常文章,>0是文字链接对应的文章id');
+            $table->unsignedInteger('link_id')->default(0)->comment('0为正常文章,>0是文字链接对应的文章id');
             $table->tinyInteger('type')->default(0)->comment('0:普通1:图片');
             $table->string('title', 255);
             $table->unsignedInteger('author_id')->default(0)->comment('作者');
@@ -31,6 +31,7 @@ class CreateArticlesTable extends Migration
             $table->unsignedtinyInteger('top_grade')->default(0)->comment('置顶级别');
             $table->string('description', 2000)->default('');
             $table->string('source', 255)->default('')->comment('信息来源');
+            $table->string('original_url', 255)->default('')->comment('原始链接');
             $table->boolean('is_headline')->default(0)->comment('头条');
             $table->boolean('is_soft')->default(0)->comment('软广');
             $table->boolean('is_political')->default(0)->comment('政治敏感');
@@ -42,7 +43,7 @@ class CreateArticlesTable extends Migration
 
             //index
             $table->index('state');
-            $table->index('linked_id');
+            $table->index('link_id');
             $table->index('type');
             $table->index('title');
             $table->index('author_id');

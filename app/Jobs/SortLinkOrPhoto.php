@@ -21,6 +21,7 @@ class SortLinkOrPhoto implements ShouldQueue
      * Create a new job instance.
      * @param Article $article
      * @param $type photo or link
+     * @param $action add or delete
      * @return void
      */
     public function __construct(Article $article, $type = 'photo', $action = 'add')

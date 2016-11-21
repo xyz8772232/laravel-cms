@@ -16,7 +16,6 @@ class CreateSortLinksTable extends Migration
         Schema::create('sort_links', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('article_id');
-            $table->string('title', 200)->nullable();
             $table->unsignedInteger('order');
             $table->timestamps();
             $table->softDeletes();

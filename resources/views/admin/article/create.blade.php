@@ -40,16 +40,16 @@
                 <div class="col-sm-6">
                   <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
-                    <input type="text" name="title[text]" value="" class="form-control" placeholder="输入标题">
+                    <input type="text" name="title" value="" class="form-control" placeholder="输入标题">
                   </div>
                   <div class="title-font">
                     <div class="title-weight">
-                      <input type="checkbox" name="title[weight]"/> 粗体
+                      <input type="checkbox" name="title_bold" value="1"/> 粗体
                     </div>
                     <div class="title-color-label">颜色:</div>
                     <div class="title-color input-group" id="titleColor">
                       <span class="input-group-addon"><i></i></span>
-                      <input class="form-control" type="text" name="title[color]" value="#333" placeholder="输入标题颜色"/>
+                      <input class="form-control" type="text" name="title_color" value="#333" placeholder="输入标题颜色"/>
                     </div>
                   </div>
                 </div>
@@ -65,9 +65,9 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="coverPic" class="col-sm-2 control-label">封面图</label>
+                <label for="cover_pic" class="col-sm-2 control-label">封面图</label>
                 <div class="col-sm-6">
-                  <input type="file" id="coverPic" name="coverPic"/>
+                  <input type="file" id="coverPic" name="cover_pic"/>
                 </div>
               </div>
               <div class="form-group">
@@ -77,11 +77,11 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="publishedAt" class="col-sm-2 control-label">发布时间</label>
+                <label for="published_at" class="col-sm-2 control-label">发布时间</label>
                 <div class="col-sm-6">
                   <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    <input type="text" id="publishedAt" name="publishedAt"
+                    <input type="text" id="publishedAt" name="published_at"
                            value="{{ date('Y-m-d H:i:s') }}"
                            class="form-control" placeholder="输入发布时间" style="width: 160px"/>
                     <button type="button" id="restPublishedAt" class="btn btn-default">设为当前时间</button>
@@ -98,9 +98,7 @@
               <div class="form-group" id="normalArticle">
                 <label for="content" class="col-sm-2 control-label">正文内容</label>
                 <div class="col-sm-8">
-                  <script id="content" name="content" type="text/plain">
-                    初始化内容
-                  </script>
+                  <script id="content" name="content" type="text/plain"></script>
                 </div>
               </div>
               <div class="form-group" id="picArticle">
@@ -120,11 +118,11 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="orgUrl" class="col-sm-2 control-label">原始链接</label>
+                <label for="original_url" class="col-sm-2 control-label">原始链接</label>
                 <div class="col-sm-6">
                   <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
-                    <input type="text" id="orgUrl" name="originalLink" value="" class="form-control"
+                    <input type="text" id="orgUrl" name="original_url" value="" class="form-control"
                            placeholder="输入原始链接">
                   </div>
                 </div>
@@ -132,7 +130,7 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">文字连接</label>
                 <div class="col-sm-6">
-                  <input type="checkbox" name="newsLink[effective]" checked class="sub-form-switch"/>
+                  <input type="checkbox" name="newsLink[effective]" class="sub-form-switch" value="1"/>
                   <div class="sub-form" id="newsLinkSubForm">
                     <div class="sub-form-add e-add">+新增文字连接</div>
                   </div>
@@ -141,7 +139,7 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">PK</label>
                 <div class="col-sm-6">
-                  <input type="checkbox" name="pk[effective]" class="sub-form-switch" id="pkSFS"/>
+                  <input type="checkbox" name="pk[effective]" class="sub-form-switch" id="pkSFS" value="1"/>
                   <div class="sub-form" id="pkSubForm">
                     <div class="sub-form-group clearfix">
                       <div class="sub-form-group-l">
@@ -153,12 +151,12 @@
                         <label class="control-label">选项</label>
                         <div class="input-group">
                           <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
-                          <input class="form-control" type="text" name="pk[option][]">
+                          <input class="form-control" type="text" name="pk[options][]">
                         </div>
                         <label class="control-label">选项</label>
                         <div class="input-group">
                           <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
-                          <input class="form-control" type="text" name="pk[option][]">
+                          <input class="form-control" type="text" name="pk[options][]">
                         </div>
                       </div>
                     </div>
@@ -168,11 +166,11 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">投票</label>
                 <div class="col-sm-6">
-                  <input type="checkbox" name="vote[effective]" class="sub-form-switch" id="voteSFS"/>
+                  <input type="checkbox" name="vote[effective]" class="sub-form-switch" id="voteSFS" value="1"/>
                   <div class="sub-form" id="voteSubForm">
                     <div class="vote-type">
-                      <input class="vote-type-radio" type="radio" name="vote_type" value="0" checked>单选
-                      <input class="vote-type-radio" type="radio" name="vote_type" value="1">多选(最多可选<input class="vote-type-text" type="text" name="vote_limit">票)
+                      <input class="vote-type-radio" type="radio" name="vote[type]" value="0" checked>单选
+                      <input class="vote-type-radio" type="radio" name="vote[type]" value="1">多选(最多可选<input class="vote-type-text" type="text" name="vote[limit]">票)
                     </div>
                     <div class="sub-form-group clearfix">
                       <div class="sub-form-group-l">
@@ -190,28 +188,30 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">属性</label>
                 <div class="col-sm-6 input-line-group">
-                  <input class="input-line" type="checkbox" name=""/> 头条
-                  <input class="input-line" type="checkbox" name=""/> 软文
-                  <input class="input-line" type="checkbox" name=""/> 政治风险
-                  <input class="input-line" type="checkbox" name=""/> 国际
-                  <input class="input-line" type="checkbox" name=""/> 幻灯片
+                  <input class="input-line" type="checkbox" name="is_headline" value="1"/> 头条
+                  <input class="input-line" type="checkbox" name="is_soft" value="1"/> 软文
+                  <input class="input-line" type="checkbox" name="is_political" value="1"/> 政治风险
+                  <input class="input-line" type="checkbox" name="is_international" value="1"/> 国际
+                  <input class="input-line" type="checkbox" name="is_slide" value="1"/> 幻灯片
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-2 control-label">所属频道</label>
                 <div class="col-sm-6 input-line-group" id="channel">
-                  <select class="select-line e-channel" name="channel1"></select>
-                  <select class="select-line e-channel" name="channel2"></select>
-                  <select class="select-line e-channel" name="channel3"></select>
-                  <select class="select-line e-channel" name="channel4"></select>
+                  <select class="select-line e-channel" name="channels[1]"></select>
+                  <select class="select-line e-channel" name="channels[2]"></select>
+                  <select class="select-line e-channel" name="channels[3]"></select>
+                  <select class="select-line e-channel" name="channels[4]"></select>
                 </div>
               </div>
+              @if(Admin::user()->can('article-online'))
               <div class="form-group">
                 <label class="col-sm-2 control-label">上线</label>
                 <div class="col-sm-6 input-line-group">
-                  <input class="input-line" type="checkbox" name=""/>
+                  <input class="input-line" type="checkbox" name="state" value="1"/>
                 </div>
               </div>
+              @endif
             </div>
             <!-- /.box-body -->
             <div class="box-footer">
