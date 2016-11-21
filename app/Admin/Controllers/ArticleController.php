@@ -9,8 +9,8 @@ use App\Channel;
 use App\Content;
 use App\Keyword;
 use App\Tool;
+use App\Permission;
 use Carbon\Carbon;
-use Encore\Admin\Auth\Permission;
 use Illuminate\Http\Request;
 use Encore\Admin\Facades\Admin;
 use App\Http\Controllers\Controller;
@@ -42,7 +42,7 @@ class ArticleController extends Controller
             'original_url' => 'url',
             'channels.*' => 'Integer',
         ];
-        $this->validate($request, $rules);
+        //$this->validate($request, $rules);
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return redirect()->to('/admin/article/create')
@@ -296,13 +296,114 @@ class ArticleController extends Controller
     public function destroy($id)
     {
         Permission::allow(['administrator', 'responsible_editor']);
-        $result = Article::findOrFail($id)->delete();
-        if ($result) {
-            return Tool::showSuccess('删除成功');
-        }
-        return Tool::showError('删除失败');
-        //return redirect()->back()->withInput()->withErrors('删除成功！');
+        $ids = explode(',', $id);
+        Article::destroy($ids);
+        return Tool::showSuccess('删除成功');
     }
+
+    /**
+     * 上线
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function online($id)
+    {
+        Permission::allow(['administrator', 'responsible_editor']);
+        $ids = explode(',', $id);
+        foreach ($ids as $id) {
+            if (empty($id)) {
+                continue;
+            }
+            $article = Article::find($id);
+            if ($article) {
+                $article->state = 1;
+                $article->save();
+            }
+        }
+        return Tool::showSuccess('上线成功');
+    }
+
+    /**
+     * 设置头条
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function headline($id)
+    {
+        Permission::allow(['administrator', 'responsible_editor']);
+        $ids = explode(',', $id);
+        foreach ($ids as $id) {
+            if (empty($id)) {
+                continue;
+            }
+            $article = Article::find($id);
+            if ($article) {
+                $article->is_headline = 1;
+                $article->save();
+            }
+        }
+        return Tool::showSuccess('设置头条成功');
+    }
+
+
+    /**
+     * @param $id
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function transfer($id)
+    {
+        Permission::allow(['administrator', 'responsible_editor']);
+        $channel_id = Tool::getChannelId(Input::get('channels'));
+        $rules = [
+            'channel_id' => 'integer|exists:channel,id',
+        ];
+        $validator = Validator::make(['channel_id' => $channel_id], $rules);
+        if ($validator->fails()) {
+            return Tool::showError('频道不存在');
+        }
+
+        $ids = explode(',', $id);
+        foreach ($ids as $id) {
+            if (empty($id)) {
+                continue;
+            }
+            $article = Article::find($id);
+            if ($article) {
+                $article->channel_id = $channel_id;
+                $article->save();
+            }
+        }
+        return Tool::showSuccess('频道转移成功');
+    }
+
+    /**
+     * 建立文字链接
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function link()
+    {
+        $channel_id = Tool::getChannelId(Input::get('channels'));
+        $rules = [
+            'channel_id' => 'required|exists:channels,id',
+            'title' => 'required|max:50',
+            'link_id' => 'required|exists:articles,id,is_link,0',
+        ];
+        $data = Input::only(['title', 'link_id']);
+        $data['channel_id'] = $channel_id;
+        $validator = Validator::make($data, $rules);
+        if ($validator->fails()) {
+            return Tool::showError('频道不存在');
+        }
+        $data['is_link'] = 1;
+        $data['author_id'] = Admin::user()->id;
+        $result = Article::create($data);
+        if ($result) {
+            return Tool::showSuccess('创建链接成功');
+        }
+        return Tool::showError('创建链接失败');
+    }
+
 
     /**
      *
@@ -331,27 +432,7 @@ class ArticleController extends Controller
         return view('admin.article.index', compact('header', 'description', 'childChannels', 'articles', 'options'));
     }
 
-    /**
-     * 建立文字链接
-     *
-     * @param \Illuminate\Http\Request $request
-     */
-    public function link(Request $request)
-    {
-        $this->validate($request, [
-            'channel' => 'required|exists:channels,id,grade,4',
-            'title' => 'required|max:50',
-            'linked_id' => 'required|exists:articles,id,is_link,0',
-        ]);
-        $channel = $request->get('channel');
-        $title = $request->get('title');
-        $linked_id = $request->get('linked_id');
-        $result = Article::create(['channel' => $channel, 'title' => $title, 'is_link' => 1, 'linked_id' => $linked_id, 'author_id' => Admin::user()->id]);
-        if ($result) {
-            Tool::showSuccess('创建链接成功');
-        }
-        Tool::showError('创建链接失败');
-    }
+
 
     /**
      * Create interface.

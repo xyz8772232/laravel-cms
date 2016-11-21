@@ -40,7 +40,7 @@
                 @foreach($articles as $article)
                   <tr >
                     <td><input type="checkbox" class="grid-item" data-id="{{ $article->id }}"></td>
-                    <td><i class="fa @if($article->is_important) fa-star @else fa-star-o @endif text-primary"></i></td>
+                    <td><i class="fa @if($article->is_important) fa-star @else fa-star-o @endif text-danger"></i></td>
                     <td>{{ $article->id }}</td>
                     <td><i @if($article->state == 0) class="fa fa-close" style="color:green" @else class="fa fa-check" style="color:red" @endif></i></td>
                     <td class="news-title">@if($article->link_id)<i class="fa fa-link"></i> @endif @if($article->is_headline)<span class="news-sign">[头]</span> @endif @if($article->type == 1) <i class="fa fa-file-image-o"></i> @endif {{ $article->title }}</td>

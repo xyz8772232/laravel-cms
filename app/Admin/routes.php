@@ -12,6 +12,9 @@ $router->resource('channels', ChannelController::class);
 //文章管理相关
 $router->get('articles/channel/{id?}', ['uses' => 'ArticleController@channel', 'as' => 'articles.channel']);
 $router->post('articles/change/{id}', 'ArticleController@change');
+$router->post('articles/online/{id}', 'ArticleController@online');
+$router->post('articles/headline/{id}', 'ArticleController@headline');
+$router->post('articles/transfer/{id}', 'ArticleController@transfer');
 $router->post('link/{id}', 'ArticleController@link');
 $router->resource('articles', ArticleController::class);
 
