@@ -1,0 +1,241 @@
+textarea {
+  resize: none;
+}
+.input-line-group {
+  line-height: 34px;
+}
+.input-line-group .input-line {
+  margin-left: 15px;
+}
+.input-line-group .input-line:first-child {
+  margin-left: 0;
+}
+.input-line-group .select-line {
+  margin-left: 5px;
+  width: 90px;
+  height: 34px;
+  padding: 6px 12px;
+  color: #555;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  -webkit-transition: border-color ease-in-out 0.15s;
+  -o-transition: border-color ease-in-out 0.15s;
+  transition: border-color ease-in-out 0.15s;
+}
+.input-line-group .select-line:first-child {
+  margin-left: 0;
+}
+.input-line-group .select-line:focus {
+  outline: none;
+  border-color: #3c8dbc;
+}
+.sub-form {
+  margin-top: 10px;
+  display: none;
+}
+.sub-form-group {
+  border-top: 1px dashed #ccc;
+  background-color: #f8f8f8;
+}
+.sub-form-group:first-child {
+  border-top: none;
+}
+.sub-form-group .control-label {
+  float: left;
+  width: 45px;
+  text-align: left;
+}
+.sub-form-group .input-group {
+  margin-bottom: 7px;
+}
+.sub-form-group .input-group:last-child {
+  margin-bottom: 0;
+}
+.sub-form-group-deletable .sub-form-group-l {
+  width: 90%;
+}
+.sub-form-group-deletable .sub-form-group-r {
+  display: block;
+}
+.sub-form-group-l {
+  float: left;
+  width: 100%;
+  padding: 5px;
+}
+.sub-form-group-r {
+  display: none;
+  float: left;
+  width: 10%;
+  padding: 5px;
+  cursor: pointer;
+}
+.sub-form-group-r:hover {
+  background-color: #e3e3e3;
+}
+.sub-form-add {
+  color: #3c8dbc;
+  line-height: 40px;
+  cursor: pointer;
+}
+.title-font {
+  margin-top: 10px;
+  line-height: 34px;
+}
+.title-color-label {
+  float: left;
+}
+.title-weight {
+  float: left;
+  width: 90px;
+}
+.title-color {
+  float: left;
+  margin-left: 5px;
+  width: 120px;
+}
+.news-link .select-group {
+  margin-left: 45px;
+}
+.news-link .news-link-select {
+  float: left;
+  margin-right: 1.3%;
+  width: 24%;
+}
+.news-link .news-link-select:last-child {
+  margin-right: 0;
+}
+.news-link .sub-form-group-r {
+  text-align: center;
+  line-height: 75px;
+}
+.vote .sub-form-group-r {
+  text-align: center;
+  line-height: 34px;
+}
+.vote-type {
+  padding: 5px 0;
+}
+.vote-type .vote-type-radio {
+  margin-left: 50px;
+  margin-right: 5px;
+}
+.vote-type .vote-type-text {
+  width: 30px;
+  margin: 0 5px;
+  text-align: center;
+}
+.imgup-header {
+  height: 34px;
+}
+.imgup-add {
+  float: left;
+  position: relative;
+}
+.imgup-add-ipt {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: .01;
+  cursor: pointer;
+  font-size: 100px;
+}
+.imgup-list {
+  margin-top: 5px;
+  background-color: #f8f8f8;
+}
+.imgup-item {
+  height: 120px;
+  padding: 10px 0;
+  border-top: 1px dashed #ccc;
+}
+.imgup-item:first-child {
+  border: none;
+}
+.imgup-item.uploading .imgup-progress-box {
+  display: block;
+}
+.imgup-item.uploading .imgup-error,
+.imgup-item.uploading .imgup-title {
+  display: none;
+}
+.imgup-item.error .imgup-error {
+  display: block;
+}
+.imgup-item.error .imgup-progress-box,
+.imgup-item.error .imgup-title {
+  display: none;
+}
+.imgup-item.gu-transit {
+  background-color: #ffeebc;
+}
+.imgup-l {
+  float: left;
+  width: 90px;
+  height: 100%;
+  padding-left: 5px;
+}
+.imgup-r {
+  float: right;
+  width: 60px;
+  height: 100%;
+  line-height: 100px;
+  text-align: center;
+}
+.imgup-r .fa {
+  padding: 0 5px;
+}
+.imgup-r .fa-trash-o {
+  cursor: pointer;
+}
+.imgup-r .fa-bars {
+  cursor: move;
+}
+.imgup-c {
+  height: 100%;
+  margin-left: 110px;
+  margin-right: 70px;
+}
+.imgup-preview {
+  display: block;
+  border: 1px solid #e1e1e1;
+  width: 80px;
+  height: 80px;
+}
+.imgup-size {
+  display: inline-block;
+  width: 100%;
+  height: 20px;
+  line-height: 20px;
+  color: #444444;
+  text-align: center;
+}
+.imgup-progress-box {
+  display: none;
+  margin-top: 45px;
+  height: 10px;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  overflow: hidden;
+}
+.imgup-progress-bar {
+  width: 0;
+  height: 100%;
+  background-color: #5ba4ff;
+  -webkit-transition: width .3s;
+  -moz-transition: width .3s;
+  transition: width .3s;
+}
+.imgup-error {
+  display: none;
+  margin-top: 40px;
+}
+.imgup-title {
+  margin-top: 20px;
+  width: 100%;
+  height: 60px;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+}
