@@ -100,6 +100,7 @@ return [
         'identity' => '手机号/用户名',
         'title' => '标题',
         'path' => '图像',
+        'channel_id' => '频道',
     ],
 
 ];

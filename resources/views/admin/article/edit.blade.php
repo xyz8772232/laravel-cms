@@ -93,7 +93,7 @@
               <div class="form-group" id="normalArticle">
                 {!! Form::label('content','正文内容', ['class' => 'col-sm-2 control-label']) !!}
                 <div class="col-sm-8">
-                  <script id="content" name="content" type="text/plain">{{ $article->content }}</script>
+                  <script id="content" name="content" type="text/plain">{!! $article->content !!}</script>
                 </div>
               </div>
               <div class="form-group" id="picArticle">
@@ -250,37 +250,7 @@
   <script src="{{ asset("/packages/admin/ueditor-utf8-php/ueditor.all.min.js") }}"></script>
   <script>
     var CHANNEL = {!! json_encode($channels) !!};
-    var INIT_CONFIG = {
-      coverPic: 'http://img.hypesphere.com/2015-12-24-231009-82.jpg'
-      ,contentPics: [
-        {
-          url: 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSLgOUc6lORcaOAvFB8cImNAuzq0UqKbkM1JlyPtPLuYUZz8Sn8',
-          title: '我去过未来,而你不在那里',
-          size: 12234
-        },
-        {
-          url: 'https://www.killping.com/blog/wp-content/uploads/2015/10/dota-2-reborn-lag.jpg',
-          title: '白昼行僵,暗夜魔王',
-          size: 4512
-        },
-        {
-          url: 'http://download.gamezone.com/uploads/image/data/1177153/rffzj2sotkqx50s8azux.png',
-          title: '奈文摩尔,never more!',
-          size: 7788
-        }
-      ]
-      ,channel: [0, 0, 1, 0]
-      ,newsLinks: [
-        {title: '哈哈', channel: [0,0,0]}
-        ,{title: '呵呵', channel: [0,0,1,0]}
-      ]
-      ,voteOptions: [
-        '黄山',
-        '华山',
-        '九华山',
-        '泰山'
-      ]
-    };
+    var INIT_CONFIG = {!! json_encode($initConfig) !!};
   </script>
   <script src="{{ asset ("/js/article-edit.js") }}"></script>
 @endsection

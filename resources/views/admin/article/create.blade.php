@@ -257,7 +257,7 @@
   <script src="{{ asset("/packages/admin/ueditor-utf8-php/ueditor.all.min.js") }}"></script>
   <script>
     var CHANNEL = {!! json_encode($channels) !!};
-    var PAGE_CONFIG = {
+    var INIT_CONFIG = {
 
     };
   </script>

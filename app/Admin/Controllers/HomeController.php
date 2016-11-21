@@ -25,20 +25,32 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $header = '111';
-        $description = '111';
-        $newsChannelId = Channel::where('name', '新闻')->first()->id;
+        $header = '新闻频道';
+        $description = '文章统计';
+        $newsChannelId = Channel::where('name', '体育')->first()->id;
         $channels = Channel::toTree([], $newsChannelId);
-
-        //dd($channels);
         $articleNums = Cache::get(config('redis.articleNums'));
-        //return view('admin.home.index', compact('header', 'description', 'channels', 'articleNums'));
+        $boxes = collect($articleNums)->only(['unaudited', 'soft'])->all();
+        $tables = [];
+        foreach ($channels as $channel) {
+            $rows = [];
+            $headers = [$channel['name'], $articleNums[$channel['id']]];
+            if (isset($channel['children'])) {
+                foreach ($channel['children'] as $child) {
+                    $route = route('articles.channel', ['id' => $child['id']]);
+                    $link = '<a href="'.$route.'">'.$child["name"].'</a>';
+                    $rows[] =  [$link, $articleNums[$child['id']]];
+                }
+            }
+            $tables[] = compact('headers', 'rows');
+        }
+        return view('admin.home.index', compact('header', 'description', 'boxes', 'tables'));
 
 
 
         return Admin::content(function(Content $content) use($channels, $articleNums) {
-            $content->header('文章统计');
-            $content->description('Description...');
+            $content->header('新闻频道');
+            $content->description('文章统计');
             $content->row(function ($row) use($articleNums) {
                 $row->column(6, new InfoBox('未审核文章', 'book', 'red', '/admin/articles', $articleNums['unaudited']));
                 $row->column(6, new InfoBox('商业软文', 'file', 'yellow', '/admin/orders', $articleNums['soft']));

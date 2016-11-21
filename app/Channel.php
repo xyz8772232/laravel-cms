@@ -16,7 +16,7 @@ class Channel extends Model
      */
     protected $appends = ['deletable'];
 
-    protected $visible = ['id', 'name', 'parent_id', 'deletable'];
+    protected $visible = ['id', 'name', 'grade', 'parent_id', 'deletable'];
 
     protected $fillable = ['name', 'admin_user_id', 'grade', 'order', 'parent_id'];
 
@@ -43,16 +43,13 @@ class Channel extends Model
 
     public function getDeletableAttribute()
     {
-        if ($this->grade == 4) {
-            $article = $this->articles()->first();
-            if ($article) {
-                return false;
-            }
-        } else {
-            $children_channel = $this->children_channel()->first();
-            if ($children_channel) {
-                return false;
-            }
+        $children_channel = $this->children_channel()->first();
+        if ($children_channel) {
+            return false;
+        }
+        $article = $this->articles()->first();
+        if ($article) {
+            return false;
         }
         return true;
     }
@@ -103,7 +100,6 @@ class Channel extends Model
             $elements = static::orderByRaw('`order` = 0,`order`')->select('id', 'parent_id')->get();
         }
 
-
         foreach ($elements as $element) {
             if ($element['parent_id'] == $parentId) {
                 $branch[] = $element['id'];
@@ -114,6 +110,22 @@ class Channel extends Model
             }
         }
         return $branch;
+    }
+
+    public static function parentIds($childId = 0)
+    {
+        return array_reverse(static::parentIdsP($childId), true);
+    }
+
+    private static function parentIdsP($childId = 0)
+    {
+        $parent = [];
+        $channel = static::find($childId);
+        if ($channel) {
+            $parent[$channel->grade] = $channel->id;
+            $parent +=  static::parentIdsP($channel->parent_id);
+        }
+        return $parent;
     }
 
 

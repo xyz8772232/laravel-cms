@@ -15,7 +15,7 @@ $router->post('articles/change/{id}', 'ArticleController@change');
 $router->post('articles/online/{id}', 'ArticleController@online');
 $router->post('articles/headline/{id}', 'ArticleController@headline');
 $router->post('articles/transfer/{id}', 'ArticleController@transfer');
-$router->post('link/{id}', 'ArticleController@link');
+$router->post('articles/link/{article_id}', 'ArticleController@link');
 $router->resource('articles', ArticleController::class);
 
 $router->resource('logs', ArticleLogController::class);
