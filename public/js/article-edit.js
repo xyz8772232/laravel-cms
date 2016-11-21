@@ -1,4 +1,5 @@
 $(function () {
+  var INIT_CONFIG = window.INIT_CONFIG;
   $('.item_delete').click(function () {
     var id = $(this).data('id');
     if (confirm('确认删除?')) {
@@ -108,27 +109,6 @@ $(function () {
   };
 
   /**
-   * 切换普通新闻和图片新闻
-   */
-  var $typeForm = $('#typeForm');
-  var $normalArticle = $('#normalArticle');
-  var $picArticle = $('#picArticle');
-  $('#typeCheckbox').bootstrapSwitch({
-    size: 'small',
-    onSwitchChange: function (event, state) {
-      if (state) {
-        $typeForm.val('1');
-        $normalArticle.hide();
-        $picArticle.show();
-      } else {
-        $typeForm.val('0');
-        $picArticle.hide();
-        $normalArticle.show();
-      }
-    }
-  });
-
-  /**
    * 标题
    */
   $('#titleColor').colorpicker();
@@ -141,7 +121,9 @@ $(function () {
     showUpload: false,
     language: 'zh_CN',
     allowedFileTypes: ['image'],
-    initialCaption: ''
+    initialPreview: INIT_CONFIG.coverPic && [
+      '<img src="' + INIT_CONFIG.coverPic + '" class="file-preview-image">'
+    ]
   });
 
   /**
@@ -161,24 +143,60 @@ $(function () {
   });
 
   /**
-   * 普通新闻正文
+   * 切换普通新闻和图片新闻
    */
-  var ue = UE.getEditor('content');
+  var $normalArticle = $('#normalArticle');
+  var $picArticle = $('#picArticle');
+  $('#typeCheckbox').bootstrapSwitch({
+    size: 'small',
+    onInit: function (e, state) {
+      state || UE.getEditor('content');
+      switchArticleType(e, state);
+    },
+    onSwitchChange: switchArticleType
+  });
+
+  function switchArticleType(e, state) {
+    if (state) {
+      $normalArticle.hide();
+      $picArticle.show();
+    } else {
+      $picArticle.hide();
+      $normalArticle.show();
+    }
+  }
 
   /**
    * 图片新闻正文
    */
-  function ImgUpload(root) {
+  function ImgUpload(root, initPics) {
     this._$root = $(root);
     this._count = 0;
-    this._init();
+    this._init(initPics);
   }
 
   ImgUpload.prototype = {
     constructor: ImgUpload,
-    _init: function () {
+    _init: function (initPics) {
       this._buildDom();
       this._bindEvents();
+      this._initPics(initPics);
+    },
+    _initPics: function (initPics) {
+      var self = this;
+
+      if (initPics && initPics.length) {
+        initPics.forEach(function (pic) {
+          var data = {
+            state: '',
+            img: pic.url,
+            size: bytesToSize(pic.size),
+            title: pic.title,
+            sort: self._count++
+          };
+          self._insertItem(data);
+        });
+      }
     },
     _buildDom: function () {
       var strHtml = '<div class="imgup-header">'
@@ -296,14 +314,6 @@ $(function () {
         .addClass('error')
         .find('.imgup-error').text(msg)
       }
-
-      function bytesToSize(bytes) {
-        var sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-        if (bytes == 0) return '0 B';
-        var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
-        if (i == 0) return bytes + ' ' + sizes[i];
-        return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
-      }
     },
     _uploadFile: function (file, progress) {
       var fd = new FormData();
@@ -333,18 +343,21 @@ $(function () {
     }
   };
 
-  new ImgUpload('#contentPics');
+  new ImgUpload('#contentPics', INIT_CONFIG.contentPics);
 
   /**
    * 文字连接
    */
   var $newsLinkSubForm = $('#newsLinkSubForm');
+
+  // 初始化文字连接
+  INIT_CONFIG.newsLinks && INIT_CONFIG.voteOptions.forEach(function (newsLink) {
+    createSubForm_NewsLink(newsLink);
+  });
+
   $newsLinkSubForm
   .on('click', '.e-add', function () {
-    var strHtml = createSubForm_NewsLink();
-    var $el = $(strHtml);
-    $el[0].channelInstance = new Channel($el.find('.select-group')[0]);
-    $newsLinkSubForm.children().eq(-1).before($el);
+    createSubForm_NewsLink();
   })
   .on('click', '.e-delete', function () {
     $(this).parent('.sub-form-group').slideUp(250, function () {
@@ -353,14 +366,14 @@ $(function () {
     })
   });
 
-  function createSubForm_NewsLink() {
+  function createSubForm_NewsLink(newsLink) {
     var randomId = Date.now();
-    return '<div class="sub-form-group sub-form-group-deletable clearfix news-link">'
+    var strHtml = '<div class="sub-form-group sub-form-group-deletable clearfix news-link">'
       + '<div class="sub-form-group-l">'
       + '<label class="control-label">标题</label>'
       + '<div class="input-group">'
       + '<span class="input-group-addon"><i class="fa fa-pencil"></i></span>'
-      + '<input class="form-control" type="text" name="newsLink[' + randomId + '][title]">'
+      + '<input class="form-control" type="text" name="newsLink[' + randomId + '][title]" value="' + (newsLink ? newsLink.title : '') + '">'
       + '</div>'
       + '<label class="control-label">频道</label>'
       + '<div class="select-group">'
@@ -372,6 +385,10 @@ $(function () {
       + '</div>'
       + '<div class="sub-form-group-r e-delete"><i class="fa fa-trash-o"></i></div>'
       + '</div>';
+    var $el = $(strHtml);
+
+    $el[0].channelInstance = new Channel($el.find('.select-group')[0], newsLink && newsLink.channel);
+    $newsLinkSubForm.children().eq(-1).before($el);
   }
 
   /**
@@ -382,13 +399,18 @@ $(function () {
   var $pkSubForm = $('#pkSubForm');
   var $voteSubForm = $('#voteSubForm');
 
-  $pkSFS.on('switchChange.bootstrapSwitch', function(event, state) {
+  // 初始化投票
+  INIT_CONFIG.voteOptions && INIT_CONFIG.voteOptions.forEach(function (option) {
+    createSubForm_Vote(option);
+  });
+
+  $pkSFS.on('switchChange.bootstrapSwitch', function (event, state) {
     if (state) {
       $voteSFS.bootstrapSwitch('state', false);
       $voteSubForm.hide();
     }
   });
-  $voteSFS.on('switchChange.bootstrapSwitch', function(event, state) {
+  $voteSFS.on('switchChange.bootstrapSwitch', function (event, state) {
     if (state) {
       $pkSFS.bootstrapSwitch('state', false);
       $pkSubForm.hide();
@@ -397,8 +419,7 @@ $(function () {
 
   $voteSubForm
   .on('click', '.e-add', function () {
-    var strHtml = createSubForm_Vote();
-    $voteSubForm.children().eq(-1).before(strHtml);
+    createSubForm_Vote();
   })
   .on('click', '.e-delete', function () {
     $(this).parent('.sub-form-group').slideUp(250, function () {
@@ -406,21 +427,34 @@ $(function () {
     })
   });
 
-  function createSubForm_Vote() {
-    return '<div class="sub-form-group sub-form-group-deletable clearfix vote">'
+  function createSubForm_Vote(option) {
+    var strHtml = '<div class="sub-form-group sub-form-group-deletable clearfix vote">'
       + '<div class="sub-form-group-l">'
       + '<label class="control-label">选项</label>'
       + '<div class="input-group">'
       + '<span class="input-group-addon"><i class="fa fa-pencil"></i></span>'
-      + '<input class="form-control" type="text" name="vote[options][]">'
+      + '<input class="form-control" type="text" name="vote[options][]" value="' + (option || '') + '">'
       + '</div>'
       + '</div>'
       + '<div class="sub-form-group-r e-delete"><i class="fa fa-trash-o"></i></div>'
       + '</div>';
+
+    $voteSubForm.children().eq(-1).before(strHtml);
   }
 
   /**
    * 所属频道
    */
-  new Channel($('#channel'), [0, 0, 1, 0]);
+  new Channel($('#channel'), INIT_CONFIG.channel);
+
+  /**
+   * common fns
+   */
+  function bytesToSize(bytes) {
+    var sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+    if (bytes == 0) return '0 B';
+    var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+    if (i == 0) return bytes + ' ' + sizes[i];
+    return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
+  }
 });
