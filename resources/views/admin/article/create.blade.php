@@ -153,12 +153,12 @@
                         <label class="control-label">选项</label>
                         <div class="input-group">
                           <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
-                          <input class="form-control" type="text" name="pk[option1]">
+                          <input class="form-control" type="text" name="pk[option][]">
                         </div>
                         <label class="control-label">选项</label>
                         <div class="input-group">
                           <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
-                          <input class="form-control" type="text" name="pk[option2]">
+                          <input class="form-control" type="text" name="pk[option][]">
                         </div>
                       </div>
                     </div>

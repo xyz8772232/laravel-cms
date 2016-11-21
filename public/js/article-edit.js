@@ -80,7 +80,7 @@ $(function () {
     _addOptions: function (elChannel, channels) {
       var channelLevel = elChannel.channelLevel;
       var chanelLevelNameTable = ['一', '二', '三', '四'];
-      var strHtml = '<option>' + chanelLevelNameTable[channelLevel - 1] + '级频道</option>';
+      var strHtml = '<option value="0">' + chanelLevelNameTable[channelLevel - 1] + '级频道</option>';
 
       channels && channels.forEach(function (channel) {
         strHtml += '<option value="' + channel.id + '">' + channel.name + '</option>';
@@ -170,6 +170,7 @@ $(function () {
    */
   function ImgUpload(root) {
     this._$root = $(root);
+    this._count = 0;
     this._init();
   }
 
@@ -201,6 +202,7 @@ $(function () {
         + '<div class="imgup-r">'
         + '<i class="e-delete fa fa fa-trash-o text-danger"></i>'
         + '<i class="e-sort fa fa-bars text-default"></i>'
+        + '<input class="imgup-sort-form" type="hidden" name="contentPic[' + randomId + '][order]" value="' + data.sort + '">'
         + '</div>'
         + '<div class="imgup-c clearfix">'
         + '<div class="imgup-progress-box">'
@@ -224,6 +226,8 @@ $(function () {
       this._$root.on('click', '.e-delete', function () {
         $(this).parents('.imgup-item').slideUp(250, function () {
           $(this).remove();
+          self._count--;
+          updateSort();
         });
       });
       // 排序
@@ -231,7 +235,14 @@ $(function () {
         moves: function (el, container, handle) {
           return handle.classList.contains('e-sort');
         }
-      });
+      }).on('drop', updateSort);
+
+      // 更改排序表单
+      function updateSort() {
+        self._$list.children().each(function (index) {
+          $(this).find('.imgup-sort-form').val(index);
+        });
+      }
     },
     _addFiles: function (files) {
       if (!files || !files.length) return false;
@@ -241,7 +252,8 @@ $(function () {
           state: 'uploading',
           img: '',
           size: bytesToSize(file.size),
-          title: ''
+          title: '',
+          sort: self._count++
         };
         var $item = self._insertItem(data);
         // 尝试读取文件,低版本不支持
@@ -268,7 +280,7 @@ $(function () {
               var path = res.result.data.path;
               $item
               .removeClass('uploading')
-              .siblings('.imgup-img-form').val(path);
+              .find('.imgup-img-form').val(path);
             } else {
               noticeError($item, res.result.status.msg);
             }
@@ -352,10 +364,10 @@ $(function () {
       + '</div>'
       + '<label class="control-label">频道</label>'
       + '<div class="select-group">'
-      + '<select class="form-control news-link-select e-channel" name="newsLink[' + randomId + '][channel1]"></select>'
-      + '<select class="form-control news-link-select e-channel" name="newsLink[' + randomId + '][channel2]"></select>'
-      + '<select class="form-control news-link-select e-channel" name="newsLink[' + randomId + '][channel3]"></select>'
-      + '<select class="form-control news-link-select e-channel" name="newsLink[' + randomId + '][channel4]"></select>'
+      + '<select class="form-control news-link-select e-channel" name="newsLink[' + randomId + '][channel][]"></select>'
+      + '<select class="form-control news-link-select e-channel" name="newsLink[' + randomId + '][channel][]"></select>'
+      + '<select class="form-control news-link-select e-channel" name="newsLink[' + randomId + '][channel][]"></select>'
+      + '<select class="form-control news-link-select e-channel" name="newsLink[' + randomId + '][channel][]"></select>'
       + '</div>'
       + '</div>'
       + '<div class="sub-form-group-r e-delete"><i class="fa fa-trash-o"></i></div>'
@@ -395,13 +407,12 @@ $(function () {
   });
 
   function createSubForm_Vote() {
-    var randomId = Date.now();
     return '<div class="sub-form-group sub-form-group-deletable clearfix vote">'
       + '<div class="sub-form-group-l">'
       + '<label class="control-label">选项</label>'
       + '<div class="input-group">'
       + '<span class="input-group-addon"><i class="fa fa-pencil"></i></span>'
-      + '<input class="form-control" type="text" name="vote[option][' + randomId + ']">'
+      + '<input class="form-control" type="text" name="vote[options][]">'
       + '</div>'
       + '</div>'
       + '<div class="sub-form-group-r e-delete"><i class="fa fa-trash-o"></i></div>'
