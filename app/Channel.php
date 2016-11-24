@@ -114,7 +114,7 @@ class Channel extends Model
 
     public static function parentIds($childId = 0)
     {
-        return array_reverse(static::parentIdsP($childId), true);
+        return array_values(array_reverse(static::parentIdsP($childId), true));
     }
 
     private static function parentIdsP($childId = 0)
@@ -185,14 +185,13 @@ class Channel extends Model
         $options = [];
 
         if (empty($elements)) {
-            $elements = static::orderByRaw('`order` = 0,`order`')->get(['id', 'parent_id', 'name']);
+            $elements = static::orderBy('parent_id')->orderByRaw('`order` = 0,`order`')->get(['id', 'parent_id', 'name'])->toArray();
         }
 
         foreach ($elements as $element) {
             $element['name'] = $prefix.'&nbsp;'.$element['name'];
             if ($element['parent_id'] == $parentId) {
                 $children = static::buildSelectOptions($elements, $element['id'], $prefix.$prefix);
-
                 $options[$element['id']] = $element['name'];
 
                 if ($children) {

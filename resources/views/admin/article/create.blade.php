@@ -181,7 +181,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="sub-form-add e-add">+新增文字连接</div>
+                    <div class="sub-form-add e-add">+新增选项</div>
                   </div>
                 </div>
               </div>

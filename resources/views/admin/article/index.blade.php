@@ -13,13 +13,34 @@
         <div class="box">
           <div class="box-header">
           <form>
-            <a href="{{ route('articles.create') }}" class="btn btn-sm btn-primary link-create-news">新闻编辑</a>
+            <a href="{{ route('articles.create') }}" class="btn btn-sm btn-primary link-create-news">发表文章</a>
             <label class="label-type">频道</label>
             <select class="btn-choose-type" data-placeholder="选择关键字" id="channel_id" name="channel_id">
               @foreach( $options as $key => $option)
-              <option value="{{ $key }}">{{ $option }}</option>
+              <option value="{{ $key }}" @if(isset($filterValues['channel_id']) && ($key == $filterValues['channel_id']))selected @endif>{{ $option }}</option>
               @endforeach
             </select>
+            <fieldset>
+              <div class="input-group input-group-sm">
+                <span class="input-group-addon"><strong>Id</strong></span>
+                <input type="text" class="form-control" name="id" value="{{ $filterValues['id'] ?? null }}"></div>
+              <div class="input-group input-group-sm">
+                <span class="input-group-addon"><strong>标题</strong></span>
+                <input type="text" class="form-control" name="title" value="{{ $filterValues['title'] ?? null }}"></div>
+              <div class="input-group input-group-sm">
+                <span class="input-group-addon"><strong>创建时间</strong></span>
+                <input type="text" class="form-control" id="created_at_start"
+                       name="created_at[start]" value="{{ $filterValues['create_at[start]'] ?? null }}">
+                <span class="input-group-addon" style="border-left: 0; border-right: 0;">-</span>
+                <input type="text" class="form-control" id="created_at_end"
+                       name="created_at[end]" value="{{ $filterValues['create_at[end]'] ?? null }}">
+              </div>
+              <div class="input-group input-group-sm">
+                <div class="input-group-btn">
+                  <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                </div>
+              </div>
+            </fieldset>
           </form>
           </div>
           <!-- /.box-header -->
@@ -27,14 +48,9 @@
             <table class="news-list table table-hover">
               <tr>
                 <th><input type="checkbox" class="grid-select-all"></th>
-                <th>重要<a class="fa fa-fw fa-sort" href=""></a></th>
-                <th>ID<a class="fa fa-fw fa-sort fa-sort-amount-asc" href=""></a></th>
-                <th>上线<a class="fa fa-fw fa-sort fa-sort-amount-desc" href=""></a></th>
-                <th>标题</th>
-                <th>发布者</th>
-                <th>发布时间<a class="fa fa-fw fa-sort" href=""></a></th>
-                <th>点击量<a class="fa fa-fw fa-sort" href=""></a></th>
-                <th>评论数<a class="fa fa-fw fa-sort" href=""></a></th>
+                @foreach($tableHeaders as $val)
+                  {!! \App\Tool::tableHeader($val) !!}
+                @endforeach
                 <th>编辑</th>
               </tr>
                 @foreach($articles as $article)

@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\URL;
 
 class Tool extends Model
 {
@@ -62,5 +63,34 @@ class Tool extends Model
         $channels = array_filter($channels);
         return (int)array_pop($channels);
     }
+
+    public static function tableHeader($header) {
+        if (!$header['sortable']) {
+            return "<th>{$header['name']}</th>";
+        }
+        $icon = 'fa-sort';
+        $type = 'desc';
+        if (self::isSorted($header['name'])) {
+            $currentType = app('request')->get('_sort')['type'];
+            $type = $currentType == 'desc' ? 'asc' : 'desc';
+            $icon .= "-amount-{$currentType}";
+        }
+        $query = app('request')->all();
+        $query = array_merge($query, ['_sort' => ['column' => $header['name'], 'type' => $type]]);
+        $url = Url::current().'?'.http_build_query($query);
+        return "<th>{$header['label']}<a class=\"fa fa-fw $icon\" href=\"$url\"></a></th>";
+    }
+
+    public static function isSorted($name)
+    {
+        $sort = app('request')->get('_sort');
+
+        if (empty($sort)) {
+            return false;
+        }
+
+        return isset($sort['column']) && $sort['column'] == $name;
+    }
+
 
 }

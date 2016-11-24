@@ -27,6 +27,7 @@
           <!-- form start -->
           {!! Form::model($article, ['url'=> route('articles.update', [$article->id]), 'class'=> 'form-horizontal', 'enctype' => 'multipart/form-data']) !!}
           {!! Form::hidden('id',$article->id) !!}
+          {!! Form::hidden('_method','PUT') !!}
           <div class="box-body">
               <div class="form-group">
                 {!! Form::label('type', '图片新闻', ['class' => 'col-sm-2 control-label']) !!}
@@ -93,7 +94,7 @@
               <div class="form-group" id="normalArticle">
                 {!! Form::label('content','正文内容', ['class' => 'col-sm-2 control-label']) !!}
                 <div class="col-sm-8">
-                  <script id="content" name="content" type="text/plain">{!! $article->content !!}</script>
+                  <script id="content" name="content" type="text/plain">@if($article->type == 0){!! $article->content !!}@endif</script>
                 </div>
               </div>
               <div class="form-group" id="picArticle">
@@ -112,82 +113,89 @@
                 </div>
               </div>
               <div class="form-group">
-                {!! Form::label('original_url', '原始链接', ['class' => 'col-sm-2 control-label']) !!}
+                {!! Form::label('original_url', '原始链接', ['class' => 'col-sm-2 control-label ']) !!}
                 <div class="col-sm-6">
                   <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
+                    <span class="input-group-addon"><i class="fa fa-internet-explorer"></i></span>
                     {!! Form::text('original_url', null, ['id' => 'orgUrl', 'class' => 'form-control', 'placeholder' => '输入原始链接']) !!}
                   </div>
                 </div>
               </div>
-              {{--<div class="form-group">--}}
-                {{--{!! Form::label('newsLink', '文字连接', ['class' => 'col-sm-2 control-label']) !!}--}}
-                {{--<div class="col-sm-6">--}}
-                  {{--{!! Form::checkbox('newsLink[effective]', 1, (bool)$article->title_bold, ['class' => 'sub-form-switch']) !!}--}}
-                  {{--<div class="sub-form" id="newsLinkSubForm">--}}
-                    {{--<div class="sub-form-add e-add">+新增文字连接</div>--}}
-                  {{--</div>--}}
-                {{--</div>--}}
-              {{--</div>--}}
-              {{--<div class="form-group">--}}
-                {{--{!! Form::label('pk', 'PK', ['class' => 'col-sm-2 control-label']) !!}--}}
-                {{--<div class="col-sm-6">--}}
-                  {{--{!! Form::checkbox('pk[effective]', 1, (bool)$article->title_bold, ['id' => 'pkSFS', 'class' => 'sub-form-switch']) !!}--}}
-                  {{--<div class="sub-form" id="pkSubForm">--}}
-                    {{--<div class="sub-form-group clearfix">--}}
-                      {{--<div class="sub-form-group-l">--}}
-                        {{--<label class="control-label">标题</label>--}}
-                        {{--<div class="input-group">--}}
-                          {{--<span class="input-group-addon"><i class="fa fa-pencil"></i></span>--}}
-                          {{--<input class="form-control" type="text" name="pk[title]">--}}
-                        {{--</div>--}}
-                        {{--<label class="control-label">选项</label>--}}
-                        {{--<div class="input-group">--}}
-                          {{--<span class="input-group-addon"><i class="fa fa-pencil"></i></span>--}}
-                          {{--<input class="form-control" type="text" name="pk[options][]">--}}
-                        {{--</div>--}}
-                        {{--<label class="control-label">选项</label>--}}
-                        {{--<div class="input-group">--}}
-                          {{--<span class="input-group-addon"><i class="fa fa-pencil"></i></span>--}}
-                          {{--<input class="form-control" type="text" name="pk[options][]">--}}
-                        {{--</div>--}}
-                      {{--</div>--}}
-                    {{--</div>--}}
-                  {{--</div>--}}
-                {{--</div>--}}
-              {{--</div>--}}
-              {{--<div class="form-group">--}}
-                {{--{!! Form::label('vote', '投票', ['class' => 'col-sm-2 control-label']) !!}--}}
-                {{--<div class="col-sm-6">--}}
-                  {{--{!! Form::checkbox('vote[effective]', 1, (bool)$article->title_bold, ['id' => 'voteSFS', 'class' => 'sub-form-switch']) !!}--}}
-                  {{--<div class="sub-form" id="voteSubForm">--}}
-                    {{--<div class="vote-type">--}}
-                      {{--<input class="vote-type-radio" type="radio" name="vote[type]" value="0" checked>单选--}}
-                      {{--<input class="vote-type-radio" type="radio" name="vote[type]" value="1">多选(最多可选<input class="vote-type-text" type="text" name="vote[limit]">票)--}}
-                    {{--</div>--}}
-                    {{--<div class="sub-form-group clearfix">--}}
-                      {{--<div class="sub-form-group-l">--}}
-                        {{--<label class="control-label">标题</label>--}}
-                        {{--<div class="input-group">--}}
-                          {{--<span class="input-group-addon"><i class="fa fa-pencil"></i></span>--}}
-                          {{--<input class="form-control" type="text" name="vote[title]">--}}
-                        {{--</div>--}}
-                      {{--</div>--}}
-                    {{--</div>--}}
-                    {{--<div class="sub-form-add e-add">+新增文字连接</div>--}}
-                  {{--</div>--}}
-                {{--</div>--}}
-              {{--</div>--}}
-              {{--<div class="form-group">--}}
-                {{--{!! Form::label(null, '属性', ['class' => 'col-sm-2 control-label']) !!}--}}
-                {{--<div class="col-sm-6 input-line-group">--}}
-                  {{--{!! Form::checkbox('is_headline', 1, null, ['class' => 'input-line']) !!} 头条--}}
-                  {{--{!! Form::checkbox('is_soft', 1, null, ['class' => 'input-line']) !!} 软文--}}
-                  {{--{!! Form::checkbox('is_political', 1, null, ['class' => 'input-line']) !!} 政治风险--}}
-                  {{--{!! Form::checkbox('is_international', 1, null, ['class' => 'input-line']) !!} 国际--}}
-                  {{--{!! Form::checkbox('is_slide', 1, null, ['class' => 'input-line']) !!} 幻灯片--}}
-                {{--</div>--}}
-              {{--</div>--}}
+              <div class="form-group">
+                {!! Form::label('newsLink', '文字连接', ['class' => 'col-sm-2 control-label']) !!}
+                <div class="col-sm-6">
+                  {!! Form::checkbox('newsLink[effective]', 1, (bool)$article->title_bold, ['class' => 'sub-form-switch']) !!}
+                  <div class="sub-form" id="newsLinkSubForm">
+                    <div class="sub-form-add e-add">+新增文字连接</div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                {!! Form::label('pk', 'PK', ['class' => 'col-sm-2 control-label']) !!}
+                <div class="col-sm-6">
+                  {!! Form::checkbox('pk[effective]', 1, isset($ballot->type) && $ballot->type == 2, ['id' => 'pkSFS', 'class' => 'sub-form-switch']) !!}
+                  @if(isset($ballot->type) && $ballot->type == 2)
+                    {!! Form::hidden('pk[id]', $ballot->id) !!}
+                  @endif
+                  <div class="sub-form" id="pkSubForm">
+                    <div class="sub-form-group clearfix">
+                      <div class="sub-form-group-l">
+                        <label class="control-label">标题</label>
+                        <div class="input-group">
+                          <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
+                          {!! Form::text('pk[title]', $ballot->title, ['class'=> 'form-control']) !!}
+                        </div>
+                        <label class="control-label">选项</label>
+                        <div class="input-group">
+                          <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
+                          {!! Form::text('pk[options][]', $ballot->choices->first()->content ?? null, ['class'=> 'form-control']) !!}
+                        </div>
+                        <label class="control-label">选项</label>
+                        <div class="input-group">
+                          <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
+                          {!! Form::text('pk[options][]', $ballot->choices->first()->content ?? null, ['class'=> 'form-control']) !!}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                {!! Form::label('vote', '投票', ['class' => 'col-sm-2 control-label']) !!}
+                <div class="col-sm-6">
+                  {!! Form::checkbox('vote[effective]', 1, isset($ballot->type) && ($ballot->type == 0 || $ballot->type == 1), ['id' => 'voteSFS', 'class' => 'sub-form-switch']) !!}
+                  @if(isset($ballot->type) && ($ballot->type == 0 || $ballot->type == 1))
+                    {!! Form::hidden('vote[id]', $ballot->id) !!}
+                  @endif
+                  <div class="sub-form" id="voteSubForm">
+                    <div class="vote-type">
+                      {!! Form::radio('vote[type]', 0, !isset($ballot->type) || (isset($ballot->type) && ($ballot->type == 0)), ['class' => 'vote-type-radio']) !!}单选
+                      {!! Form::radio('vote[type]', 0, isset($ballot->type) && ($ballot->type == 1), ['class' => 'vote-type-radio']) !!}多选
+                      (最多可选{!! Form::text('vote[limit]', isset($ballot->type) && ($ballot->type == 1) ? $ballot->max_num : null, ['class' => 'vote-type-text']) !!}票)
+                    </div>
+                    <div class="sub-form-group clearfix">
+                      <div class="sub-form-group-l">
+                        <label class="control-label">标题</label>
+                        <div class="input-group">
+                          <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
+                          {!! Form::text('vote[title]', $ballot->title ?? null, ['class' => 'form-control']) !!}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="sub-form-add e-add">+新增选项</div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                {!! Form::label(null, '属性', ['class' => 'col-sm-2 control-label']) !!}
+                <div class="col-sm-6 input-line-group">
+                  {!! Form::checkbox('is_headline', 1, null, ['class' => 'input-line']) !!} 头条
+                  {!! Form::checkbox('is_soft', 1, null, ['class' => 'input-line']) !!} 软文
+                  {!! Form::checkbox('is_political', 1, null, ['class' => 'input-line']) !!} 政治风险
+                  {!! Form::checkbox('is_international', 1, null, ['class' => 'input-line']) !!} 国际
+                  {!! Form::checkbox('is_slide', 1, (bool)$slide, ['class' => 'input-line']) !!} 幻灯片
+                </div>
+              </div>
               <div class="form-group">
                 {!! Form::label(null, '所属频道', ['class' => 'col-sm-2 control-label']) !!}
                 <div class="col-sm-6 input-line-group" id="channel">
