@@ -23,7 +23,14 @@ class SortLinkController extends Controller
     {
         $header = '热推文章排序';
         $description = '';
-        $links = SortLink::orderBy('order', 'asc');
+        $links = SortLink::with('article')->orderByRaw('`order` = 0,`order`')->orderBy('created_at', 'desc')->get();
+//        foreach ($links as $link) {
+//            if (empty($link->article)) {
+//                dump($link->id);
+//            }
+//        }
+//        exit;
+        //dd($links);
         return view('admin.sort.link', ['header' => $header, 'description' => $description, 'links' => $links]);
 
         return Admin::content(function (Content $content) {
@@ -33,6 +40,20 @@ class SortLinkController extends Controller
 
             $content->body($this->grid());
         });
+    }
+
+    public function save()
+    {
+        if (Input::has('_tree')) {
+            $serialize = Input::get('_tree');
+            $tree = json_decode($serialize, true);
+            if (json_last_error() != JSON_ERROR_NONE) {
+                return Tool::showError('参数错误');
+            }
+            SortLink::saveTree($tree['children'], $tree['id']);
+            return Tool::showSuccess();
+        }
+        return Tool::showError('参数错误');
     }
 
     /**

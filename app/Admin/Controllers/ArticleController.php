@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Article;
+use App\ArticleInfo;
 use App\Ballot;
 use App\BallotChoice;
 use App\Channel;
@@ -16,6 +17,7 @@ use App\Permission;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Encore\Admin\Facades\Admin;
+use Encore\Admin\Grid;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
@@ -39,9 +41,26 @@ class ArticleController extends Controller
         //查询条件处理
         $model = new Model(Admin::getModel(Article::class));
         $model->addCondition(['whereIn' => ['channel_id', $channelIds]]);
+        $model->with('articleInfo');
+
+        //过滤条件
         $filter = new Filter($model);
+        $filter->like('title', '标题');
+        $filter->between('created_at', trans('admin::lang.created_at'))->datetime();
 
 
+        //dd($filterValues);
+        $articles = $filter->execute();
+        $query = Input::all();
+        $articles->appends($query);
+        //dd($articles->last());
+        //dd($filter->conditions(), $filter->execute());
+
+        //$query = Input::all();
+        //$articles = Article::with('articleInfo', 'author')->where('state', 0)->orderBy('id', 'desc')->paginate()->appends($query);
+        $filterValues = array_filter(Input::only('id', 'title', 'create_at[start]', 'create_at[end]', 'channel_id'), function($item) {
+            return !is_null($item);
+        });
         $tableHeaders = [
             [
                 'name' => 'is_important',
@@ -74,35 +93,16 @@ class ArticleController extends Controller
                 'sortable' => true,
             ],
             [
-                'name' => 'content.view_num',
+                'name' => 'articleInfo.view_num',
                 'label' => '点击量',
                 'sortable' => true,
             ],
             [
-                'name' => 'content.comment_num',
+                'name' => 'articleInfo.comment_num',
                 'label' => '评论数',
                 'sortable' => true,
             ],
         ];
-
-//        $filter->where(function($query) use($channelIds) {
-//            $query->whereIn('channel_id', $channelIds);
-//        }, '频道id');
-        //$filter->in('channel_id', '频道id');
-        $filter->like('title', '标题');
-        $filter->between('created_at', trans('admin::lang.created_at'))->datetime();
-
-
-        //dd($filterValues);
-        $articles = $filter->execute();
-        //dd($articles);
-        //dd($filter->conditions(), $filter->execute());
-
-        //$query = Input::all();
-        //$articles = Article::with('articleInfo', 'author')->where('state', 0)->orderBy('id', 'desc')->paginate()->appends($query);
-        $filterValues = array_filter(Input::only('id', 'title', 'create_at[start]', 'create_at[end]', 'channel_id'), function($item) {
-            return !is_null($item);
-        });
         return view('admin.article.index',
             compact('header', 'description', 'articles', 'options', 'filterValues', 'tableHeaders'));
     }
@@ -272,6 +272,7 @@ class ArticleController extends Controller
                 $article->save();
                 $article->keywords()->sync($keywords);
                 $article->content()->save(new Content(['content' => $content]));
+                $article->articleInfo()->save(new ArticleInfo());
                 if ($ballot) {
                     $article->ballot()->save(new Ballot($ballot));
                     foreach ($ballotChoices as $val) {

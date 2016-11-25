@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Article;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -47,8 +48,9 @@ class SortLinkOrPhoto implements ShouldQueue
 
         $existedNum = $className::count();
         if ($existedNum >= config('article.sortMaxNum')) {
-            $oldestSort = $className::orderBy('updated_at', 'asc')->first();
+            $oldestSort = $className::orderBy('created_at', 'asc')->first();
             $oldestSort->article_id = $article_id;
+            $oldestSort->created_at = Carbon::now();
             $result = $oldestSort->save();
         } else {
             $result = $className::create(['article_id' => $article_id]);

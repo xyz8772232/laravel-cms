@@ -12,29 +12,12 @@
       <div class="box-header">
       </div>
       <div class="box-body" id="sortBox">
-        <div class="sort-pic">
-          <img class="pic" src="http://img.cool80.com/i/png/381/02.png" alt="">
-          <div class="title">瓦力1</div>
-        </div>
-        <div class="sort-pic">
-          <img class="pic" src="http://img.cool80.com/i/png/381/02.png" alt="">
-          <div class="title">瓦力2</div>
-        </div>
-        <div class="sort-pic">
-          <img class="pic" src="http://img.cool80.com/i/png/381/02.png" alt="">
-          <div class="title">瓦力3</div>
-        </div>
-        <div class="sort-pic">
-          <img class="pic" src="http://img.cool80.com/i/png/381/02.png" alt="">
-          <div class="title">力瓦力瓦力瓦力瓦力瓦力瓦</div>
-        </div>
-        <div class="sort-pic">
-          <img class="pic" src="http://img.cool80.com/i/png/381/02.png" alt="">
-          <div class="title">瓦力4</div>
-        </div>
-        <div class="sort-pic">
-          <img class="pic" src="http://img.cool80.com/i/png/381/02.png" alt="">
-          <div class="title">瓦力5</div>
+        @foreach($photos as $photo)
+          <div class="sort-pic" data-id="{{$photo->id}}">
+            <img class="pic" src="{{asset('/upload/'.$photo->article->cover_pic)}}" alt="">
+            <div class="title">{{$photo->article->title}}</div>
+          </div>
+        @endforeach
         </div>
       </div>
       <div class="box-footer clearfix">

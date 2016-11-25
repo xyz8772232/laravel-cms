@@ -23,7 +23,7 @@ class SortPhotoController extends Controller
     {
         $header = '幻灯片排序';
         $description = '';
-        $photos = SortPhoto::orderBy('order', 'asc');
+        $photos = SortPhoto::with('article')->orderByRaw('`order` = 0,`order`')->orderBy('created_at', 'desc')->get();
         return view('admin.sort.photo', ['header' => $header, 'description' => $description, 'photos' => $photos]);
 
         return Admin::content(function (Content $content) {

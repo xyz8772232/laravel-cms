@@ -145,7 +145,6 @@ class Model
 
         $this->setSort();
         $this->setPaginate();
-        //dd($this->queries);
         $this->queries->each(function ($query) {
             $this->model = call_user_func_array([$this->model, $query['method']], $query['arguments']);
         });
@@ -240,14 +239,14 @@ class Model
     protected function setRelationSort($column)
     {
         list($relationName, $relationColumn) = explode('.', $column);
-
-        if ($this->queries->contains(function ($key, $query) use ($relationName) {
+        if ($this->queries->contains(function ($query) use ($relationName) {
             return $query['method'] == 'with' && in_array($relationName, $query['arguments']);
         })) {
+
             $relation = $this->model->$relationName();
 
             $this->queries->push([
-                'method'    => 'join',
+                'method'    => 'leftJoin',
                 'arguments' => $this->joinParameters($relation),
             ]);
 
