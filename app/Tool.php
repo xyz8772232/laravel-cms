@@ -92,5 +92,38 @@ class Tool extends Model
         return isset($sort['column']) && $sort['column'] == $name;
     }
 
+    /**
+     * 处理热点区
+     * @param \App\Article $article
+     * @param string       $type
+     * @param string       $action
+     *
+     * @return bool
+     */
+    public static function handleSort(Article $article, $type = 'link', $action = 'add')
+    {
+        $article_id =$article->id;
+        $className = 'App\Sort'.ucfirst($type);
 
+        if ($action == 'delete') {
+            if ($article->is_headline == 0) {
+                return true;
+            }
+            return $className::where('article_id', $article_id)->delete();
+        }
+
+        if ($article->is_headline == 1) {
+            return true;
+        }
+
+        $existedNum = $className::count();
+        if ($existedNum >= config('article.sortMaxNum')) {
+            $oldestSort = $className::orderBy('created_at')->first();
+            $oldestSort->article_id = $article_id;
+            $oldestSort->created_at = Carbon::now();
+            return $oldestSort->save();
+        } else {
+            return $className::create(['article_id' => $article_id]);
+        }
+    }
 }

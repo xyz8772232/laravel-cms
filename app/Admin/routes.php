@@ -43,8 +43,10 @@ $router->get('watermarks/create', 'WatermarkController@create');
 
 $router->any('ueditor', 'UploadController@ueditorUpload');
 
-
+$router->post('sort_links/save', 'SortLinkController@save');
 $router->resource('sort_links', SortLinkController::class);
+
+$router->post('sort_photos/save', 'SortPhotoController@save');
 $router->resource('sort_photos', SortPhotoController::class);
 
 $router->resource('app_photos', AppPhotoController::class);

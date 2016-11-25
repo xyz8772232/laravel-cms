@@ -8,6 +8,8 @@ class SortPhoto extends Model
 {
     protected $fillable = ['article_id'];
 
+    protected static $branchOrder = [];
+
     public function article()
     {
         return $this->belongsTo('\App\Article');
@@ -32,8 +34,8 @@ class SortPhoto extends Model
         static::setBranchOrder($tree);
 
         foreach ($tree as $branch) {
-            $node = static::find($branch['id']);
-            $node->order = static::$branchOrder[$branch['id']];
+            $node = static::find($branch);
+            $node->order = static::$branchOrder[$branch];
             $node->save();
         }
     }

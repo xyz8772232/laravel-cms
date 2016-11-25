@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\SortPhoto;
+use App\Tool;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Facades\Admin;
@@ -23,7 +24,7 @@ class SortPhotoController extends Controller
     {
         $header = '幻灯片排序';
         $description = '';
-        $photos = SortPhoto::with('article')->orderByRaw('`order` = 0,`order`')->orderBy('created_at', 'desc')->get();
+        $photos = SortPhoto::with('article')->orderByRaw('`order` = 0,`order`')->orderBy('created_at')->get();
         return view('admin.sort.photo', ['header' => $header, 'description' => $description, 'photos' => $photos]);
 
         return Admin::content(function (Content $content) {
@@ -33,6 +34,24 @@ class SortPhotoController extends Controller
 
             $content->body($this->grid());
         });
+    }
+
+    /**
+     * 保存顺序
+     * @return mixed
+     */
+    public function save()
+    {
+        if (Input::has('_tree')) {
+            $serialize = Input::get('_tree');
+            $tree = json_decode($serialize, true);
+            if (json_last_error() != JSON_ERROR_NONE) {
+                return Tool::showError('参数错误');
+            }
+            SortLink::saveTree($tree);
+            return Tool::showSuccess();
+        }
+        return Tool::showError('参数错误');
     }
 
     /**

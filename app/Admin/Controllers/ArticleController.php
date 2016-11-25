@@ -427,9 +427,6 @@ class ArticleController extends Controller
         $article = Article::find($id);
 
         $changeableField = [
-            'channel',
-            'state',
-            'is_headline',
             'is_soft',
             'is_political',
             'is_international',
@@ -503,9 +500,11 @@ class ArticleController extends Controller
                 continue;
             }
             $article = Article::find($id);
-            if ($article) {
+            if ($article && $article->is_headline == 0) {
                 $article->is_headline = 1;
                 $article->save();
+                Tool::handleSort($article, 'link', 'add');
+                //dispatch(new SortLinkOrPhoto($article, 'link', 'add'));
             }
         }
         return Tool::showSuccess('设置头条成功');
