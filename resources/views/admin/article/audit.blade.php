@@ -81,7 +81,7 @@
           <div class="box-footer clearfix">
             <div class="actions" id="batchActions">
               <span class="btn btn-sm btn-danger e-delete">删除</span>
-              <span class="btn btn-sm btn-success e-publish">审核通过</span>
+              <span class="btn btn-sm btn-success e-audit">审核通过</span>
               <span class="pull-right">
                 共<span class="text-primary">{{ $articles->total() }}</span>篇文章
               </span>

@@ -48,6 +48,8 @@ $(function () {
     commonAlert('是否确认上线', commonPost('上线', '/admin/articles/online/'));
   }).on('click', '.e-top', function () {
     commonAlert('是否确认设为头条', commonPost('头条设置', '/admin/articles/headline/'));
+  }).on('click', '.e-audit', function () {
+    commonAlert('是否通过', commonPost('通过', '/admin/articles/audit/'));
   });
 
   function commonAlert(noticeText, confirmCallback) {
