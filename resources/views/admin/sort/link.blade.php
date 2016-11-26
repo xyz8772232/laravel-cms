@@ -14,7 +14,7 @@
       <div class="box-body">
         <div class="sort-box" id="sortBox">
           @foreach($links as $link)
-            <div class="sort-news" data-id="{{$link->id}}"><i class="fa fa-bars e-drag text-default"></i>{{$link->article->title}}</div>
+            <div class="sort-news" data-id="{{$link->id}}"><i class="fa fa-arrows-alt text-default e-drag"></i>{{$link->article->title}}</div>
           @endforeach
         </div>
       </div>
@@ -146,7 +146,9 @@
             submitFail(res && res.result.status.msg);
           }
         })
-        .fail(submitFail);
+        .fail(function (){
+          submitFail();
+        });
       }
 
       function submitFail(failMsg) {

@@ -11,17 +11,23 @@
     <div class="box">
       <div class="box-header">
       </div>
-      <div class="box-body" id="sortBox">
+      <div class="box-body">
+        <div class="sort-box" id="sortBox">
         @foreach($photos as $photo)
-          <div class="sort-pic" data-id="{{$photo->id}}">
-            <img class="pic" src="{{asset('/upload/'.$photo->article->cover_pic)}}" alt="">
-            <div class="title">{{$photo->article->title}}</div>
-          </div>
+          @if ($photo->article)
+            <div class="sort-pic" data-id="{{$photo->id}}">
+              <i class="fa fa-arrows-alt e-drag"></i>
+              <img class="pic" src="{{asset('/upload/'.$photo->article->cover_pic)}}" alt="">
+              <div class="title">{{$photo->article->title}}</div>
+            </div>
+          @endif
         @endforeach
         </div>
       </div>
       <div class="box-footer clearfix">
-        <button type="button" class="btn btn-success pull-right">确定</button>
+        <button type="button" class="btn btn-primary pull-right e-sort">排序</button>
+        <button type="button" class="btn btn-success pull-right e-submit">确定</button>
+        <button type="button" class="btn btn-danger pull-right e-cancel">取消</button>
       </div>
     </div>
   </section>
@@ -32,24 +38,68 @@
   <link rel="stylesheet" href="{{ asset("/packages/admin/dragula/dragula.min.css") }}">
   <style>
     .sort-pic {
+      position: relative;
       float: left;
-      margin: 15px 0 0 15px;
-      width: 200px;
-      height: 200px;
-      padding: 0 25px;
+      margin: 15px 20px;
+      width: 243px;
+      height: 220px;
+      background-color: #1fa67a;
+      border: 1px solid #1fa67a;
+      overflow: hidden;
     }
     .sort-pic .pic {
       display: block;
       border: 1px solid #ddd;
       width: 100%;
-      height: 150px;
+      height: 160px;
+      background-color: #fff;
     }
     .sort-pic .title {
-      margin-top: 10px;
-      height: 40px;
-      line-height: 1.2;
-      font-size: 16px;
-      color: #333;
+      padding: 10px;
+      line-height: 1.3;
+      font-size: 15px;
+      color: #fff;
+    }
+    .e-drag {
+      position: absolute;
+      right: 0;
+      top: 0;
+      padding: 8px;
+      font-size: 18px;
+      color: #1fa67a;
+      border: 1px solid #1fa67a;
+      border-top: none;
+      border-right: none;
+      background-color: #fff;
+      cursor: move;
+      visibility: hidden;
+    }
+    .sort-box.active .e-drag {
+      visibility: visible;
+    }
+    .box-footer {
+      padding-right: 30px;
+    }
+    .e-submit,
+    .e-cancel {
+      margin-left: 5px;
+      display: none;
+    }
+    .action-sort .e-submit,
+    .action-sort .e-cancel {
+      display: block;
+    }
+    .action-sort .e-sort {
+      display: none;
+    }
+    .submit-loading {
+      padding-bottom: 17px!important;
+    }
+    .icon-submit-loading {
+      display: inline-block;
+      width: 50px;
+      height: 50px;
+      background: url('/img/loading.gif') no-repeat;
     }
   </style>
 @endsection
@@ -100,7 +150,7 @@
           tree.push(this.getAttribute('data-id'));
         });
         setTimeout(function() {})
-        $.post('/admin/sort_links/save', {
+        $.post('/admin/sort_photos/save', {
           _tree: JSON.stringify(tree)
         })
         .done(function (res) {
@@ -115,7 +165,9 @@
             submitFail(res && res.result.status.msg);
           }
         })
-        .fail(submitFail);
+        .fail(function (){
+          submitFail();
+        });
       }
 
       function submitFail(failMsg) {
