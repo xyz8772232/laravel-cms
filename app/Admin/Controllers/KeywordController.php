@@ -92,6 +92,9 @@ class KeywordController extends Controller
                 return "<span class='label label-success'>{$name}</span>";
             });
 
+
+            $grid->model()->orderBy('id', 'desc');
+
             $grid->created_at(trans('admin::lang.created_at'))->value(function ($date) {
                     return Carbon::parse($date)->diffForHumans();
                 });

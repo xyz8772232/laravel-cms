@@ -31,18 +31,23 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $header = '文章列表';
-        $description = '描述';
+        $header = '待审核文章';
+        $description = '列表';
         $channel_id = (int)Input::get('channel_id', 0);
         $options = [0 => '全部'] + Channel::buildSelectOptions([], 0, str_repeat('&nbsp;', 1));
 
-        $channelIds = array_merge(Channel::branchIds([], $channel_id), [$channel_id]);
-
         //查询条件处理
         $model = new Model(Admin::getModel(Article::class));
-        $model->addCondition(['whereIn' => ['channel_id', $channelIds]]);
-        $model->with('articleInfo');
-
+        $conditions[] = ['where' => ['state', 0]];
+        if ($channel_id) {
+            $channelIds = array_merge(Channel::branchIds([], $channel_id), [$channel_id]);
+            $conditions[] = ['whereIn' => ['channel_id', $channelIds]];
+        }
+        $model->addConditions($conditions);
+        $model->with('articleInfo', 'author');
+        if (!Input::get('_order')) {
+            $model->orderBy('created_at', 'desc');
+        }
         //过滤条件
         $filter = new Filter($model);
         $filter->like('title', '标题');
@@ -109,16 +114,83 @@ class ArticleController extends Controller
 
     public function channel($id = 1)
     {
-        $options = [0 => '全部'] + Channel::buildSelectOptions([], $id, '&nbsp;&nbsp;');
+        $header = '待审核文章';
+        $description = '列表';
+        $options = [0 => '全部'] + Channel::buildSelectOptions([], 0, str_repeat('&nbsp;', 1));
 
-        $channelIds = array_merge(Channel::branchIds([], $id), [(int)$id]);
-        $channelName = Channel::find($id)->name;
-        $childChannels = Channel::with('children_channel')->find($id)->children_channel->pluck('name', 'id');
-        $header = '文章列表';
-        $description = $channelName;
-        $query = Input::except('_pjax');
-        $articles =  Article::with('articleInfo', 'author')->whereIn('channel_id', $channelIds)->orderBy('published_at', 'desc')->paginate($query);
-        return view('admin.article.index', compact('header', 'description', 'childChannels', 'articles', 'options'));
+        //查询条件处理
+        $model = new Model(Admin::getModel(Article::class));
+        if ($id) {
+            $channelIds = array_merge(Channel::branchIds([], $id), [$id]);
+            $conditions[] = ['whereIn' => ['channel_id', $channelIds]];
+            $model->addConditions($conditions);
+        }
+        $model->with('articleInfo','author');
+        if (!Input::get('_order')) {
+            $model->orderBy('created_at', 'desc');
+        }
+        //过滤条件
+        $filter = new Filter($model);
+        $filter->like('title', '标题');
+        $filter->between('created_at', trans('admin::lang.created_at'))->datetime();
+
+
+        //dd($filterValues);
+        $articles = $filter->execute();
+        $query = Input::all();
+        $articles->appends($query);
+        //dd($articles->last());
+        //dd($filter->conditions(), $filter->execute());
+
+        //$query = Input::all();
+        //$articles = Article::with('articleInfo', 'author')->where('state', 0)->orderBy('id', 'desc')->paginate()->appends($query);
+        $filterValues = array_filter(Input::only('id', 'title', 'create_at[start]', 'create_at[end]', 'channel_id'), function($item) {
+            return !is_null($item);
+        });
+        $tableHeaders = [
+            [
+                'name' => 'is_important',
+                'label' => '重要',
+                'sortable' => true,
+            ],
+            [
+                'name' => 'id',
+                'label' => 'ID',
+                'sortable' => true,
+            ],
+            [
+                'name' => 'state',
+                'label' => '上线',
+                'sortable' => true,
+            ],
+            [
+                'name' => 'title',
+                'label' => '标题',
+                'sortable' => false,
+            ],
+            [
+                'name' => 'author',
+                'label' => '发布者',
+                'sortable' => false,
+            ],
+            [
+                'name' => 'published_at',
+                'label' => '发布时间',
+                'sortable' => true,
+            ],
+            [
+                'name' => 'articleInfo.view_num',
+                'label' => '点击量',
+                'sortable' => true,
+            ],
+            [
+                'name' => 'articleInfo.comment_num',
+                'label' => '评论数',
+                'sortable' => true,
+            ],
+        ];
+        return view('admin.article.index',
+            compact('header', 'description', 'articles', 'options', 'filterValues', 'tableHeaders'));
     }
 
     /**

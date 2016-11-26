@@ -16,7 +16,7 @@ class Channel extends Model
      */
     protected $appends = ['deletable'];
 
-    protected $visible = ['id', 'name', 'grade', 'parent_id', 'deletable'];
+    protected $visible = ['id', 'name', 'grade', 'parent_id'];
 
     protected $fillable = ['name', 'admin_user_id', 'grade', 'order', 'parent_id'];
 
@@ -68,7 +68,7 @@ class Channel extends Model
         $branch = [];
 
         if (empty($elements)) {
-            $elements = static::orderByRaw('`order` = 0,`order`')->get()->toArray();
+            $elements = static::orderByRaw('`order` = 0,`order`')->get()->makeVisible('deletable')->toArray();
         }
 
         foreach ($elements as $element) {

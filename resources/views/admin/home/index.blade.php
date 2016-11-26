@@ -12,7 +12,7 @@
             <div class="col-md-6">
                 <div class="small-box bg-red">
                     <div class="inner">
-                        <h3>{{$boxes['unaudited']}}</h3>
+                        <h3>{{$boxes['unaudited'] ?? 0}}</h3>
                         <p>未审核文章</p>
                     </div>
                     <div class="icon">
@@ -27,7 +27,7 @@
             <div class="col-md-6">
                 <div class="small-box bg-yellow">
                     <div class="inner">
-                        <h3>{{$boxes['soft']}}</h3>
+                        <h3>{{$boxes['soft'] ?? 0}}</h3>
                         <p>商业软文</p>
                     </div>
                     <div class="icon">

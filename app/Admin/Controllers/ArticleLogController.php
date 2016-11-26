@@ -125,6 +125,7 @@ class ArticleLogController extends Controller
             $grid->disableCreation();
             $grid->disableActions();
             $grid->disableBatchDeletion();
+            $grid->model()->orderBy('id', 'desc');
 
             $grid->filter(function($filter){
 

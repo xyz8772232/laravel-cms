@@ -49,5 +49,5 @@
 @section('admin_js')
   <script src="{{ asset("/packages/admin/bootstrap-fileinput/js/fileinput.min.js") }}"></script>
   <script src="{{ asset("/packages/admin/sweetalert/sweetalert.min.js") }}"></script>
-  <script src="{{ asset("/js/photo.index.js") }}"></script>
+  <script src="{{ asset_with_version("/js/photo.index.js") }}"></script>
 @endsection
