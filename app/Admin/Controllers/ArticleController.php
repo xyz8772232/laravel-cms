@@ -25,6 +25,75 @@ use Illuminate\Support\Facades\Validator;
 
 class ArticleController extends Controller
 {
+    public function auditList()
+    {
+        $header = '待审核文章';
+        $description = '列表';
+        $channel_id = (int)Input::get('channel_id', 0);
+        $channels = Channel::toTree([], 0);
+        $options = [0 => '全部'] + Channel::buildSelectOptions([], 0, str_repeat('&nbsp;', 2));
+
+        //查询条件处理
+        $model = new Model(Admin::getModel(Article::class));
+        $model->audit();
+
+        if ($channel_id) {
+            $channelIds = array_merge(Channel::branchIds([], $channel_id), [$channel_id]);
+            $conditions[] = ['whereIn' => ['channel_id', $channelIds]];
+            $model->addConditions($conditions);
+        }
+        $model->with('articleInfo', 'author');
+        if (!Input::get('_order')) {
+            $model->orderBy('created_at', 'desc');
+        }
+        //过滤条件
+        $filter = new Filter($model);
+        $filter->like('title', '标题');
+        $filter->between('created_at', trans('admin::lang.created_at'))->datetime();
+
+
+        //dd($filterValues);
+        $articles = $filter->execute();
+        $query = Input::all();
+        $articles->appends($query);
+        //dd($articles->last());
+        //dd($filter->conditions(), $filter->execute());
+
+        //$query = Input::all();
+        //$articles = Article::with('articleInfo', 'author')->where('state', 0)->orderBy('id', 'desc')->paginate()->appends($query);
+        $filterValues = array_filter(Input::only('id', 'title', 'create_at[start]', 'create_at[end]', 'channel_id'), function($item) {
+            return !is_null($item);
+        });
+        $tableHeaders = [
+            [
+                'name' => 'is_important',
+                'label' => '重要',
+                'sortable' => true,
+            ],
+            [
+                'name' => 'id',
+                'label' => 'ID',
+                'sortable' => true,
+            ],
+            [
+                'name' => 'title',
+                'label' => '标题',
+                'sortable' => false,
+            ],
+            [
+                'name' => 'author',
+                'label' => '发布者',
+                'sortable' => false,
+            ],
+            [
+                'name' => 'published_at',
+                'label' => '发布时间',
+                'sortable' => true,
+            ],
+        ];
+        return view('admin.article.audit',
+            compact('header', 'description', 'articles', 'options', 'filterValues', 'tableHeaders', 'channels'));
+    }
     /**
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -39,7 +108,7 @@ class ArticleController extends Controller
 
         //查询条件处理
         $model = new Model(Admin::getModel(Article::class));
-        $model->online();
+        $model->audit();
 
         if ($channel_id) {
             $channelIds = array_merge(Channel::branchIds([], $channel_id), [$channel_id]);

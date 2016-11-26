@@ -14,13 +14,18 @@
       <div class="box-body" id="sortBox">
         @foreach($photos as $photo)
           @if ($photo->article)
-          <div class="sort-pic" data-id="{{$photo->id}}">
-            <img class="pic" src="{{asset('/upload/'.$photo->article->cover_pic)}}" alt="">
-            <div class="title">{{$photo->article->title}}</div>
-          </div>
+              @if($loop->first || $loop->iteration % 5 == 0)
+                <div class="row">
+              @endif
+                <div class="sort-pic" data-id="{{$photo->id}}">
+                  <img class="pic" src="{{asset('/upload/'.$photo->article->cover_pic)}}" alt="">
+                  <div class="title">{{$photo->article->title}}</div>
+                </div>
+              @if($loop->last || $loop->iteration % 4 == 0)
+              </div>
+              @endif
           @endif
         @endforeach
-        </div>
       </div>
       <div class="box-footer clearfix">
         <button type="button" class="btn btn-success pull-right">确定</button>

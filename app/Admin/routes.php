@@ -10,9 +10,11 @@ $router->post('channels/save', 'ChannelController@save');
 $router->resource('channels', ChannelController::class);
 
 //文章管理相关
+$router->get('articles/audit_list', 'ArticleController@auditList');
 $router->get('articles/channel/{id?}', ['uses' => 'ArticleController@channel', 'as' => 'articles.channel']);
 $router->post('articles/change/{id}', 'ArticleController@change');
 $router->post('articles/online/{id}', 'ArticleController@online');
+$router->post('articles/audit/{id}', 'ArticleController@audit');
 $router->post('articles/headline/{id}', 'ArticleController@headline');
 $router->post('articles/transfer/{id}', 'ArticleController@transfer');
 $router->post('articles/link/{article_id}', 'ArticleController@link');

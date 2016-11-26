@@ -70,7 +70,7 @@ class Article extends Model
         return $this->hasOne('App\SortPhoto');
     }
 
-    public function scopeOnline($query)
+    public function scopeAudit($query)
     {
         return $query->where('state', 1);
     }
