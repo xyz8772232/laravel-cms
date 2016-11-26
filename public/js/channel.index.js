@@ -220,7 +220,7 @@ $(function () {
     _sort: function (handlerSortFail) {
       var self = this;
       var tree = {
-        id: this.elChannel.channelId,
+        id: this.elChannel && this.elChannel.channelId,
         children: Array.prototype.reduce.call(this.elBox.children, function (per, cur) {
           per.push({
             id: cur.channelId

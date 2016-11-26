@@ -12,19 +12,15 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset("/packages/admin/font-awesome/css/font-awesome.min.css") }}">
     <!-- Theme style -->
-    <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/dist/css/skins/" . config('admin.skin') .".min.css") }}">
+    <link rel="stylesheet" href="{{ asset("/css/skin-custom.css") }}">
 
     {!! Admin::css() !!}
-    <link rel="stylesheet" href="{{ asset("/packages/admin/nestable/nestable.css") }}">
-    <link rel="stylesheet" href="{{ asset("/packages/admin/bootstrap3-editable/css/bootstrap-editable.css") }}">
-    <link rel="stylesheet" href="{{ asset("/packages/admin/google-fonts/fonts.css") }}">
     <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/dist/css/AdminLTE.min.css") }}">
     @yield('css')
 
     <!-- REQUIRED JS SCRIPTS -->
     <script src="{{ asset ("/packages/admin/AdminLTE/plugins/jQuery/jQuery-2.1.4.min.js") }}"></script>
     <script src="{{ asset ("/packages/admin/AdminLTE/bootstrap/js/bootstrap.min.js") }}"></script>
-    <script src="{{ asset ("/packages/admin/AdminLTE/plugins/slimScroll/jquery.slimscroll.min.js") }}"></script>
     <script src="{{ asset ("/packages/admin/AdminLTE/dist/js/app.min.js") }}"></script>
     <script>
       // 设置X-CSRF-TOKEN
@@ -41,7 +37,7 @@
     <![endif]-->
 </head>
 
-<body class="hold-transition {{config('admin.skin')}} {{join(' ', config('admin.layout'))}}">
+<body class="hold-transition skin-custom {{join(' ', config('admin.layout'))}}">
 <div class="wrapper">
 
     @include('admin::partials.header')
@@ -62,26 +58,7 @@
 <!-- ./wrapper -->
 
 <!-- REQUIRED JS SCRIPTS -->
-<script src="{{ asset ("/packages/admin/AdminLTE/plugins/chartjs/Chart.min.js") }}"></script>
-<script src="{{ asset ("/packages/admin/nestable/jquery.nestable.js") }}"></script>
-<script src="{{ asset ("/packages/admin/noty/jquery.noty.packaged.min.js") }}"></script>
-<script src="{{ asset ("/packages/admin/bootstrap3-editable/js/bootstrap-editable.min.js") }}"></script>
-
 {!! Admin::js() !!}
-
-<script>
-
-    $.fn.editable.defaults.params = function (params) {
-        params._token = '{{ csrf_token() }}';
-        params._editable = 1;
-        params._method = 'PUT';
-        return params;
-    };
-
-    $.noty.defaults.layout = 'topRight';
-    $.noty.defaults.theme = 'relax';
-
-</script>
 @yield('js')
 </body>
 </html>

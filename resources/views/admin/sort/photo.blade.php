@@ -28,6 +28,7 @@
 @endsection
 
 @section('css')
+  <link rel="stylesheet" href="{{ asset("/packages/admin/sweetalert/sweetalert.css") }}">
   <link rel="stylesheet" href="{{ asset("/packages/admin/dragula/dragula.min.css") }}">
   <style>
     .sort-pic {
@@ -54,10 +55,76 @@
 @endsection
 
 @section('admin_js')
+  <script src="{{ asset("/packages/admin/sweetalert/sweetalert.min.js") }}"></script>
   <script src="{{ asset("/packages/admin/dragula/dragula.min.js") }}"></script>
   <script>
     $(function () {
-      dragula([document.getElementById('sortBox')]);
+      var $sortBox = $('#sortBox');
+      /**
+       * 绑定拖拽事件
+       */
+      dragula([$sortBox[0]], {
+        moves: function (el, container, handle) {
+          return handle.classList.contains('e-drag');
+        }
+      });
+
+      /**
+       * 绑定排序事件
+       */
+      var orgElList = Array.prototype.slice.call($sortBox.children(), 0);
+      $('.box-footer').on('click', '.e-sort', function (e) {
+        $sortBox.addClass('active');
+        e.delegateTarget.classList.add('action-sort');
+      }).on('click', '.e-submit', function (e) {
+        swal({
+          title: '',
+          text: '<i class="icon-submit-loading">',
+          customClass: 'submit-loading',
+          showConfirmButton: false,
+          html: true
+        });
+        setTimeout(function () {
+          submitSort();
+        }, 250);
+      }).on('click', '.e-cancel', function (e) {
+        $sortBox.removeClass('active');
+        e.delegateTarget.classList.remove('action-sort');
+        $sortBox.html('').append(orgElList);
+      });
+
+      function submitSort(){
+        var tree = [];
+
+        $sortBox.children().each(function () {
+          tree.push(this.getAttribute('data-id'));
+        });
+        setTimeout(function() {})
+        $.post('/admin/sort_links/save', {
+          _tree: JSON.stringify(tree)
+        })
+        .done(function (res) {
+          if (res && res.result.status.code === 0) {
+            swal({
+              title: '修改成功',
+              type: 'success'
+            }, function () {
+              location.reload();
+            });
+          } else {
+            submitFail(res && res.result.status.msg);
+          }
+        })
+        .fail(submitFail);
+      }
+
+      function submitFail(failMsg) {
+        swal({
+          title: '修改失败',
+          type: 'error',
+          text: failMsg || ''
+        });
+      }
     });
   </script>
 @endsection

@@ -58,17 +58,20 @@ $(function () {
   /**
    * 复制地址
    */
-  $('.box-body').on('click', '.img-copy-url', function (e) {
-    var url = this.parentNode.previousElementSibling.src;
-    if (e.clipboardData) {
-      e.clipboardData.setData("text/plain", url);
-    } else if (window.clipboardData) {
-      window.clipboardData.setData("text", url);
-    } else {
-      alert('当前浏览器不支持直接复制,请手动复制:' + url);
-      return false;
-    }
-    alert('复制成功');
+  var clipboard = new Clipboard('.img-copy-url');
+
+  clipboard.on('success', function (e) {
+    swal({
+      title: '复制成功',
+      type: 'success'
+    });
+  }).on('error', function (e) {
+    swal({
+      title: '复制失败,请手动复制下面链接',
+      type: 'error',
+      text: '<p style="word-wrap: break-word; word-break: break-all;">' + (e.trigger.getAttribute('data-clipboard-text') || '') + '</p>',
+      html: true
+    });
   });
 
   /**
@@ -135,6 +138,6 @@ $(function () {
   }
 
   function fixSwalStyle($swal) {
-    $swal.css('marginTop',  - $swal.height() / 2 + 'px');
+    $swal.css('marginTop', -$swal.height() / 2 + 'px');
   }
 });
