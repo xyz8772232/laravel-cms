@@ -13,26 +13,30 @@
         <div class="box">
           <div class="box-header">
           <form>
-            <a href="{{ route('articles.create') }}" class="btn btn-sm btn-primary link-create-news">发表文章</a>
-            <label class="label-type">频道</label>
-            <select class="btn-choose-type" data-placeholder="选择关键字" id="channel_id" name="channel_id">
-              @foreach( $options as $key => $option)
-              <option value="{{ $key }}" @if(isset($filterValues['channel_id']) && ($key == $filterValues['channel_id']))selected @endif>{{ $option }}</option>
-              @endforeach
-            </select>
-            <fieldset>
+            <a href="{{ route('articles.create') }}" class="btn btn-sm btn-primary link-create-news">新闻编辑</a>
+            <div class="form-inline pull-right">
+              <div class="input-group input-group-sm">
+                <span class="input-group-addon"><strong>频道</strong></span>
+                <select class="select-line" data-placeholder="选择关键字" name="channel_id" id="channelId">
+                  @foreach( $options as $key => $option)
+                  <option value="{{ $key }}">{{ $option }}</option>
+                  @endforeach
+                </select>
+              </div>
               <div class="input-group input-group-sm">
                 <span class="input-group-addon"><strong>Id</strong></span>
-                <input type="text" class="form-control" name="id" value="{{ $filterValues['id'] ?? null }}"></div>
+                <input type="text" class="form-control" name="id" value="{{ $filterValues['id'] ?? null }}">
+              </div>
               <div class="input-group input-group-sm">
                 <span class="input-group-addon"><strong>标题</strong></span>
-                <input type="text" class="form-control" name="title" value="{{ $filterValues['title'] ?? null }}"></div>
+                <input type="text" class="form-control" name="title" value="{{ $filterValues['title'] ?? null }}">
+              </div>
               <div class="input-group input-group-sm">
                 <span class="input-group-addon"><strong>创建时间</strong></span>
-                <input type="text" class="form-control" id="created_at_start"
+                <input type="text" class="form-control" id="createdAtStart"
                        name="created_at[start]" value="{{ $filterValues['create_at[start]'] ?? null }}">
                 <span class="input-group-addon" style="border-left: 0; border-right: 0;">-</span>
-                <input type="text" class="form-control" id="created_at_end"
+                <input type="text" class="form-control" id="createdAtEnd"
                        name="created_at[end]" value="{{ $filterValues['create_at[end]'] ?? null }}">
               </div>
               <div class="input-group input-group-sm">
@@ -40,7 +44,7 @@
                   <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
                 </div>
               </div>
-            </fieldset>
+            </div>
           </form>
           </div>
           <!-- /.box-header -->
@@ -48,9 +52,14 @@
             <table class="news-list table table-hover">
               <tr>
                 <th><input type="checkbox" class="grid-select-all"></th>
-                @foreach($tableHeaders as $val)
-                  {!! \App\Tool::tableHeader($val) !!}
-                @endforeach
+                <th>重要<a class="fa fa-fw fa-sort" href=""></a></th>
+                <th>ID<a class="fa fa-fw fa-sort fa-sort-amount-asc" href=""></a></th>
+                <th>上线<a class="fa fa-fw fa-sort fa-sort-amount-desc" href=""></a></th>
+                <th>标题</th>
+                <th>发布者</th>
+                <th>发布时间<a class="fa fa-fw fa-sort" href=""></a></th>
+                <th>点击量<a class="fa fa-fw fa-sort" href=""></a></th>
+                <th>评论数<a class="fa fa-fw fa-sort" href=""></a></th>
                 <th>编辑</th>
               </tr>
                 @foreach($articles as $article)
@@ -99,22 +108,28 @@
 @endsection
 
 @section('css')
+  <link rel="stylesheet" href="{{ asset("/packages/admin/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css") }}">
   <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/plugins/select2/select2.min.css") }}">
   <style>
     .link-create-news{
       display: inline-block;
       margin-right: 25px;
     }
-    .btn-choose-type{
-      display: inline-block;
-      margin-left: 10px;
-      width: 100px;
-      height: 30px;
+    .select-line{
+      width: 120px;
     }
-    .label-type{
-      margin-bottom: 0;
-      vertical-align: middle;
-      color: #666;
+    .box-header .select2-selection{
+      height: 30px;
+      border-radius: 0 3px 3px 0;
+      border-color: #ccc;
+      color: #555;
+      font-size: 12px;
+    }
+    .select2-search__field{
+      outline: none;
+    }
+    .select2-search__field:focus{
+      border-color: #3c8dbc!important;
     }
     .news-list,
     .news-list th{
@@ -143,12 +158,22 @@
 @endsection
 
 @section('admin_js')
+  <script src="{{ asset ("/packages/admin/moment/min/moment-with-locales.min.js") }}"></script>
+  <script src="{{ asset ("/packages/admin/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js") }}"></script>
   <script src="{{ asset ("/packages/admin/AdminLTE/plugins/select2/select2.full.min.js") }}"></script>
   <script>
     $(function () {
-       $("#channel_id").select2({
-        minimumResultsForSearch: Infinity,
-        allowClear: true
+       $("#channelId").select2({
+        allowClear: false
+       });
+
+       $('#createdAtStart').datetimepicker({"format":"YYYY-MM-DD HH:mm:ss","locale":"zh_CN"});
+       $('#createdAtEnd').datetimepicker({"format":"YYYY-MM-DD HH:mm:ss","locale":"zh_CN","useCurrent":false});
+       $("#createdAtStart").on("dp.change", function (e) {
+           $('#createdAtEnd').data("DateTimePicker").minDate(e.date);
+       });
+       $("#createdAtEnd").on("dp.change", function (e) {
+           $('#createdAtStart').data("DateTimePicker").maxDate(e.date);
        });
     });
   </script>
