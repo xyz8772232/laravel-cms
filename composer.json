@@ -53,11 +53,5 @@
     },
     "config": {
         "preferred-install": "dist"
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/xiaot2014/laravel-admin"
-        }
-    ]
+    }
 }

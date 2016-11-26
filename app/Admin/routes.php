@@ -15,7 +15,7 @@ $router->post('articles/change/{id}', 'ArticleController@change');
 $router->post('articles/online/{id}', 'ArticleController@online');
 $router->post('articles/headline/{id}', 'ArticleController@headline');
 $router->post('articles/transfer/{id}', 'ArticleController@transfer');
-$router->post('link/{id}', 'ArticleController@link');
+$router->post('articles/link/{article_id}', 'ArticleController@link');
 $router->resource('articles', ArticleController::class);
 
 $router->resource('logs', ArticleLogController::class);
@@ -43,8 +43,10 @@ $router->get('watermarks/create', 'WatermarkController@create');
 
 $router->any('ueditor', 'UploadController@ueditorUpload');
 
-
+$router->post('sort_links/save', 'SortLinkController@save');
 $router->resource('sort_links', SortLinkController::class);
+
+$router->post('sort_photos/save', 'SortPhotoController@save');
 $router->resource('sort_photos', SortPhotoController::class);
 
 $router->resource('app_photos', AppPhotoController::class);

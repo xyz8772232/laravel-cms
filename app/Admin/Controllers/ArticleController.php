@@ -3,16 +3,21 @@
 namespace App\Admin\Controllers;
 
 use App\Article;
+use App\ArticleInfo;
 use App\Ballot;
 use App\BallotChoice;
 use App\Channel;
 use App\Content;
+use App\Filter;
+use App\Model;
 use App\Keyword;
+use App\SortLink;
 use App\Tool;
 use App\Permission;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Encore\Admin\Facades\Admin;
+use Encore\Admin\Grid;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
@@ -20,6 +25,102 @@ use Illuminate\Support\Facades\Validator;
 
 class ArticleController extends Controller
 {
+    /**
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function index()
+    {
+        $header = '文章列表';
+        $description = '描述';
+        $channel_id = (int)Input::get('channel_id', 0);
+        $options = [0 => '全部'] + Channel::buildSelectOptions([], 0, str_repeat('&nbsp;', 1));
+
+        $channelIds = array_merge(Channel::branchIds([], $channel_id), [$channel_id]);
+
+        //查询条件处理
+        $model = new Model(Admin::getModel(Article::class));
+        $model->addCondition(['whereIn' => ['channel_id', $channelIds]]);
+        $model->with('articleInfo');
+
+        //过滤条件
+        $filter = new Filter($model);
+        $filter->like('title', '标题');
+        $filter->between('created_at', trans('admin::lang.created_at'))->datetime();
+
+
+        //dd($filterValues);
+        $articles = $filter->execute();
+        $query = Input::all();
+        $articles->appends($query);
+        //dd($articles->last());
+        //dd($filter->conditions(), $filter->execute());
+
+        //$query = Input::all();
+        //$articles = Article::with('articleInfo', 'author')->where('state', 0)->orderBy('id', 'desc')->paginate()->appends($query);
+        $filterValues = array_filter(Input::only('id', 'title', 'create_at[start]', 'create_at[end]', 'channel_id'), function($item) {
+            return !is_null($item);
+        });
+        $tableHeaders = [
+            [
+                'name' => 'is_important',
+                'label' => '重要',
+                'sortable' => true,
+            ],
+            [
+                'name' => 'id',
+                'label' => 'ID',
+                'sortable' => true,
+            ],
+            [
+                'name' => 'state',
+                'label' => '上线',
+                'sortable' => true,
+            ],
+            [
+                'name' => 'title',
+                'label' => '标题',
+                'sortable' => false,
+            ],
+            [
+                'name' => 'author',
+                'label' => '发布者',
+                'sortable' => false,
+            ],
+            [
+                'name' => 'published_at',
+                'label' => '发布时间',
+                'sortable' => true,
+            ],
+            [
+                'name' => 'articleInfo.view_num',
+                'label' => '点击量',
+                'sortable' => true,
+            ],
+            [
+                'name' => 'articleInfo.comment_num',
+                'label' => '评论数',
+                'sortable' => true,
+            ],
+        ];
+        return view('admin.article.index',
+            compact('header', 'description', 'articles', 'options', 'filterValues', 'tableHeaders'));
+    }
+
+    public function channel($id = 1)
+    {
+        $options = [0 => '全部'] + Channel::buildSelectOptions([], $id, '&nbsp;&nbsp;');
+
+        $channelIds = array_merge(Channel::branchIds([], $id), [(int)$id]);
+        $channelName = Channel::find($id)->name;
+        $childChannels = Channel::with('children_channel')->find($id)->children_channel->pluck('name', 'id');
+        $header = '文章列表';
+        $description = $channelName;
+        $query = Input::except('_pjax');
+        $articles =  Article::with('articleInfo', 'author')->whereIn('channel_id', $channelIds)->orderBy('published_at', 'desc')->paginate($query);
+        return view('admin.article.index', compact('header', 'description', 'childChannels', 'articles', 'options'));
+    }
+
     /**
      * Store a new article.
      *
@@ -29,8 +130,19 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
+        //频道处理
+        $request->merge(['channel_id' => Tool::getChannelId($request->channels)]);
+
+        //内容存储
+        if ($request->type == 1 && $request->contentPic) {
+            $contentPic = $request->contentPic;
+            $contentPic = json_encode(collect($contentPic)->values()->sortBy('order')->values()->all());
+            $request->merge(['content' => $contentPic]);
+        }
+
         $rules = [
             'title' => 'required|max:50',
+            'content' => 'required',
             'type' => 'in:0,1',
             'title_bold' => 'in:0,1',
             'is_headline' => 'in:0,1',
@@ -40,15 +152,17 @@ class ArticleController extends Controller
             'is_important' => 'in:0,1',
             'publish_at' => 'date',
             'original_url' => 'url',
-            'channels.*' => 'Integer',
+            'channel_id' => 'required|integer|exists:channels,id',
         ];
-        //$this->validate($request, $rules);
+
+
+
+
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return redirect()->to('/admin/article/create')
+            return redirect()->to('/admin/articles/create')
                 ->withInput($request->input())
                 ->withErrors($validator->errors());
-            //dd($validator->errors()->getMessages());
         }
 
 
@@ -68,6 +182,7 @@ class ArticleController extends Controller
             'source',
             'original_url',
             'published_at',
+            'channel_id',
         ];
 
         $article = new Article();
@@ -76,25 +191,21 @@ class ArticleController extends Controller
             isset($request->$field) && $article->$field = $request->$field;
         });
 
-        //频道处理
-        $article->channel_id = Tool::getChannelId($request->channels);
+        $content = $request->content;
+
+
 
         //封面图处理
         if (!empty($request->file('cover_pic'))) {
-            $article->cover_pic = $request->file('cover_pic')->storeAs('cover_pic', uniqid('cover_'), 'admin');
+            $coverFile = $request->file('cover_pic');
+            $coverName = uniqid('cover_').'.'.$coverFile->guessExtension();
+            $article->cover_pic = $coverFile->storeAs('cover_pic', $coverName, 'admin');
         }
 
         //作者处理
         $article->author_id = Admin::user()->id;
 
-        //内容存储
-        if ($request->type == 1) {
-            $contentPic = $request->contentPic;
-            $contentPic = collect($contentPic)->values()->sortBy('order')->all();
-            $content = json_encode($contentPic);
-        }else {
-            $content = $request->get('content');
-        }
+
 
         //关键字同步
         $keywords = [];
@@ -104,6 +215,7 @@ class ArticleController extends Controller
         //pk或投票同步
         $pk = $request->pk;
         $vote = $request->vote;
+        $ballot = $ballotChoices = [];
         if (!empty($pk['effective'])) {
             $ballot = ['title' => $pk['title'], 'type' => 2];
             foreach ($pk['options'] as $val) {
@@ -131,11 +243,36 @@ class ArticleController extends Controller
             })->all();
         }
 
+//        $exception = DB::transaction(function () use ($article, $keywords, $content, $ballot, $ballotChoices, $newsLinks) {
+//            $article->save();
+//            $article->keywords()->sync($keywords);
+//            $article->content()->save(new Content(['content' => $content]));
+//            if ($ballot) {
+//                $article->ballot()->save(new Ballot($ballot));
+//                foreach ($ballotChoices as $val) {
+//                    $choices[] = new BallotChoice($val);
+//                }
+//                $article->ballot()->first()->choices()->saveMany($choices);
+//            }
+//            if ($newsLinks) {
+//                $link_id = $article->id;
+//                foreach ($newsLinks as &$link) {
+//                    $link['link_id'] = $link_id;
+//                    $link['author_id'] = (int)$article->author_id;
+//                    $link['created_at'] = $link['updated_at'] = Carbon::now();
+//                    $link['state'] = (int)$article->state;
+//                }
+//                Article::insert($newsLinks);
+//            }
+//
+//        });
+
         try {
             $exception = DB::transaction(function () use ($article, $keywords, $content, $ballot, $ballotChoices, $newsLinks) {
                 $article->save();
                 $article->keywords()->sync($keywords);
                 $article->content()->save(new Content(['content' => $content]));
+                $article->articleInfo()->save(new ArticleInfo());
                 if ($ballot) {
                     $article->ballot()->save(new Ballot($ballot));
                     foreach ($ballotChoices as $val) {
@@ -181,18 +318,46 @@ class ArticleController extends Controller
 
     public function update($id, Request $request)
     {
-        $this->validate($request, [
+
+        //内容存储
+        if ($request->type == 1 && $request->contentPic) {
+            $contentPic = $request->contentPic;
+            $contentPic = json_encode(collect($contentPic)->values()->sortBy('order')->map(function($val) {
+                return collect($val)->only('img', 'title')->all();
+            })->all());
+            $request->merge(['content' => $contentPic]);
+        }
+
+        $rules = [
+            'id' => 'required|exists:articles,id',
             'title' => 'required|max:50',
+            'content' => 'required',
             'type' => 'in:0,1',
             'title_bold' => 'in:0,1',
             'is_headline' => 'in:0,1',
-            'content' => 'required'
-        ]);
-        $article = Article::with('keywords', 'content')->findOrFail($id);
+            'is_soft' => 'in:0,1',
+            'is_political' => 'in:0,1',
+            'is_international' => 'in:0,1',
+            'is_important' => 'in:0,1',
+            'publish_at' => 'date',
+            'original_url' => 'url',
+            'state' => 'in:0,1',
+        ];
+
+
+
+
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return redirect()->to('/admin/articles/'.$id)
+                ->withInput($request->input())
+                ->withErrors($validator->errors());
+        }
+
+        $article = Article::with('keywords', 'content')->find($id);
 
         $canUpdateField = [
             'title',
-            'channel',
             'state',
             'is_headline',
             'is_soft',
@@ -207,7 +372,8 @@ class ArticleController extends Controller
             'title_bold',
             'description',
             'source',
-            'type',
+            'original_url',
+            'published_at',
         ];
 
         $input = collect(Input::only($canUpdateField))->filter(function ($value) {
@@ -261,9 +427,6 @@ class ArticleController extends Controller
         $article = Article::find($id);
 
         $changeableField = [
-            'channel',
-            'state',
-            'is_headline',
             'is_soft',
             'is_political',
             'is_international',
@@ -337,9 +500,11 @@ class ArticleController extends Controller
                 continue;
             }
             $article = Article::find($id);
-            if ($article) {
+            if ($article && $article->is_headline == 0) {
                 $article->is_headline = 1;
                 $article->save();
+                Tool::handleSort($article, 'link', 'add');
+                //dispatch(new SortLinkOrPhoto($article, 'link', 'add'));
             }
         }
         return Tool::showSuccess('设置头条成功');
@@ -405,32 +570,6 @@ class ArticleController extends Controller
     }
 
 
-    /**
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function index()
-    {
-        $header = '文章列表';
-        $description = '描述';
-        $options = [0 => '全部'] + Channel::buildSelectOptions([], 0, '&nbsp;&nbsp;');
-        $query = Input::all();
-        $articles = Article::with('articleInfo', 'author')->where('state', 0)->orderBy('id', 'desc')->paginate()->appends($query);
-        return view('admin.article.index', compact('header', 'description', 'articles', 'options'));
-    }
-
-    public function channel($id = 1)
-    {
-        $options = [0 => '全部'] + Channel::buildSelectOptions([], $id, '&nbsp;&nbsp;');
-
-        $channelIds = Channel::branchIds([], $id);
-        $childChannels = Channel::with('children_channel')->find($id)->children_channel->pluck('name', 'id');
-        $header = '文章列表';
-        $description = '描述';
-        $query = Input::except('_pjax');
-        $articles =  Article::with('articleInfo', 'author')->whereIn('channel_id', $channelIds )->orderBy('published_at', 'desc')->paginate($query);
-        return view('admin.article.index', compact('header', 'description', 'childChannels', 'articles', 'options'));
-    }
 
 
 
@@ -455,10 +594,9 @@ class ArticleController extends Controller
     }
 
     /**
-     * Edit interface.
-     *
      * @param $id
      *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit($id)
     {
@@ -467,6 +605,34 @@ class ArticleController extends Controller
         $article = Article::with('keywords', 'content')->findOrFail($id);
         $keywords = Keyword::pluck('name', 'id');
         $channels = Channel::toTree([], 0);
+        if ($article->type == 1) {
+            $contentPics = array_values(json_decode($article->content, true));
+        }
+        $channel_id = $article->channel_id;
+        $parentIds = Channel::parentIds($channel_id);
+        $links = Article::where('link_id', $id)->get(['id', 'title', 'channel_id'])->map(function($val) {
+            return ['id' => $val->id, 'title' => $val->title, 'channel' => Channel::parentIds($val->channel_id)];
+        })->all();
+
+        $ballot = $article->ballot;
+
+        $slide = SortLink::where('article_id', $id)->first();
+        if ($ballot) {
+            $voteOptions = $ballot->choices->map(function($val) {
+                return [
+                    'id' => $val->id,
+                    'option' => $val->content,
+                ];
+            })->all();
+        }
+
+        $initConfig = [
+            'coverPic' => $article->cover_pic ? asset('upload/'.$article->cover_pic) : null,
+            'contentPics' => $contentPics ?? null,
+            'channel' => array_values($parentIds),
+            'newsLinks' => $links,
+            'voteOptions' => $voteOptions ?? null,
+        ];
 
         return view('admin.article.edit',
             [
@@ -474,16 +640,18 @@ class ArticleController extends Controller
             'description' => $description,
             'article' => $article,
             'keywords' => $keywords,
-            'channels' => $channels
+            'channels' => $channels,
+            'ballot' => $ballot,
+            'slide' => $slide,
+            'initConfig' => $initConfig,
             ]
         );
     }
 
     /**
-     * show interface.
-     *
      * @param $id
      *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function show($id)
     {

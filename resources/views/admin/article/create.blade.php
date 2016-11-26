@@ -181,7 +181,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="sub-form-add e-add">+新增文字连接</div>
+                    <div class="sub-form-add e-add">+新增选项</div>
                   </div>
                 </div>
               </div>
@@ -257,7 +257,7 @@
   <script src="{{ asset("/packages/admin/ueditor-utf8-php/ueditor.all.min.js") }}"></script>
   <script>
     var CHANNEL = {!! json_encode($channels) !!};
-    var PAGE_CONFIG = {
+    var INIT_CONFIG = {
 
     };
   </script>

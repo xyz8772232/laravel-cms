@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\URL;
 
 class Tool extends Model
 {
@@ -63,4 +64,66 @@ class Tool extends Model
         return (int)array_pop($channels);
     }
 
+    public static function tableHeader($header) {
+        if (!$header['sortable']) {
+            return "<th>{$header['name']}</th>";
+        }
+        $icon = 'fa-sort';
+        $type = 'desc';
+        if (self::isSorted($header['name'])) {
+            $currentType = app('request')->get('_sort')['type'];
+            $type = $currentType == 'desc' ? 'asc' : 'desc';
+            $icon .= "-amount-{$currentType}";
+        }
+        $query = app('request')->all();
+        $query = array_merge($query, ['_sort' => ['column' => $header['name'], 'type' => $type]]);
+        $url = Url::current().'?'.http_build_query($query);
+        return "<th>{$header['label']}<a class=\"fa fa-fw $icon\" href=\"$url\"></a></th>";
+    }
+
+    public static function isSorted($name)
+    {
+        $sort = app('request')->get('_sort');
+
+        if (empty($sort)) {
+            return false;
+        }
+
+        return isset($sort['column']) && $sort['column'] == $name;
+    }
+
+    /**
+     * 处理热点区
+     * @param \App\Article $article
+     * @param string       $type
+     * @param string       $action
+     *
+     * @return bool
+     */
+    public static function handleSort(Article $article, $type = 'link', $action = 'add')
+    {
+        $article_id =$article->id;
+        $className = 'App\Sort'.ucfirst($type);
+
+        if ($action == 'delete') {
+            if ($article->is_headline == 0) {
+                return true;
+            }
+            return $className::where('article_id', $article_id)->delete();
+        }
+
+        if ($article->is_headline == 1) {
+            return true;
+        }
+
+        $existedNum = $className::count();
+        if ($existedNum >= config('article.sortMaxNum')) {
+            $oldestSort = $className::orderBy('created_at')->first();
+            $oldestSort->article_id = $article_id;
+            $oldestSort->created_at = Carbon::now();
+            return $oldestSort->save();
+        } else {
+            return $className::create(['article_id' => $article_id]);
+        }
+    }
 }

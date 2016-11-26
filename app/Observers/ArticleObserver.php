@@ -10,6 +10,7 @@ namespace App\Observers;
 
 use App\Article;
 use App\ArticleLog;
+use App\Tool;
 use Encore\Admin\Facades\Admin;
 class ArticleObserver
 {
@@ -29,6 +30,23 @@ class ArticleObserver
     }
 
     /**
+     *监听文章删除事件
+     * @param  Article  $article
+     * @return void
+     */
+    public function deleting(Article $article)
+    {
+        if ($article->is_headline) {
+            Tool::handleSort($article, 'link', 'delete');
+        }
+
+        if ($article->is_slide) {
+            Tool::handleSort($article, 'photo', 'delete');
+        }
+
+    }
+
+    /**
      * Listen to the Article deleted event.
      *
      * @param  Article  $article
@@ -43,7 +61,7 @@ class ArticleObserver
         ]);
     }
 
-    public function updating(Article $article) {
+    public function updated(Article $article) {
         $admin_user_id = Admin::user()->id;
         if ($article->state == 1 && $article->getOriginal('state') == 0) {
             ArticleLog::create([

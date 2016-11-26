@@ -16,10 +16,8 @@ class CreateSortphotosTable extends Migration
         Schema::create('sort_photos', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('article_id');
-            $table->unsignedInteger('order');
+            $table->unsignedInteger('order')->default(0);
             $table->timestamps();
-            $table->softDeletes();
-
 
             $table->index('article_id');
             $table->index('order');

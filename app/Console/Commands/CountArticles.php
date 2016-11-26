@@ -45,7 +45,6 @@ class CountArticles extends Command
             $articleNums[$grade4Channel->id] = Article::where('channel_id', $grade4Channel->id)->count();
         }
 
-
         foreach (range(3, 1) as $grade) {
             $channels  = Channel::where('grade', $grade)->get();
             foreach ($channels as $channel) {

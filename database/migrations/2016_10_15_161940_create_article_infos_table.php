@@ -14,12 +14,11 @@ class CreateArticleInfosTable extends Migration
     public function up()
     {
         Schema::create('article_infos', function (Blueprint $table) {
-            $table->increments('id');
             $table->unsignedInteger('article_id');
             $table->unsignedBigInteger('view_num')->default(0);
             $table->unsignedBigInteger('comment_num')->default(0);
 
-            $table->unique('article_id');
+            $table->primary('article_id');
             $table->index('view_num');
             $table->index('comment_num');
 
