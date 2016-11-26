@@ -26,7 +26,7 @@
                    alt="">
               <div class="img-action">
                 <input type="checkbox" data-index="{{ $loop->index }}" class="img-select input-lg">
-                <button type="button" class="img-copy-url btn btn-primary btn-xs pull-right">复制地址</button>
+                <button type="button" class="img-copy-url btn btn-primary btn-xs pull-right" data-clipboard-text="{{ asset('upload/'.$photo->path) }}">复制地址</button>
               </div>
             </div>
           </div>
@@ -49,5 +49,6 @@
 @section('admin_js')
   <script src="{{ asset("/packages/admin/bootstrap-fileinput/js/fileinput.min.js") }}"></script>
   <script src="{{ asset("/packages/admin/sweetalert/sweetalert.min.js") }}"></script>
+  <script src="{{ asset("/packages/admin/clipboard/clipboard.min.js") }}"></script>
   <script src="{{ asset("/js/photo.index.js") }}"></script>
 @endsection

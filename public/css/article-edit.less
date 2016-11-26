@@ -41,9 +41,9 @@ textarea {
 }
 
 .sub-form-group {
-  border-top: 1px dashed #ccc;
+  border-bottom: 1px dashed #ccc;
   background-color: #f8f8f8;
-  &:first-child {
+  &:last-child {
     border-top: none;
   }
   .control-label {
@@ -160,6 +160,7 @@ textarea {
 .imgup-add {
   float: left;
   position: relative;
+  overflow: hidden;
 }
 
 .imgup-add-ipt {
@@ -212,7 +213,15 @@ textarea {
   float: left;
   width: 90px;
   height: 100%;
-  padding-left: 5px;
+  padding-left: 10px;
+  &.no-size {
+    .imgup-size {
+      display: none;
+    }
+    .imgup-preview {
+      margin-top: 10px;
+    }
+  }
 }
 
 .imgup-r {

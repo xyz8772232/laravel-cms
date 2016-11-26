@@ -14,17 +14,7 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset("/css/skin-custom.css") }}">
 
-    <!--
-    <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/plugins/select2/select2.min.css") }}">
-    <link rel="stylesheet" href="{{ asset("/packages/admin/bootstrap-fileinput/css/fileinput.min.css") }}">
-    <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/plugins/colorpicker/bootstrap-colorpicker.min.css") }}">
-    <link rel="stylesheet" href="{{ asset("/packages/admin/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css") }}">
-    <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/plugins/iCheck/all.css") }}">
-    <link rel="stylesheet" href="{{ asset("/packages/admin/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css") }}">
-    <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/plugins/ionslider/ion.rangeSlider.css") }}">
-    <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/plugins/ionslider/ion.rangeSlider.skinNice.css") }}">
-    <link rel="stylesheet" href="{{ asset("/packages/admin/nestable/nestable.css") }}">
-    -->
+    {!! Admin::css() !!}
     <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/dist/css/AdminLTE.min.css") }}">
     @yield('css')
 
@@ -61,31 +51,14 @@
         {!! Admin::script() !!}
     </div>
 
-    @include('admin::partials.footer')
-
-    @include('admin::partials.control-sidebar')
+    {{--@include('admin::partials.footer')--}}
 
 </div>
 
 <!-- ./wrapper -->
 
 <!-- REQUIRED JS SCRIPTS -->
-{{--
-<script src="{{ asset ("/packages/admin/AdminLTE/plugins/select2/select2.full.min.js") }}"></script>
-<script src="{{ asset ("/packages/admin/bootstrap-fileinput/js/plugins/canvas-to-blob.min.js") }}"></script>
-<script src="{{ asset ("/packages/admin/bootstrap-fileinput/js/fileinput.min.js") }}"></script>
-<script src="{{ asset ("/packages/admin/AdminLTE/plugins/colorpicker/bootstrap-colorpicker.min.js") }}"></script>
-<script src="{{ asset ("/packages/admin/moment/min/moment-with-locales.min.js") }}"></script>
-<script src="{{ asset ("/packages/admin/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js") }}"></script>
-<script src="{{ asset ("/packages/admin/AdminLTE/plugins/input-mask/jquery.inputmask.bundle.min.js") }}"></script>
-<script src="{{ asset ("/packages/admin/number-input/bootstrap-number-input.js") }}"></script>
-<script src="{{ asset ("/packages/admin/AdminLTE/plugins/iCheck/icheck.min.js") }}"></script>
-<script src="{{ asset ("/packages/admin/bootstrap-switch/dist/js/bootstrap-switch.min.js") }}"></script>
-<script src="{{ asset ("/packages/admin/ckeditor/ckeditor.js") }}"></script>
-<script src="{{ asset ("/packages/admin/AdminLTE/plugins/chartjs/Chart.min.js") }}"></script>
-<script src="{{ asset ("/packages/admin/AdminLTE/plugins/ionslider/ion.rangeSlider.min.js") }}"></script>
-<script src="{{ asset ("/packages/admin/nestable/jquery.nestable.js") }}"></script>
---}}
+{!! Admin::js() !!}
 @yield('js')
 </body>
 </html>

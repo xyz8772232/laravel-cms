@@ -35,16 +35,16 @@ $(function () {
   /**
    * channel
    */
-  function Channel(root, channelPath) {
+  function Channel(root, channelIds) {
     this.$root = $(root);
     this._$channels = this.$root.children('.e-channel');
     this._channelLevelStack = [];
-    this._init(channelPath);
+    this._init(channelIds);
   }
 
   Channel.prototype = {
     constructor: Channel,
-    _init: function (channelPath) {
+    _init: function (channelIds) {
       var self = this;
 
       // 标识频道级别
@@ -53,19 +53,39 @@ $(function () {
         self._addOptions(this);
       });
       // 读取初始化频道
-      if (channelPath) {
+      if (channelIds) {
         var parPath;
-        channelPath.forEach(function (path, index) {
-          var el = self._$channels[index];
+        var parIndex;
+        var el;
+        channelIds.forEach(function (id, index) {
+          el = self._$channels[index];
           self._readChannel(el, parPath);
-          parPath = path;
-          el.selectedIndex = path + 1;
+          parPath = self._readPathById(id);
+          parIndex = index;
+          el.selectedIndex = parPath + 1;
         });
+        // 读出下一级channel
+        el = this._$channels[parIndex + 1];
+        el && this._readChannel(el, parPath);
       } else {
         this._readChannel(this._$channels[0]);
       }
       // 绑定事件
       this._bindEvent();
+    },
+    _readPathById: function (id) {
+      var channelLevelStack = this._channelLevelStack;
+      var path;
+
+      (channelLevelStack.length ? channelLevelStack[0].channels : CHANNEL).some(function (channel, index) {
+        if (id === channel.id) {
+          path = index;
+          return true;
+        } else {
+          return false;
+        }
+      });
+      return path;
     },
     _readChannel: function (el, parPath) {
       var channelLevelStack = this._channelLevelStack;
@@ -189,8 +209,7 @@ $(function () {
         initPics.forEach(function (pic) {
           var data = {
             state: '',
-            img: pic.url,
-            size: bytesToSize(pic.size),
+            img: pic.img,
             title: pic.title,
             sort: self._count++
           };
@@ -212,7 +231,7 @@ $(function () {
     _insertItem: function (data) {
       var randomId = Date.now();
       var strHtml = '<div class="imgup-item ' + data.state + '">'
-        + '<div class="imgup-l">'
+        + '<div class="imgup-l' + (data.size ? '' : ' no-size') + '">'
         + '<img src="' + data.img + '" alt="" class="imgup-preview">'
         + '<span class="imgup-size">' + data.size + '</span>'
         + '<input class="imgup-img-form" type="hidden" name="contentPic[' + randomId + '][img]" value="' + data.img + '">'
@@ -351,7 +370,7 @@ $(function () {
   var $newsLinkSubForm = $('#newsLinkSubForm');
 
   // 初始化文字连接
-  INIT_CONFIG.newsLinks && INIT_CONFIG.voteOptions.forEach(function (newsLink) {
+  INIT_CONFIG.newsLinks && INIT_CONFIG.newsLinks.forEach(function (newsLink) {
     createSubForm_NewsLink(newsLink);
   });
 
@@ -374,6 +393,7 @@ $(function () {
       + '<div class="input-group">'
       + '<span class="input-group-addon"><i class="fa fa-pencil"></i></span>'
       + '<input class="form-control" type="text" name="newsLink[' + randomId + '][title]" value="' + (newsLink ? newsLink.title : '') + '">'
+      + '<input type="hidden" name="newsLink[' + randomId + '][id]" value="' + (newsLink ? newsLink.id : '') + '">'
       + '</div>'
       + '<label class="control-label">频道</label>'
       + '<div class="select-group">'
@@ -428,12 +448,14 @@ $(function () {
   });
 
   function createSubForm_Vote(option) {
+    var randomId = Date.now();
     var strHtml = '<div class="sub-form-group sub-form-group-deletable clearfix vote">'
       + '<div class="sub-form-group-l">'
       + '<label class="control-label">选项</label>'
       + '<div class="input-group">'
       + '<span class="input-group-addon"><i class="fa fa-pencil"></i></span>'
-      + '<input class="form-control" type="text" name="vote[options][]" value="' + (option || '') + '">'
+      + '<input class="form-control" type="text" name="vote[' + randomId + '][option]" value="' + (option ? option.option : '') + '">'
+      + '<input type="hidden" name="vote[' + randomId + '][id]" value="' + (option ? option.id : '') + '">'
       + '</div>'
       + '</div>'
       + '<div class="sub-form-group-r e-delete"><i class="fa fa-trash-o"></i></div>'
