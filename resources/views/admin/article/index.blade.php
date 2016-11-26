@@ -51,7 +51,7 @@
           <div class="box-body table-responsive no-padding">
             <table class="news-list table table-hover">
               <tr>
-                <th><input type="checkbox" class="grid-select-all"></th>
+                <th><input type="checkbox" id="selectAll"></th>
                 <th>重要<a class="fa fa-fw fa-sort" href=""></a></th>
                 <th>ID<a class="fa fa-fw fa-sort fa-sort-amount-asc" href=""></a></th>
                 <th>上线<a class="fa fa-fw fa-sort fa-sort-amount-desc" href=""></a></th>
@@ -64,7 +64,7 @@
               </tr>
                 @foreach($articles as $article)
                   <tr >
-                    <td><input type="checkbox" class="grid-item" data-id="{{ $article->id }}"></td>
+                    <td><input type="checkbox" class="grid-item e-select" data-id="{{ $article->id }}"></td>
                     <td><i class="fa @if($article->is_important) fa-star @else fa-star-o @endif text-danger"></i></td>
                     <td>{{ $article->id }}</td>
                     <td><i @if($article->state == 0) class="fa fa-close" style="color:green" @else class="fa fa-check" style="color:red" @endif></i></td>
@@ -81,6 +81,7 @@
                       --}}
                       @unless ($article->link_id)
                       <a href="{{route('articles.edit', [$article->id])}}"><i class="fa fa-edit"></i></a>
+                      <i class="fa fa-link e-link" data-id="{{ $article->id }}"></i>
                       @endunless
                     </td>
                   </tr>
@@ -88,16 +89,15 @@
             </table>
           </div>
           <div class="box-footer clearfix">
-            <form class="form-news">
-              <span class="btn btn-sm btn-danger batch-delete">删除</span>
-              <span class="btn btn-sm btn-success batch-check">上线</span>
-              <span class="btn btn-sm btn-default">设置头条</span>
-              <span class="btn btn-sm btn-default">转移</span>
-              <span class="btn btn-sm btn-default">创建文字连接</span>
+            <div class="actions" id="batchActions">
+              <span class="btn btn-sm btn-danger e-delete">删除</span>
+              <span class="btn btn-sm btn-success e-publish">上线</span>
+              <span class="btn btn-sm btn-default e-top">设置头条</span>
+              <span class="btn btn-sm btn-default e-transfer">转移</span>
               <span class="pull-right">
                 共<span class="text-primary">{{ $articles->total() }}</span>篇文章
               </span>
-            </form>
+            </div>
               {{ $articles->appends(['sort' => 'votes'])->links('admin::pagination') }}
           </div>
           <!-- /.box-body -->
@@ -108,73 +108,19 @@
 @endsection
 
 @section('css')
+  <link rel="stylesheet" href="{{ asset("/packages/admin/sweetalert/sweetalert.css") }}">
   <link rel="stylesheet" href="{{ asset("/packages/admin/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css") }}">
   <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/plugins/select2/select2.min.css") }}">
-  <style>
-    .link-create-news{
-      display: inline-block;
-      margin-right: 25px;
-    }
-    .select-line{
-      width: 120px;
-    }
-    .box-header .select2-selection{
-      height: 30px;
-      border-radius: 0 3px 3px 0;
-      border-color: #ccc;
-      color: #555;
-      font-size: 12px;
-    }
-    .select2-search__field{
-      outline: none;
-    }
-    .select2-search__field:focus{
-      border-color: #3c8dbc!important;
-    }
-    .news-list,
-    .news-list th{
-      text-align: center;
-    }
-    .news-list .news-title{
-      text-align: left;
-      min-width: 300px;
-    }
-    .news-list .news-sign{
-      font-weight: bold;
-      color: #337ab7;
-    }
-    .news-list .fa-file-image-o{
-      margin: 4px 3px 0;
-    }
-    .form-news{
-      line-height: 30px;
-      margin-bottom: 5px;
-    }
-    .box-footer .btn{
-      margin-right: 3px;
-    }
-    .show-count{width: 50px!important; margin: 0 5px;}
-  </style>
+  <link rel="stylesheet" href="{{ asset("/css/article.index.css") }}">
 @endsection
 
 @section('admin_js')
+  <script src="{{ asset ("/packages/admin/sweetalert/sweetalert.min.js") }}"></script>
   <script src="{{ asset ("/packages/admin/moment/min/moment-with-locales.min.js") }}"></script>
   <script src="{{ asset ("/packages/admin/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js") }}"></script>
   <script src="{{ asset ("/packages/admin/AdminLTE/plugins/select2/select2.full.min.js") }}"></script>
   <script>
-    $(function () {
-       $("#channelId").select2({
-        allowClear: false
-       });
-
-       $('#createdAtStart').datetimepicker({"format":"YYYY-MM-DD HH:mm:ss","locale":"zh_CN"});
-       $('#createdAtEnd').datetimepicker({"format":"YYYY-MM-DD HH:mm:ss","locale":"zh_CN","useCurrent":false});
-       $("#createdAtStart").on("dp.change", function (e) {
-           $('#createdAtEnd').data("DateTimePicker").minDate(e.date);
-       });
-       $("#createdAtEnd").on("dp.change", function (e) {
-           $('#createdAtStart').data("DateTimePicker").maxDate(e.date);
-       });
-    });
+    var CHANNEL = {!! json_encode($channels) !!};
   </script>
+  <script src="{{ asset ("/js/article.index.js") }}"></script>
 @endsection
