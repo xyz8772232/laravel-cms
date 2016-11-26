@@ -66,7 +66,7 @@ class Tool extends Model
 
     public static function tableHeader($header) {
         if (!$header['sortable']) {
-            return "<th>{$header['name']}</th>";
+            return "<th>{$header['label']}</th>";
         }
         $icon = 'fa-sort';
         $type = 'desc';

@@ -30,7 +30,6 @@ class ArticleController extends Controller
         $header = '待审核文章';
         $description = '列表';
         $channel_id = (int)Input::get('channel_id', 0);
-        $channels = Channel::toTree([], 0);
         $options = [0 => '全部'] + Channel::buildSelectOptions([], 0, str_repeat('&nbsp;', 2));
 
         //查询条件处理
@@ -92,7 +91,7 @@ class ArticleController extends Controller
             ],
         ];
         return view('admin.article.audit',
-            compact('header', 'description', 'articles', 'options', 'filterValues', 'tableHeaders', 'channels'));
+            compact('header', 'description', 'articles', 'options', 'filterValues', 'tableHeaders'));
     }
     /**
      *
@@ -116,7 +115,7 @@ class ArticleController extends Controller
             $model->addConditions($conditions);
         }
         $model->with('articleInfo', 'author');
-        if (!Input::get('_order')) {
+        if (!Input::get('_sort')) {
             $model->orderBy('created_at', 'desc');
         }
         //过滤条件
@@ -187,6 +186,7 @@ class ArticleController extends Controller
     {
         $header = '频道文章';
         $description = '全部';
+        $channels = Channel::toTree([], 0);
         $options = [0 => '全部'] + Channel::buildSelectOptions([], 0, str_repeat('&nbsp;', 1));
 
         //查询条件处理
@@ -197,7 +197,7 @@ class ArticleController extends Controller
             $model->addConditions($conditions);
         }
         $model->with('articleInfo','author');
-        if (!Input::get('_order')) {
+        if (!Input::get('_sort')) {
             $model->orderBy('created_at', 'desc');
         }
         //过滤条件
@@ -261,7 +261,7 @@ class ArticleController extends Controller
             ],
         ];
         return view('admin.article.index',
-            compact('header', 'description', 'articles', 'options', 'filterValues', 'tableHeaders'));
+            compact('header', 'description', 'channels','articles', 'options', 'filterValues', 'tableHeaders'));
     }
 
     public function preview($id)
@@ -629,13 +629,35 @@ class ArticleController extends Controller
     }
 
     /**
-     * 上线
+     * 审核通过
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function audit($id)
+    {
+        Permission::allow(['administrator', 'responsible_editor']);
+        $ids = explode(',', $id);
+        foreach ($ids as $id) {
+            if (empty($id)) {
+                continue;
+            }
+            $article = Article::find($id);
+            if ($article) {
+                $article->state = 2;
+                $article->save();
+            }
+        }
+        return Tool::showSuccess('通过成功');
+    }
+
+    /**
+     * 提交审核
      * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function online($id)
     {
-        Permission::allow(['administrator', 'responsible_editor']);
+        //Permission::allow(['administrator', 'responsible_editor']);
         $ids = explode(',', $id);
         foreach ($ids as $id) {
             if (empty($id)) {

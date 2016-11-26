@@ -10,6 +10,7 @@ use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\AdminController;
+use Illuminate\Support\Facades\Input;
 
 class SortPhotoController extends Controller
 {
@@ -48,7 +49,7 @@ class SortPhotoController extends Controller
             if (json_last_error() != JSON_ERROR_NONE) {
                 return Tool::showError('参数错误');
             }
-            SortLink::saveTree($tree);
+            SortPhoto::saveTree($tree);
             return Tool::showSuccess();
         }
         return Tool::showError('参数错误');
