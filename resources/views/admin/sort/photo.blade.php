@@ -13,10 +13,12 @@
       </div>
       <div class="box-body" id="sortBox">
         @foreach($photos as $photo)
+          @if ($photo->article)
           <div class="sort-pic" data-id="{{$photo->id}}">
             <img class="pic" src="{{asset('/upload/'.$photo->article->cover_pic)}}" alt="">
             <div class="title">{{$photo->article->title}}</div>
           </div>
+          @endif
         @endforeach
         </div>
       </div>

@@ -80,11 +80,9 @@
 @endsection
 
 @section('css')
-    <link data-exec-on-popstate rel="stylesheet" href="/css/photo.index.css">
     <link rel="stylesheet" href="/packages/admin/sweetalert/sweetalert.css">
 @endsection
 
 @section('admin_js')
     <script data-exec-on-popstate src="/packages/admin/sweetalert/sweetalert.min.js"></script>
-    <script data-exec-on-popstate src="/js/photo.index.js"></script>
 @endsection

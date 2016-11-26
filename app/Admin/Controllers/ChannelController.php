@@ -33,7 +33,7 @@ class ChannelController extends Controller
     {
         $header = '频道';
         $description = 'description';
-        $channels = Channel::toTree([], 0);
+        $channels = Channel::toTree([], 0, true);
 
         return view('admin.channel.index', ['header' => $header, 'description' => $description, 'channels' => $channels]);
 
@@ -57,7 +57,7 @@ class ChannelController extends Controller
             if (json_last_error() != JSON_ERROR_NONE) {
                 return Tool::showError('参数错误');
             }
-            Channel::saveTree($tree['children'], $tree['id']);
+            Channel::saveTree($tree['children'], $tree['id'] ?? 0);
             return Tool::showSuccess();
         }
         return Tool::showError('参数错误');

@@ -16,6 +16,7 @@ $router->post('articles/online/{id}', 'ArticleController@online');
 $router->post('articles/headline/{id}', 'ArticleController@headline');
 $router->post('articles/transfer/{id}', 'ArticleController@transfer');
 $router->post('articles/link/{article_id}', 'ArticleController@link');
+$router->get('articles/preview/{id}', ['uses' => 'ArticleController@preview', 'as' => 'articles.preview']);
 $router->resource('articles', ArticleController::class);
 
 $router->resource('logs', ArticleLogController::class);
@@ -28,7 +29,7 @@ $router->resource('keywords', KeywordController::class);
 //], function ($router) {
 //    $router->post('comments/block/{$id}', 'CommentController@block')->name('comments.block');
 //});
-$router->post('comments/block/{$id}',['uses' => 'CommentController@block' ,'as' => 'comments.block']);
+$router->post('comments/block/{id}', ['uses' => 'CommentController@block', 'as' => 'comments.block']);
 
 $router->resource('comments', CommentController::class);
 

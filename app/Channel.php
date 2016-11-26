@@ -60,15 +60,20 @@ class Channel extends Model
      *
      * @param array $elements
      * @param int   $parentId
+     * @param boolean $deletable 是否需要deletable属性
      *
      * @return array
      */
-    public static function toTree(array $elements = [], $parentId = 0)
+    public static function toTree(array $elements = [], $parentId = 0, $deletable = false)
     {
         $branch = [];
 
         if (empty($elements)) {
-            $elements = static::orderByRaw('`order` = 0,`order`')->get()->makeVisible('deletable')->toArray();
+            if ($deletable) {
+                $elements = static::orderByRaw('`order` = 0,`order`')->get()->makeVisible('deletable')->toArray();
+            } else {
+                $elements = static::orderByRaw('`order` = 0,`order`')->get()->toArray();
+            }
         }
 
         foreach ($elements as $element) {

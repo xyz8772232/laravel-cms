@@ -37,11 +37,13 @@ class ArticleObserver
     public function deleting(Article $article)
     {
         if ($article->is_headline) {
-            Tool::handleSort($article, 'link', 'delete');
+            Tool::handleSortLink($article, 'delete');
+            $article->is_headline = 0;
+            $article->save();
         }
 
         if ($article->is_slide) {
-            Tool::handleSort($article, 'photo', 'delete');
+            Tool::handleSortPhoto($article, 'delete');
         }
 
     }

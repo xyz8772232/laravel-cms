@@ -13,6 +13,6 @@ class Comment extends Model
 
     public function article()
     {
-        return $this->belongsTo('\App\Article');
+        return $this->belongsTo('App\Article');
     }
 }
