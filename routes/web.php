@@ -24,3 +24,4 @@ Route::get('/', function () {
 Route::get('articles/{id}', 'ArticleController@show');
 
 Route::resource('comments', CommentController::class);
+

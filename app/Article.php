@@ -12,6 +12,11 @@ class Article extends Model
 
     use FormAccessible;
 
+    protected $casts = [
+        'is_slide' => 'boolean',
+        'is_headline' => 'boolean',
+    ];
+
     /**
      * 获取文章内容
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
@@ -55,8 +60,19 @@ class Article extends Model
      * 获取文章内容
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function articleInfo() {
+    public function articleInfo()
+    {
         return $this->hasOne('App\ArticleInfo');
+    }
+
+    public function sortPhoto()
+    {
+        return $this->hasOne('App\SortPhoto');
+    }
+
+    public function scopeAudit($query)
+    {
+        return $query->where('state', 1);
     }
 //    public function getKeywordsAttribute() {
 //        return $this->keywords()->pluck('id');
@@ -87,7 +103,24 @@ class Article extends Model
         return 0;
     }
 
-    public function getContentAttribute() {
+    public function getContentAttribute()
+    {
         return $this->content()->first()->content;
     }
+
+    public function getIsSlideAttribute()
+    {
+        return $this->sortPhoto()->first();
+    }
+
+    public function getOnlineAttribute()
+    {
+        return $this->state == 2;
+    }
+
+    public function setOnlineAttribute()
+    {
+        $this->state = 2;
+    }
+
 }

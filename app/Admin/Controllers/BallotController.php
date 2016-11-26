@@ -9,7 +9,6 @@ use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\AdminController;
-use App\Comment;
 
 class BallotController extends Controller
 {

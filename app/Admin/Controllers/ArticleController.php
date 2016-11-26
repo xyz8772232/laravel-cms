@@ -25,6 +25,75 @@ use Illuminate\Support\Facades\Validator;
 
 class ArticleController extends Controller
 {
+    public function auditList()
+    {
+        $header = '待审核文章';
+        $description = '列表';
+        $channel_id = (int)Input::get('channel_id', 0);
+        $channels = Channel::toTree([], 0);
+        $options = [0 => '全部'] + Channel::buildSelectOptions([], 0, str_repeat('&nbsp;', 2));
+
+        //查询条件处理
+        $model = new Model(Admin::getModel(Article::class));
+        $model->audit();
+
+        if ($channel_id) {
+            $channelIds = array_merge(Channel::branchIds([], $channel_id), [$channel_id]);
+            $conditions[] = ['whereIn' => ['channel_id', $channelIds]];
+            $model->addConditions($conditions);
+        }
+        $model->with('articleInfo', 'author');
+        if (!Input::get('_order')) {
+            $model->orderBy('created_at', 'desc');
+        }
+        //过滤条件
+        $filter = new Filter($model);
+        $filter->like('title', '标题');
+        $filter->between('created_at', trans('admin::lang.created_at'))->datetime();
+
+
+        //dd($filterValues);
+        $articles = $filter->execute();
+        $query = Input::all();
+        $articles->appends($query);
+        //dd($articles->last());
+        //dd($filter->conditions(), $filter->execute());
+
+        //$query = Input::all();
+        //$articles = Article::with('articleInfo', 'author')->where('state', 0)->orderBy('id', 'desc')->paginate()->appends($query);
+        $filterValues = array_filter(Input::only('id', 'title', 'create_at[start]', 'create_at[end]', 'channel_id'), function($item) {
+            return !is_null($item);
+        });
+        $tableHeaders = [
+            [
+                'name' => 'is_important',
+                'label' => '重要',
+                'sortable' => true,
+            ],
+            [
+                'name' => 'id',
+                'label' => 'ID',
+                'sortable' => true,
+            ],
+            [
+                'name' => 'title',
+                'label' => '标题',
+                'sortable' => false,
+            ],
+            [
+                'name' => 'author',
+                'label' => '发布者',
+                'sortable' => false,
+            ],
+            [
+                'name' => 'published_at',
+                'label' => '发布时间',
+                'sortable' => true,
+            ],
+        ];
+        return view('admin.article.audit',
+            compact('header', 'description', 'articles', 'options', 'filterValues', 'tableHeaders', 'channels'));
+    }
     /**
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -34,16 +103,18 @@ class ArticleController extends Controller
         $header = '待审核文章';
         $description = '列表';
         $channel_id = (int)Input::get('channel_id', 0);
-        $options = [0 => '全部'] + Channel::buildSelectOptions([], 0, str_repeat('&nbsp;', 1));
+        $channels = Channel::toTree([], 0);
+        $options = [0 => '全部'] + Channel::buildSelectOptions([], 0, str_repeat('&nbsp;', 2));
 
         //查询条件处理
         $model = new Model(Admin::getModel(Article::class));
-        $conditions[] = ['where' => ['state', 0]];
+        $model->audit();
+
         if ($channel_id) {
             $channelIds = array_merge(Channel::branchIds([], $channel_id), [$channel_id]);
             $conditions[] = ['whereIn' => ['channel_id', $channelIds]];
+            $model->addConditions($conditions);
         }
-        $model->addConditions($conditions);
         $model->with('articleInfo', 'author');
         if (!Input::get('_order')) {
             $model->orderBy('created_at', 'desc');
@@ -109,13 +180,13 @@ class ArticleController extends Controller
             ],
         ];
         return view('admin.article.index',
-            compact('header', 'description', 'articles', 'options', 'filterValues', 'tableHeaders'));
+            compact('header', 'description', 'articles', 'options', 'filterValues', 'tableHeaders', 'channels'));
     }
 
     public function channel($id = 1)
     {
-        $header = '待审核文章';
-        $description = '列表';
+        $header = '频道文章';
+        $description = '全部';
         $options = [0 => '全部'] + Channel::buildSelectOptions([], 0, str_repeat('&nbsp;', 1));
 
         //查询条件处理
@@ -191,6 +262,25 @@ class ArticleController extends Controller
         ];
         return view('admin.article.index',
             compact('header', 'description', 'articles', 'options', 'filterValues', 'tableHeaders'));
+    }
+
+    public function preview($id)
+    {
+        $rules = [
+            'id' => 'required|integer|exists:articles,id,state,0',
+        ];
+
+        $validator = Validator::make(Input::all(), $rules);
+        if ($validator->fails()) {
+            return redirect()->to('/admin/articles/create')
+                ->withInput($request->input())
+                ->withErrors($validator->errors());
+        }
+
+        $article = Article::find($id);
+
+        return view('admin.article.preview', compact('header', 'description', 'article'));
+
     }
 
     /**
@@ -302,6 +392,8 @@ class ArticleController extends Controller
                 $ballotChoices[] = ['content' => $val];
             }
         }
+
+
         //dd($ballotChoices);
 
         //处理文字链接
@@ -572,10 +664,13 @@ class ArticleController extends Controller
                 continue;
             }
             $article = Article::find($id);
-            if ($article && $article->is_headline == 0) {
-                $article->is_headline = 1;
-                $article->save();
-                Tool::handleSort($article, 'link', 'add');
+            if ($article && $article->state == 1 && $article->is_headline == 0) {
+
+                $result = Tool::handleSortLink($article, 'add');
+                if ($result) {
+                    $article->is_headline = 1;
+                    $article->save();
+                }
                 //dispatch(new SortLinkOrPhoto($article, 'link', 'add'));
             }
         }
@@ -624,15 +719,14 @@ class ArticleController extends Controller
         $rules = [
             'channel_id' => 'required|exists:channels,id',
             'title' => 'required|max:50',
-            'link_id' => 'required|exists:articles,id,is_link,0',
+            'link_id' => 'required|exists:articles,id,link_id,0',
         ];
         $data = Input::only(['title', 'link_id']);
         $data['channel_id'] = $channel_id;
         $validator = Validator::make($data, $rules);
         if ($validator->fails()) {
-            return Tool::showError('频道不存在');
+            return Tool::showError();
         }
-        $data['is_link'] = 1;
         $data['author_id'] = Admin::user()->id;
         $result = Article::create($data);
         if ($result) {

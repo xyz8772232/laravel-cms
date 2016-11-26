@@ -100,7 +100,7 @@ class AppMessageController extends Controller
         return Admin::form(AppMessage::class, function (Form $form) {
 
             $form->textarea('content', '内容')->rules('required');
-            $form->text('article_id', '文章id')->rules('required|exists:articles,id');
+            $form->text('article_id', '文章id')->rules('required|exists:articles,id,state,0,deleted_at,NOT_NULL');
             $form->hidden('admin_user_id', '发布人id');
         });
     }

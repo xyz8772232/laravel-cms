@@ -24,11 +24,13 @@ class CreateCommentsTable extends Migration
             $table->unsignedInteger('user_id')->comment('评论者id');
             $table->string('user_nick')->comment('评论者昵称');
             $table->unsignedInteger('reply_to_id')->comment('被评论的id');
+            $table->unsignedTinyInteger('blocked')->comment('是否被屏蔽');
             $table->softDeletes();
             $table->timestamps();
 
             $table->index('article_id');
             $table->index('reply_to_id');
+            $table->index('blocked');
             $table->index('user_id');
         });
     }
