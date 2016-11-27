@@ -62,7 +62,7 @@
                     <td><input type="checkbox" class="grid-item e-select" data-id="{{ $article->id }}"></td>
                     <td><i class="fa @if($article->is_important) fa-star @else fa-star-o @endif text-danger"></i></td>
                     <td>{{ $article->id }}</td>
-                    <td><i @if($article->online) class="fa fa-check" style="color:red" @else class="fa fa-close" style="color:green" @endif></i></td>
+                    <td>@if($article->online)<i class="fa fa-check" style="color:red"></i>@elseif($article->state==0) <span class="badge bg-green">未提交</span> @else <span class="badge bg-red">待审核</span> @endif</td>
                     <td class="news-title">@if($article->link_id)<i class="fa fa-link text-danger"></i> @endif @if($article->is_headline)<span class="news-sign text-danger">[头]</span> @endif @if($article->type == 1) <i class="fa fa-file-image-o text-danger"></i> @endif <a href="{{ route('articles.preview', ['id' => $article->id]) }}">{{ $article->title }}</a></td>
                     <td>{{ $article->author_name }}</td>
                     <td>{{ $article->created_at }}</td>
@@ -86,7 +86,7 @@
           <div class="box-footer clearfix">
             <div class="actions" id="batchActions">
               <span class="btn btn-sm btn-danger e-delete">删除</span>
-              <span class="btn btn-sm btn-success e-publish">上线</span>
+              <span class="btn btn-sm btn-success e-publish">提交审核</span>
               <span class="btn btn-sm btn-default e-top">设置头条</span>
               <span class="btn btn-sm btn-default e-transfer">转移</span>
               <span class="pull-right">

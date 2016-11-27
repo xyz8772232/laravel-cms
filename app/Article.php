@@ -119,6 +119,12 @@ class Article extends Model
 
     }
 
+    public function getIsSlideAttribute()
+    {
+        return $this->sortPhoto()->withTrashed()->first();
+
+    }
+
     public function getIsHeadlineOnlineAttribute()
     {
         return $this->sortLink()->first();

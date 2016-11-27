@@ -20,7 +20,7 @@ class CreateSortphotosTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->index('article_id');
+            $table->unique('article_id');
             $table->index('order');
         });
     }

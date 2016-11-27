@@ -121,7 +121,7 @@ class Tool extends Model
                     return false;
                 }
                 if ($article->is_headline) {
-                    $article->sortLink()->restore();
+                    return $article->sortLink()->restore();
                 }
                 return $article->sortLink()->save(new SortLink());
                 break;
@@ -163,7 +163,7 @@ class Tool extends Model
                     $oldestSlide->delete();
                 }
                 if ($article->is_slide) {
-                    $article->sortPhoto()->restore();
+                    return $article->sortPhoto()->restore();
                 }
                 return $article->sortPhoto()->save(new SortPhoto());
                 break;
