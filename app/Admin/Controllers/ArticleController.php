@@ -647,6 +647,7 @@ class ArticleController extends Controller
     {
         Permission::allow(['administrator', 'responsible_editor']);
         $ids = explode(',', $id);
+        $auditor_id = Admin::user()->id;
         foreach ($ids as $id) {
             if (empty($id)) {
                 continue;
@@ -654,6 +655,7 @@ class ArticleController extends Controller
             $article = Article::find($id);
             if ($article) {
                 $article->state = 2;
+                $article->auditor_id = $auditor_id;
                 $article->save();
             }
         }
@@ -667,7 +669,6 @@ class ArticleController extends Controller
      */
     public function online($id)
     {
-        //Permission::allow(['administrator', 'responsible_editor']);
         $ids = explode(',', $id);
         foreach ($ids as $id) {
             if (empty($id)) {
@@ -696,7 +697,7 @@ class ArticleController extends Controller
                 continue;
             }
             $article = Article::find($id);
-            if ($article && $article->state == 1 && $article->is_headline == 0) {
+            if ($article && $article->online && $article->is_headline == 0) {
 
                 $result = Tool::handleSortLink($article, 'add');
                 if ($result) {

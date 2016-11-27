@@ -32,7 +32,7 @@
         <div class="extra">
             <!--<span class="collect extra-action {=if $col==1=}collected{=/if=}">{=if $col==1=}已收藏{=else=}收藏{=/if=}</span>-->
             <!--<a class="comments extra-action" href="{=$commentUrl=}">{=$commentSum=}</a>-->
-            {{--<div class="extra-info">{=$data.create_time|date_format:"%Y-%m-%d %H:%M:%S"=}</div>--}}
+            <div class="extra-info">{{ $article->created_at }}</div>
         </div>
         <article class="main-body">
             {!! $article->content !!}

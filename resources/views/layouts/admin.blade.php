@@ -40,9 +40,9 @@
 <body class="hold-transition skin-custom {{join(' ', config('admin.layout'))}}">
 <div class="wrapper">
 
-    @include('admin::partials.header')
+    @include('admin.partials.header')
 
-    @include('admin::partials.sidebar')
+    @include('admin.partials.sidebar')
 
     <div class="content-wrapper" id="pjax-container">
         @include('include.error')
