@@ -65,6 +65,11 @@ class Article extends Model
         return $this->hasOne('App\ArticleInfo');
     }
 
+    public function sortLink()
+    {
+        return $this->hasOne('App\SortLink');
+    }
+
     public function sortPhoto()
     {
         return $this->hasOne('App\SortPhoto');
@@ -106,6 +111,12 @@ class Article extends Model
     public function getContentAttribute()
     {
         return $this->content()->first()->content;
+    }
+
+    public function getIsHeadlineAttribute()
+    {
+        return $this->sortLink()->first();
+
     }
 
     public function getIsSlideAttribute()

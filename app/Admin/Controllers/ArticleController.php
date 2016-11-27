@@ -339,7 +339,6 @@ class ArticleController extends Controller
             'title',
             'type',
             'state',
-            'is_headline',
             'is_soft',
             'is_political',
             'is_international',
@@ -364,6 +363,7 @@ class ArticleController extends Controller
 
 
 
+
         //封面图处理
         if (!empty($request->file('cover_pic'))) {
             $coverFile = $request->file('cover_pic');
@@ -374,8 +374,6 @@ class ArticleController extends Controller
         //作者处理
         $article->author_id = Admin::user()->id;
 
-
-
         //关键字同步
         $keywords = [];
         if (is_array($request->keywords)) {
@@ -384,6 +382,7 @@ class ArticleController extends Controller
         //pk或投票同步
         $pk = $request->pk;
         $vote = $request->vote;
+
         $ballot = $ballotChoices = [];
         if (!empty($pk['effective'])) {
             $ballot = ['title' => $pk['title'], 'type' => 2];
@@ -391,12 +390,19 @@ class ArticleController extends Controller
                 $ballotChoices[] = ['content' => $val];
             }
         } elseif (!empty($vote['effective'])) {
+            if ($vote['effective'] ?? false) {
+                dd($vote);
+
+                $vote['options'] = collect($vote)->filter(function($value, $key) {
+                    return is_numeric($key);
+                })->values()->all();
+            }
             $ballot = ['title' => $vote['title'], 'type' => $vote['type'], ];
             if ($vote['type'] == 2 && $vote['limit'] > 1) {
                 $ballot['max_num'] = $vote['limit'];
             }
             foreach ($vote['options'] as $val) {
-                $ballotChoices[] = ['content' => $val];
+                $ballotChoices[] = ['content' => $val['option']];
             }
         }
 
@@ -405,10 +411,11 @@ class ArticleController extends Controller
 
         //处理文字链接
         $newsLinks = $request->newsLink;
+        dd($newsLinks);
         if ($newsLinks['effective']) {
             $newsLinks = collect($newsLinks)->except('effective')->values()->map(function($value) {
                 return [
-                    'channel_id' => Tool::getChannelId($value['channels']),
+                    'channel_id' => Tool::getChannelId($value['channel']),
                     'title' => $value['title'],
                 ];
             })->all();
@@ -437,9 +444,11 @@ class ArticleController extends Controller
 //            }
 //
 //        });
+        $is_headline = (boolean)$request->is_headline;
+        $is_slide = (boolean)$request->is_slide;
 
         try {
-            $exception = DB::transaction(function () use ($article, $keywords, $content, $ballot, $ballotChoices, $newsLinks) {
+            $exception = DB::transaction(function () use ($article, $keywords, $content, $ballot, $ballotChoices, $newsLinks, $is_headline, $is_slide) {
                 $article->save();
                 $article->keywords()->sync($keywords);
                 $article->content()->save(new Content(['content' => $content]));
@@ -460,6 +469,20 @@ class ArticleController extends Controller
                         $link['state'] = (int)$article->state;
                     }
                     Article::insert($newsLinks);
+                }
+
+                $now = Carbon::now()->toDateTimeString();
+
+                if ($is_headline) {
+                    $article->sortLink()->create([
+                        'deleted_at' => $now,
+                    ]);
+                }
+
+                if ($is_slide) {
+                    $article->sortPhoto()->create([
+                        'deleted_at' => $now,
+                    ]);
                 }
 
             });

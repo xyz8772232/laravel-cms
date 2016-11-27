@@ -18,6 +18,7 @@ class CreateSortphotosTable extends Migration
             $table->unsignedInteger('article_id');
             $table->unsignedInteger('order')->default(0);
             $table->timestamps();
+            $table->softDeletes();
 
             $table->index('article_id');
             $table->index('order');

@@ -3,10 +3,13 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SortPhoto extends Model
 {
-    protected $fillable = ['article_id'];
+    use SoftDeletes;
+
+    protected $fillable = ['article_id', 'deleted_at'];
 
     protected static $branchOrder = [];
 
