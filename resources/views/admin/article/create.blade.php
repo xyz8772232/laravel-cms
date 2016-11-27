@@ -119,7 +119,7 @@
                 <div class="col-sm-6">
                   <input type="checkbox" name="newsLink[effective]" class="sub-form-switch" value="1"/>
                   <div class="sub-form" id="newsLinkSubForm">
-                    <div class="sub-form-add e-add">+新增文字连接</div>
+                    <span class="sub-form-add e-add">+新增文字连接</span>
                   </div>
                 </div>
               </div>
@@ -168,7 +168,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="sub-form-add e-add">+新增选项</div>
+                    <span class="sub-form-add e-add">+新增选项</span>
                   </div>
                 </div>
               </div>

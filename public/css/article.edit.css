@@ -33,6 +33,11 @@ textarea {
   outline: none;
   border-color: #3c8dbc;
 }
+.input-line-group .select-line[disabled] {
+  background-color: #eee;
+  opacity: 1;
+  cursor: not-allowed;
+}
 .sub-form {
   margin-top: 10px;
   display: none;
@@ -127,6 +132,9 @@ textarea {
   width: 30px;
   margin: 0 5px;
   text-align: center;
+}
+.vote-type + .sub-form-group {
+  border-top: none;
 }
 .imgup-header {
   height: 34px;

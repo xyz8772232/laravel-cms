@@ -27,6 +27,11 @@ textarea {
       outline: none;
       border-color: #3c8dbc;
     }
+    &[disabled] {
+      background-color: #eee;
+      opacity: 1;
+      cursor: not-allowed;
+    }
     margin-left: 5px;
     width: 90px;
     height: 34px;
@@ -155,6 +160,9 @@ textarea {
     width: 30px;
     margin: 0 5px;
     text-align: center;
+  }
+  & + .sub-form-group {
+    border-top: none;
   }
 }
 
