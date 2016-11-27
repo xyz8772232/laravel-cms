@@ -24,9 +24,9 @@ class HomeController extends Controller
                 $headers = [$channel['name'], $articleNums[$channel['id']]];
                 if (isset($channel['children'])) {
                     foreach ($channel['children'] as $child) {
-                        $route = route('articles.index', ['channel_id' => $child['id']]);
-                        $link = '<a href="'.$route.'">'.$child["name"].'</a>';
-                        $rows[] =  [$link, $articleNums[$child['id']]];
+                        //$route = route('articles.index', ['channel_id' => $child['id']]);
+                        //$link = '<a href="'.$route.'">'.$child["name"].'</a>';
+                        $rows[] =  [$child["name"], $articleNums[$child['id']]];
                     }
                 }
                 $tables[] = compact('headers', 'rows');

@@ -32,7 +32,7 @@ class CreateArticlesTable extends Migration
             $table->string('description', 2000)->default('');
             $table->string('source', 255)->default('')->comment('信息来源');
             $table->string('original_url', 255)->default('')->comment('原始链接');
-            $table->boolean('is_headline')->default(0)->comment('头条');
+            //$table->boolean('is_headline')->default(0)->comment('头条');
             $table->boolean('is_soft')->default(0)->comment('软广');
             $table->boolean('is_political')->default(0)->comment('政治敏感');
             $table->boolean('is_international')->default(0)->comment('国际');

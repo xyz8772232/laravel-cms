@@ -11,24 +11,12 @@
     <div class="row">
       <div class="col-md-12">
         <div class="box box-info">
-          <div class="box-header with-border">
-            <h3 class="box-title">创建</h3>
-            <div class="box-tools">
-              <div class="btn-group pull-right">
-                <a href="javascript:void(0);" class="btn btn-sm btn-warning item_delete" data-id=""><i
-                          class="fa fa-trash"></i>&nbsp;删除</a>
-              </div>
-              <div class="btn-group pull-right" style="margin-right: 10px">
-                <a href="/admin/articles" class="btn btn-sm btn-default"><i class="fa fa-list"></i>&nbsp;列表</a>
-              </div>
-            </div>
-          </div>
           <!-- /.box-header -->
           <!-- form start -->
           {!! Form::model($article, ['url'=> route('articles.update', [$article->id]), 'class'=> 'form-horizontal', 'enctype' => 'multipart/form-data']) !!}
           {!! Form::hidden('id',$article->id) !!}
           {!! Form::hidden('_method','PUT') !!}
-          <div class="box-body">
+          <div class="box-body form-edit">
               <div class="form-group">
                 {!! Form::label('type', '图片新闻', ['class' => 'col-sm-2 control-label']) !!}
                 <div class="col-sm-6">
@@ -124,7 +112,7 @@
               <div class="form-group">
                 {!! Form::label('newsLink', '文字连接', ['class' => 'col-sm-2 control-label']) !!}
                 <div class="col-sm-6">
-                  {!! Form::checkbox('newsLink[effective]', 1, (bool)$article->title_bold, ['class' => 'sub-form-switch']) !!}
+                  {!! Form::checkbox('newsLink[effective]', 1, (bool)$article->title_bold, ['class' => 'sub-form-switch', 'readonly' => 'readonly']) !!}
                   <div class="sub-form" id="newsLinkSubForm">
                     <div class="sub-form-add e-add">+新增文字连接</div>
                   </div>
@@ -133,7 +121,7 @@
               <div class="form-group">
                 {!! Form::label('pk', 'PK', ['class' => 'col-sm-2 control-label']) !!}
                 <div class="col-sm-6">
-                  {!! Form::checkbox('pk[effective]', 1, isset($ballot->type) && $ballot->type == 2, ['id' => 'pkSFS', 'class' => 'sub-form-switch']) !!}
+                  {!! Form::checkbox('pk[effective]', 1, isset($ballot->type) && $ballot->type == 2, ['id' => 'pkSFS', 'class' => 'sub-form-switch', 'readonly' => 'readonly']) !!}
                   @if(isset($ballot->type) && $ballot->type == 2)
                     {!! Form::hidden('pk[id]', $ballot->id) !!}
                   @endif
@@ -163,7 +151,7 @@
               <div class="form-group">
                 {!! Form::label('vote', '投票', ['class' => 'col-sm-2 control-label']) !!}
                 <div class="col-sm-6">
-                  {!! Form::checkbox('vote[effective]', 1, $ballot->vote ?? null, ['id' => 'voteSFS', 'class' => 'sub-form-switch']) !!}
+                  {!! Form::checkbox('vote[effective]', 1, $ballot->vote ?? null, ['id' => 'voteSFS', 'class' => 'sub-form-switch', 'readonly' => 'readonly']) !!}
                   @if($ballot->vote ?? false)
                     {!! Form::hidden('vote[id]', $ballot->id) !!}
                   @endif
@@ -186,6 +174,17 @@
                   </div>
                 </div>
               </div>
+
+              <div class="form-group">
+                {!! Form::label(null, '所属频道', ['class' => 'col-sm-2 control-label']) !!}
+                <div class="col-sm-6 input-line-group" id="channel">
+                  {!! Form::select('channels[1]', [], null, ['class' => 'select-line e-channel', 'disabled' => 'disabled']) !!}
+                  {!! Form::select('channels[2]', [], null, ['class' => 'select-line e-channel', 'disabled' => 'disabled']) !!}
+                  {!! Form::select('channels[3]', [], null, ['class' => 'select-line e-channel', 'disabled' => 'disabled']) !!}
+                  {!! Form::select('channels[4]', [], null, ['class' => 'select-line e-channel', 'disabled' => 'disabled']) !!}
+                </div>
+              </div>
+              @if(Admin::user()->can('article-online'))
               <div class="form-group">
                 {!! Form::label(null, '属性', ['class' => 'col-sm-2 control-label']) !!}
                 <div class="col-sm-6 input-line-group">
@@ -194,24 +193,9 @@
                   {!! Form::checkbox('is_political', 1, null, ['class' => 'input-line']) !!} 政治风险
                   {!! Form::checkbox('is_international', 1, null, ['class' => 'input-line']) !!} 国际
                   {!! Form::checkbox('is_slide', 1, (bool)$slide, ['class' => 'input-line']) !!} 幻灯片
+                  {!! Form::checkbox('state', 1, null, ['class' => 'input-line']) !!} 上线
                 </div>
               </div>
-              <div class="form-group">
-                {!! Form::label(null, '所属频道', ['class' => 'col-sm-2 control-label']) !!}
-                <div class="col-sm-6 input-line-group" id="channel">
-                  {!! Form::select('channels[1]', [], null, ['class' => 'select-line e-channel']) !!}
-                  {!! Form::select('channels[2]', [], null, ['class' => 'select-line e-channel']) !!}
-                  {!! Form::select('channels[3]', [], null, ['class' => 'select-line e-channel']) !!}
-                  {!! Form::select('channels[4]', [], null, ['class' => 'select-line e-channel']) !!}
-                </div>
-              </div>
-              @if(Admin::user()->can('article-online'))
-                <div class="form-group">
-                  {!! Form::label(null, '上线', ['class' => 'col-sm-2 control-label']) !!}
-                  <div class="col-sm-6 input-line-group">
-                    {!! Form::checkbox('state', 1, null, ['class' => 'input-line']) !!} 上线
-                  </div>
-                </div>
               @endif
             </div>
             <!-- /.box-body -->

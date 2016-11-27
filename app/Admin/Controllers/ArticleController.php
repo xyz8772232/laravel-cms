@@ -188,17 +188,15 @@ class ArticleController extends Controller
 
         $header = '频道文章';
         $description = '全部';
-        $channel_id = (int)Input::get('channel_id', 0);
+        $channel_id = (int)Input::get('channel_id', 1);
         $channels = Channel::toTree([], 0);
-        $options = [0 => '全部'] + Channel::buildSelectOptions([], 0, str_repeat('&nbsp;', 1));
+        $options = [1 => '新闻'] + Channel::buildSelectOptions([], 1, str_repeat('&nbsp;', 1));
 
         //查询条件处理
         $model = new Model(Admin::getModel(Article::class));
-        if ($channel_id) {
-            $channelIds = array_merge(Channel::branchIds([], $channel_id), [$channel_id]);
-            $conditions[] = ['whereIn' => ['channel_id', $channelIds]];
-            $model->addConditions($conditions);
-        }
+        $channelIds = array_merge(Channel::branchIds([], $channel_id), [$channel_id]);
+        $conditions[] = ['whereIn' => ['channel_id', $channelIds]];
+        $model->addConditions($conditions);
         $model->with('articleInfo','author');
         if (!Input::get('_sort')) {
             $model->orderBy('created_at', 'desc');
@@ -787,6 +785,7 @@ class ArticleController extends Controller
         }
 
         $initConfig =  [
+            'status' => 0,
             'channel' => isset($parentIds) ? array_values($parentIds) : null,
         ];
 
@@ -808,13 +807,19 @@ class ArticleController extends Controller
     public function edit($id)
     {
         $header = '编辑文章';
-        $description = '描述';
+        $description = '';
         $article = Article::with('keywords', 'content')->findOrFail($id);
         $keywords = Keyword::pluck('name', 'id');
         $channels = Channel::toTree([], 0);
         if ($article->type == 1) {
-            $contentPics = array_values(json_decode($article->content, true));
+            $contentPics = collect(json_decode($article->content, true))->map(function($value) {
+                return [
+                    'img' => cms_web_uri($value['img']),
+                     'title' => $value['title'],
+                        ];
+            })->all();
         }
+        //dd($contentPics);
         $channel_id = $article->channel_id;
         $parentIds = Channel::parentIds($channel_id);
         $links = Article::where('link_id', $id)->get(['id', 'title', 'channel_id'])->map(function($val) {
@@ -834,6 +839,7 @@ class ArticleController extends Controller
         }
 
         $initConfig = [
+            'status' => 1,
             'coverPic' => $article->cover_pic ? asset('upload/'.$article->cover_pic) : null,
             'contentPics' => $contentPics ?? null,
             'channel' => array_values($parentIds),
