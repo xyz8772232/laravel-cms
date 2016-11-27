@@ -1,21 +1,6 @@
 $(function () {
   var INIT_CONFIG = window.INIT_CONFIG;
-  $('.item_delete').click(function () {
-    var id = $(this).data('id');
-    if (confirm('确认删除?')) {
-      $.post('/admin/articles/' + id, {
-        _method: 'delete',
-        '_token': 'cBhuCiUomMmrIvqNXzYrKnKQSUY6J06uYBAk0lkk'
-      }, function (data) {
-        $.pjax({
-          timeout: 2000,
-          url: '/admin/articles',
-          container: '#pjax-container'
-        });
-        return false;
-      });
-    }
-  });
+  var IS_EDIT = INIT_CONFIG.status === 1;
 
   /**
    * sub form
@@ -141,9 +126,10 @@ $(function () {
     showUpload: false,
     language: 'zh_CN',
     allowedFileTypes: ['image'],
-    initialPreview: INIT_CONFIG.coverPic && [
+    initialPreview: INIT_CONFIG.coverPic ? [
       '<img src="' + INIT_CONFIG.coverPic + '" class="file-preview-image">'
-    ]
+    ] : undefined,
+    initialCaption: ''
   });
 
   /**
@@ -387,20 +373,23 @@ $(function () {
 
   function createSubForm_NewsLink(newsLink) {
     var randomId = Date.now();
-    var strHtml = '<div class="sub-form-group sub-form-group-deletable clearfix news-link">'
+    var strDisabled = IS_EDIT ? 'disabled' : '';
+    var strReadonly = IS_EDIT ? 'readonly' : '';
+    var strDeletable = IS_EDIT ? '' : 'deletable';
+    var strHtml = '<div class="' + strDeletable + ' sub-form-group clearfix news-link">'
       + '<div class="sub-form-group-l">'
       + '<label class="control-label">标题</label>'
       + '<div class="input-group">'
       + '<span class="input-group-addon"><i class="fa fa-pencil"></i></span>'
-      + '<input class="form-control" type="text" name="newsLink[' + randomId + '][title]" value="' + (newsLink ? newsLink.title : '') + '">'
+      + '<input ' + strReadonly + ' class="form-control" type="text" name="newsLink[' + randomId + '][title]" value="' + (newsLink ? newsLink.title : '') + '">'
       + '<input type="hidden" name="newsLink[' + randomId + '][id]" value="' + (newsLink ? newsLink.id : '') + '">'
       + '</div>'
       + '<label class="control-label">频道</label>'
       + '<div class="select-group">'
-      + '<select class="form-control news-link-select e-channel" name="newsLink[' + randomId + '][channel][]"></select>'
-      + '<select class="form-control news-link-select e-channel" name="newsLink[' + randomId + '][channel][]"></select>'
-      + '<select class="form-control news-link-select e-channel" name="newsLink[' + randomId + '][channel][]"></select>'
-      + '<select class="form-control news-link-select e-channel" name="newsLink[' + randomId + '][channel][]"></select>'
+      + '<select ' + strDisabled + ' class="form-control news-link-select e-channel" name="newsLink[' + randomId + '][channel][]"></select>'
+      + '<select ' + strDisabled + ' class="form-control news-link-select e-channel" name="newsLink[' + randomId + '][channel][]"></select>'
+      + '<select ' + strDisabled + ' class="form-control news-link-select e-channel" name="newsLink[' + randomId + '][channel][]"></select>'
+      + '<select ' + strDisabled + ' class="form-control news-link-select e-channel" name="newsLink[' + randomId + '][channel][]"></select>'
       + '</div>'
       + '</div>'
       + '<div class="sub-form-group-r e-delete"><i class="fa fa-trash-o"></i></div>'
@@ -449,12 +438,14 @@ $(function () {
 
   function createSubForm_Vote(option) {
     var randomId = Date.now();
-    var strHtml = '<div class="sub-form-group sub-form-group-deletable clearfix vote">'
+    var strReadonly = IS_EDIT ? 'readonly' : '';
+    var strDeletable = IS_EDIT ? '' : 'deletable';
+    var strHtml = '<div class="' + strDeletable + ' sub-form-group clearfix vote">'
       + '<div class="sub-form-group-l">'
       + '<label class="control-label">选项</label>'
       + '<div class="input-group">'
       + '<span class="input-group-addon"><i class="fa fa-pencil"></i></span>'
-      + '<input class="form-control" type="text" name="vote[' + randomId + '][option]" value="' + (option ? option.option : '') + '">'
+      + '<input ' + strReadonly + ' class="form-control" type="text" name="vote[' + randomId + '][option]" value="' + (option ? option.option : '') + '">'
       + '<input type="hidden" name="vote[' + randomId + '][id]" value="' + (option ? option.id : '') + '">'
       + '</div>'
       + '</div>'
