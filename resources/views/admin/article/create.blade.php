@@ -229,7 +229,7 @@
   <link rel="stylesheet" href="{{ asset("/packages/admin/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css") }}">
   <link rel="stylesheet" href="{{ asset("/packages/admin/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css") }}">
   <link rel="stylesheet" href="{{ asset("/packages/admin/dragula/dragula.min.css") }}">
-  <link rel="stylesheet" href="{{ asset("/css/article-edit.css") }}">
+  <link rel="stylesheet" href="{{ asset("/css/article.edit.css") }}">
 @endsection
 
 @section('admin_js')
@@ -246,5 +246,5 @@
     var CHANNEL = {!! json_encode($channels) !!};
     var INIT_CONFIG = {!! json_encode($initConfig) !!};
   </script>
-  <script src="{{ asset ("/js/article-edit.js") }}"></script>
+  <script src="{{ asset ("/js/article.edit.js") }}"></script>
 @endsection
