@@ -34,10 +34,10 @@
               <div class="input-group input-group-sm">
                 <span class="input-group-addon"><strong>创建时间</strong></span>
                 <input type="text" class="form-control" id="createdAtStart"
-                       name="created_at[start]" value="{{ $filterValues['create_at[start]'] ?? null }}">
+                       name="created_at[start]" value="{{ $filterValues['created_at']['start'] ?? null }}">
                 <span class="input-group-addon" style="border-left: 0; border-right: 0;">-</span>
                 <input type="text" class="form-control" id="createdAtEnd"
-                       name="created_at[end]" value="{{ $filterValues['create_at[end]'] ?? null }}">
+                       name="created_at[end]" value="{{ $filterValues['created_at']['end'] ?? null }}">
               </div>
               <div class="input-group input-group-sm">
                 <div class="input-group-btn">
