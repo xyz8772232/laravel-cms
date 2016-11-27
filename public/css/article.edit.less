@@ -3,6 +3,13 @@ textarea {
   resize: none;
 }
 
+// 编辑状态
+.form-edit {
+  .sub-form-add {
+    display: none;
+  }
+}
+
 // 自定义input line
 .input-line-group {
   line-height: 34px;
@@ -19,6 +26,11 @@ textarea {
     &:focus {
       outline: none;
       border-color: #3c8dbc;
+    }
+    &[disabled] {
+      background-color: #eee;
+      opacity: 1;
+      cursor: not-allowed;
     }
     margin-left: 5px;
     width: 90px;
@@ -41,10 +53,18 @@ textarea {
 }
 
 .sub-form-group {
-  border-bottom: 1px dashed #ccc;
+  border-top: 1px dashed #ccc;
   background-color: #f8f8f8;
-  &:last-child {
+  &:first-child {
     border-top: none;
+  }
+  &.deletable {
+    .sub-form-group-l {
+      width: 90%;
+    }
+    .sub-form-group-r {
+      display: block;
+    }
   }
   .control-label {
     float: left;
@@ -56,15 +76,6 @@ textarea {
     &:last-child {
       margin-bottom: 0;
     }
-  }
-}
-
-.sub-form-group-deletable {
-  .sub-form-group-l {
-    width: 90%;
-  }
-  .sub-form-group-r {
-    display: block;
   }
 }
 
@@ -149,6 +160,9 @@ textarea {
     width: 30px;
     margin: 0 5px;
     text-align: center;
+  }
+  & + .sub-form-group {
+    border-top: none;
   }
 }
 

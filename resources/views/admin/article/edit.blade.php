@@ -114,7 +114,7 @@
                 <div class="col-sm-6">
                   {!! Form::checkbox('newsLink[effective]', 1, (bool)$article->title_bold, ['class' => 'sub-form-switch', 'readonly' => 'readonly']) !!}
                   <div class="sub-form" id="newsLinkSubForm">
-                    <div class="sub-form-add e-add">+新增文字连接</div>
+                    <span class="sub-form-add e-add">+新增文字连接</span>
                   </div>
                 </div>
               </div>
@@ -131,17 +131,17 @@
                         <label class="control-label">标题</label>
                         <div class="input-group">
                           <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
-                            {!! Form::text('pk[title]', isset($ballot->type) && $ballot->type == 2 ? $ballot->title : null, ['class'=> 'form-control']) !!}
+                            {!! Form::text('pk[title]', isset($ballot->type) && $ballot->type == 2 ? $ballot->title : null, ['class'=> 'form-control', 'readonly' => 'readonly']) !!}
                         </div>
                         <label class="control-label">选项</label>
                         <div class="input-group">
                           <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
-                          {!! Form::text('pk[options][]', isset($ballot->type) && $ballot->type == 2 ? $ballot->choices->first()->content : null, ['class'=> 'form-control']) !!}
+                          {!! Form::text('pk[options][]', isset($ballot->type) && $ballot->type == 2 ? $ballot->choices->first()->content : null, ['class'=> 'form-control', 'readonly' => 'readonly']) !!}
                         </div>
                         <label class="control-label">选项</label>
                         <div class="input-group">
                           <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
-                          {!! Form::text('pk[options][]', isset($ballot->type) && $ballot->type == 2 ? $ballot->choices->last()->content : null, ['class'=> 'form-control']) !!}
+                          {!! Form::text('pk[options][]', isset($ballot->type) && $ballot->type == 2 ? $ballot->choices->last()->content : null, ['class'=> 'form-control', 'readonly' => 'readonly']) !!}
                         </div>
                       </div>
                     </div>
@@ -157,20 +157,11 @@
                   @endif
                   <div class="sub-form" id="voteSubForm">
                     <div class="vote-type">
-                      {!! Form::radio('vote[type]', 0, $ballot->single_vote ?? false, ['class' => 'vote-type-radio']) !!}单选
-                      {!! Form::radio('vote[type]', 0, $ballot->multi_vote ?? false, ['class' => 'vote-type-radio']) !!}多选
-                      (最多可选{!! Form::text('vote[limit]', isset($ballot->multi_vote) && $ballot->multi_vote ? $ballot->max_num : null, ['class' => 'vote-type-text']) !!}票)
+                      {!! Form::radio('vote[type]', 0, $ballot->single_vote ?? false, ['class' => 'vote-type-radio', 'disabled' => 'disabled']) !!}单选
+                      {!! Form::radio('vote[type]', 0, $ballot->multi_vote ?? false, ['class' => 'vote-type-radio', 'disabled' => 'disabled']) !!}多选
+                      (最多可选{!! Form::text('vote[limit]', isset($ballot->multi_vote) && $ballot->multi_vote ? $ballot->max_num : null, ['class' => 'vote-type-text', 'readonly' => 'readonly']) !!}票)
                     </div>
-                    <div class="sub-form-group clearfix">
-                      <div class="sub-form-group-l">
-                        <label class="control-label">标题</label>
-                        <div class="input-group">
-                          <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
-                          {!! Form::text('vote[title]', isset($ballot->vote) && $ballot->vote ? $ballot->title : null, ['class' => 'form-control']) !!}
-                        </div>
-                      </div>
-                    </div>
-                    <div class="sub-form-add e-add">+新增选项</div>
+                    <span class="sub-form-add e-add">+新增选项</span>
                   </div>
                 </div>
               </div>
@@ -227,7 +218,7 @@
   <link rel="stylesheet" href="{{ asset("/packages/admin/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css") }}">
   <link rel="stylesheet" href="{{ asset("/packages/admin/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css") }}">
   <link rel="stylesheet" href="{{ asset("/packages/admin/dragula/dragula.min.css") }}">
-  <link rel="stylesheet" href="{{ asset("/css/article-edit.css") }}">
+  <link rel="stylesheet" href="{{ asset("/css/article.edit.css") }}">
 @endsection
 
 @section('admin_js')
@@ -244,5 +235,5 @@
     var CHANNEL = {!! json_encode($channels) !!};
     var INIT_CONFIG = {!! json_encode($initConfig) !!};
   </script>
-  <script src="{{ asset ("/js/article-edit.js") }}"></script>
+  <script src="{{ asset ("/js/article.edit.js") }}"></script>
 @endsection

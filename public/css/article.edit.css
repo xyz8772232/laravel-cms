@@ -1,6 +1,9 @@
 textarea {
   resize: none;
 }
+.form-edit .sub-form-add {
+  display: none;
+}
 .input-line-group {
   line-height: 34px;
 }
@@ -30,16 +33,27 @@ textarea {
   outline: none;
   border-color: #3c8dbc;
 }
+.input-line-group .select-line[disabled] {
+  background-color: #eee;
+  opacity: 1;
+  cursor: not-allowed;
+}
 .sub-form {
   margin-top: 10px;
   display: none;
 }
 .sub-form-group {
-  border-bottom: 1px dashed #ccc;
+  border-top: 1px dashed #ccc;
   background-color: #f8f8f8;
 }
-.sub-form-group:last-child {
+.sub-form-group:first-child {
   border-top: none;
+}
+.sub-form-group.deletable .sub-form-group-l {
+  width: 90%;
+}
+.sub-form-group.deletable .sub-form-group-r {
+  display: block;
 }
 .sub-form-group .control-label {
   float: left;
@@ -51,12 +65,6 @@ textarea {
 }
 .sub-form-group .input-group:last-child {
   margin-bottom: 0;
-}
-.sub-form-group-deletable .sub-form-group-l {
-  width: 90%;
-}
-.sub-form-group-deletable .sub-form-group-r {
-  display: block;
 }
 .sub-form-group-l {
   float: left;
@@ -124,6 +132,9 @@ textarea {
   width: 30px;
   margin: 0 5px;
   text-align: center;
+}
+.vote-type + .sub-form-group {
+  border-top: none;
 }
 .imgup-header {
   height: 34px;
