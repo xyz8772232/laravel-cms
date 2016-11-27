@@ -36,16 +36,8 @@ class ArticleObserver
      */
     public function deleting(Article $article)
     {
-        if ($article->is_headline) {
-            Tool::handleSortLink($article, 'delete');
-            $article->is_headline = 0;
-            $article->save();
-        }
-
-        if ($article->is_slide) {
-            Tool::handleSortPhoto($article, 'delete');
-        }
-
+        Tool::handleSortLink($article, 'offline');
+        Tool::handleSortPhoto($article, 'offline');
     }
 
     /**
@@ -63,7 +55,14 @@ class ArticleObserver
         ]);
     }
 
-    public function updated(Article $article) {
+    /**
+     * Listen to the Article updated event.
+     *
+     * @param  Article  $article
+     * @return void
+     */
+    public function updated(Article $article)
+    {
         $admin_user_id = Admin::user()->id;
         if ($article->state == 1 && $article->getOriginal('state') == 0) {
             ArticleLog::create([
@@ -80,6 +79,5 @@ class ArticleObserver
                 'admin_user_id' => $admin_user_id,
             ]);
         }
-
     }
 }

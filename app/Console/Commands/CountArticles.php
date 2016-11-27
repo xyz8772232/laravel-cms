@@ -58,7 +58,7 @@ class CountArticles extends Command
         }
 
         $articleNums['soft'] = Article::where('is_soft', 1)->count();
-        $articleNums['unaudited'] = Article::where('auditor_id', 0)->count();
+        $articleNums['unaudited'] = Article::whereIn('state', [0, 1])->count();
 
         Cache::put(config('redis.articleNums'), $articleNums, 10);
     }

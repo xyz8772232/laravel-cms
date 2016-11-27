@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\URL;
 
@@ -101,37 +102,80 @@ class Tool extends Model
      */
     public static function handleSortLink(Article $article, $action = 'add')
     {
-        $article_id =$article->id;
-
-        if ($action == 'delete') {
-            if ($article->is_headline == 0) {
+        switch ($action) {
+            //添加但不显示在热点区域
+            case 'add':
+                if ($article->is_headline) {
+                    return false;
+                }
+                return $article->sortLink()->create(['deleted_at' => Carbon::now()]);
+                break;
+            case 'delete':
+                if (!$article->is_headline) {
+                    return false;
+                }
+                return $article->sortLink()->forceDelete();
+                break;
+            case 'online':
+                if ($article->is_headline_online) {
+                    return false;
+                }
+                if ($article->is_headline) {
+                    $article->sortLink()->restore();
+                }
+                return $article->sortLink()->save(new SortLink());
+                break;
+            case 'offline':
+                if (!$article->is_headline_online) {
+                    return false;
+                }
+                return $article->sortLink()->delete();
+                break;
+            default:
                 return false;
-            }
-            return SortLink::where('article_id', $article_id)->delete();
+                break;
         }
-
-        if ($article->is_headline == 1) {
-            return false;
-        }
-        return SortLink::create(['article_id' => $article_id]);
     }
 
-    public function handleSortPhoto(Article $article, $action = 'add')
+    public static function handleSortPhoto(Article $article, $action = 'add')
     {
-        $article_id =$article->id;
-        if ($action == 'delete') {
-            return SortPhoto::where('article_id', $article_id)->delete();
+        switch ($action) {
+            //添加但不显示在热点区域
+            case 'add':
+                if ($article->is_slide) {
+                    return false;
+                }
+                return $article->sortPhoto()->create(['deleted_at' => Carbon::now()]);
+                break;
+            case 'delete':
+                if (!$article->is_slide) {
+                    return false;
+                }
+                return $article->sortPhoto()->forceDelete();
+                break;
+            case 'online':
+                if ($article->is_slide_online) {
+                    return false;
+                }
+                $existedNum = SortPhoto::count();
+                if ($existedNum >= config('article.sortPhotoMaxNum')) {
+                    $oldestSlide = SortPhoto::orderBy('created_at')->first();
+                    $oldestSlide->delete();
+                }
+                if ($article->is_slide) {
+                    $article->sortPhoto()->restore();
+                }
+                return $article->sortPhoto()->save(new SortPhoto());
+                break;
+            case 'offline':
+                if (!$article->is_slide_online) {
+                    return false;
+                }
+                return $article->sortPhoto()->delete();
+                break;
+            default:
+                return false;
+                break;
         }
-
-        $existedNum = SortPhoto::count();
-        if ($existedNum >= config('article.sortPhotoMaxNum')) {
-            $oldestSort = SortPhoto::orderBy('created_at')->first();
-            $oldestSort->article_id = $article_id;
-            $oldestSort->created_at = Carbon::now();
-            return $oldestSort->save();
-        } else {
-            return SortPhoto::create(['article_id' => $article_id]);
-        }
-
     }
 }

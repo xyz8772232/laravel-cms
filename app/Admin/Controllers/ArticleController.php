@@ -15,7 +15,6 @@ use App\SortLink;
 use App\Tool;
 use App\Permission;
 use Carbon\Carbon;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Grid;
@@ -390,60 +389,26 @@ class ArticleController extends Controller
                 $ballotChoices[] = ['content' => $val];
             }
         } elseif (!empty($vote['effective'])) {
-            if ($vote['effective'] ?? false) {
-                dd($vote);
-
-                $vote['options'] = collect($vote)->filter(function($value, $key) {
-                    return is_numeric($key);
-                })->values()->all();
-            }
             $ballot = ['title' => $vote['title'], 'type' => $vote['type'], ];
             if ($vote['type'] == 2 && $vote['limit'] > 1) {
                 $ballot['max_num'] = $vote['limit'];
             }
             foreach ($vote['options'] as $val) {
-                $ballotChoices[] = ['content' => $val['option']];
+                $ballotChoices[] = ['content' => $val['content']];
             }
         }
 
-
-        //dd($ballotChoices);
-
         //处理文字链接
         $newsLinks = $request->newsLink;
-        dd($newsLinks);
-        if ($newsLinks['effective']) {
+        if ($newsLinks['effective'] ?? false) {
             $newsLinks = collect($newsLinks)->except('effective')->values()->map(function($value) {
                 return [
-                    'channel_id' => Tool::getChannelId($value['channel']),
+                    'channel_id' => Tool::getChannelId($value['channels']),
                     'title' => $value['title'],
                 ];
             })->all();
         }
 
-//        $exception = DB::transaction(function () use ($article, $keywords, $content, $ballot, $ballotChoices, $newsLinks) {
-//            $article->save();
-//            $article->keywords()->sync($keywords);
-//            $article->content()->save(new Content(['content' => $content]));
-//            if ($ballot) {
-//                $article->ballot()->save(new Ballot($ballot));
-//                foreach ($ballotChoices as $val) {
-//                    $choices[] = new BallotChoice($val);
-//                }
-//                $article->ballot()->first()->choices()->saveMany($choices);
-//            }
-//            if ($newsLinks) {
-//                $link_id = $article->id;
-//                foreach ($newsLinks as &$link) {
-//                    $link['link_id'] = $link_id;
-//                    $link['author_id'] = (int)$article->author_id;
-//                    $link['created_at'] = $link['updated_at'] = Carbon::now();
-//                    $link['state'] = (int)$article->state;
-//                }
-//                Article::insert($newsLinks);
-//            }
-//
-//        });
         $is_headline = (boolean)$request->is_headline;
         $is_slide = (boolean)$request->is_slide;
 
@@ -553,8 +518,6 @@ class ArticleController extends Controller
         $canUpdateField = [
             'title',
             'state',
-            'is_headline',
-            'is_soft',
             'is_political',
             'is_international',
             'is_important',
@@ -632,7 +595,7 @@ class ArticleController extends Controller
         })->map(function ($value, $key) use ($article) {
             $article->$key = $value;
         });
-        dd($article);
+
         $result = $article->save();
         if ($request->ajax()) {
             if ($result) {
@@ -677,6 +640,8 @@ class ArticleController extends Controller
                 $article->state = 2;
                 $article->auditor_id = $auditor_id;
                 $article->save();
+                Tool::handleSortLink($article, 'online');
+                Tool::handleSortPhoto($article, 'online');
             }
         }
         return Tool::showSuccess('通过成功');
@@ -717,14 +682,12 @@ class ArticleController extends Controller
                 continue;
             }
             $article = Article::find($id);
-            if ($article && $article->online && $article->is_headline == 0) {
-
-                $result = Tool::handleSortLink($article, 'add');
-                if ($result) {
-                    $article->is_headline = 1;
-                    $article->save();
+            if ($article) {
+                if ($article->online) {
+                    Tool::handleSortLink($article, 'online');
+                } else {
+                    Tool::handleSortLink($article, 'add');
                 }
-                //dispatch(new SortLinkOrPhoto($article, 'link', 'add'));
             }
         }
         return Tool::showSuccess('设置头条成功');
@@ -739,9 +702,14 @@ class ArticleController extends Controller
     public function transfer($id)
     {
         Permission::allow(['administrator', 'responsible_editor']);
-        $channel_id = Tool::getChannelId(Input::get('channels'));
+        $serialize = Input::get('channels');
+        $channels = json_decode($serialize, true);
+        if (json_last_error() != JSON_ERROR_NONE) {
+            return Tool::showError('参数错误');
+        }
+        $channel_id = Tool::getChannelId($channels);
         $rules = [
-            'channel_id' => 'integer|exists:channel,id',
+            'channel_id' => 'integer|exists:channels,id',
         ];
         $validator = Validator::make(['channel_id' => $channel_id], $rules);
         if ($validator->fails()) {
@@ -766,26 +734,44 @@ class ArticleController extends Controller
      * 建立文字链接
      * @return \Illuminate\Http\JsonResponse
      */
-    public function link()
+    public function link($article_id)
     {
-        $channel_id = Tool::getChannelId(Input::get('channels'));
+        Permission::allow('administrator', 'responsible_editor');
+
         $rules = [
-            'channel_id' => 'required|exists:channels,id',
-            'title' => 'required|max:50',
-            'link_id' => 'required|exists:articles,id,link_id,0',
+            'article_id' => 'integer|exists:articles,id,link_id,0',
         ];
-        $data = Input::only(['title', 'link_id']);
-        $data['channel_id'] = $channel_id;
-        $validator = Validator::make($data, $rules);
+        $validator = Validator::make(['article_id' => $article_id], $rules);
         if ($validator->fails()) {
-            return Tool::showError();
+            return Tool::showError('文章不能被链接');
         }
-        $data['author_id'] = Admin::user()->id;
-        $result = Article::create($data);
-        if ($result) {
-            return Tool::showSuccess('创建链接成功');
+
+        if (Input::has('_tree')) {
+            $serialize = Input::get('_tree');
+            $tree = json_decode($serialize, true);
+            if (json_last_error() != JSON_ERROR_NONE) {
+                return Tool::showError('参数错误');
+            }
+            $link_id = $article_id;
+
+            $article = Article::find($article_id);
+
+            foreach ($tree as &$link) {
+                $link['link_id'] = $link_id;
+                $link['channel_id'] = Tool::getChannelId($link['channels']);
+                unset($link['channels']);
+                $link['author_id'] = $article->author_id;
+                $link['created_at'] = $link['updated_at'] = Carbon::now();
+                $link['state'] = $article->state;
+            }
+
+            $result = Article::insert($tree);
+            if ($result) {
+                return Tool::showSuccess('创建链接成功');
+            }
+            return Tool::showError('创建链接失败');
         }
-        return Tool::showError('创建链接失败');
+        return Tool::showError('参数错误');
     }
 
 

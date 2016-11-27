@@ -246,5 +246,5 @@
     var CHANNEL = {!! json_encode($channels) !!};
     var INIT_CONFIG = {!! json_encode($initConfig) !!};
   </script>
-  <script src="{{ asset ("/js/article-edit.js") }}"></script>
+  <script src="{{ asset_with_version("/js/article-edit.js") }}"></script>
 @endsection
