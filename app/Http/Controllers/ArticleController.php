@@ -16,7 +16,7 @@ class ArticleController extends Controller
 
     public function show($id)
     {
-        $article =  Article::find($id);
-        view('wap.article.show', compact('article'));
+        $article =  Article::where('state', 2)->where('id', $id)->firstOrFail();
+        return view('wap.article.show', compact('article'));
     }
 }

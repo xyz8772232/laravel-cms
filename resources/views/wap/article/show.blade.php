@@ -8,7 +8,7 @@
 @endsection
 
 @section('description')
-    {{--<meta name="description" content="{=$data.title=}">--}}
+    <meta name="description" content="{{ $article->title }}">
 @endsection
 
 @section('js')
@@ -28,14 +28,14 @@
     </section>
 
     <section class="module-article">
-        {{--<h1 class="title">{=$data.title=}</h1>--}}
+        <h1 class="title">{{ $article->title }}</h1>
         <div class="extra">
             <!--<span class="collect extra-action {=if $col==1=}collected{=/if=}">{=if $col==1=}已收藏{=else=}收藏{=/if=}</span>-->
             <!--<a class="comments extra-action" href="{=$commentUrl=}">{=$commentSum=}</a>-->
             {{--<div class="extra-info">{=$data.create_time|date_format:"%Y-%m-%d %H:%M:%S"=}</div>--}}
         </div>
         <article class="main-body">
-            {{--{=$data.content nofilter=}--}}
+            {!! $article->content !!}
         </article>
         <div class="action">
             {{--<div class="like {=if $fav==1=}liked{=/if=} action-btn"><i class="icon icon-like"></i>{=$favourNum=}</div>--}}
@@ -48,7 +48,7 @@
     <section class="bar-tab">
         <div class="tab-box">
             <div class="tab back"></div>
-            {{--<a class="tab comments" href="{=$commentUrl=}">{=$commentSum=}</a>--}}
+            <a class="tab comments" href="">{{ $article->comment_num }}</a>
             {{--<div class="tab collect {=if $col==1=}collected{=/if=}"></div>--}}
             <div class="tab share"></div>
             <div class="tab font"></div>

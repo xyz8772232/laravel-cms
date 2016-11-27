@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     @section('title')
-        <title>财经头条-为您发掘海量信息中的投资价值</title>
+        <title></title>
     @show
     @section('description')
         <meta name="description" content="财经头条-为您发掘海量信息中的投资价值">
