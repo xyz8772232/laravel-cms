@@ -1,0 +1,279 @@
+body {
+  padding-bottom: .9rem;
+  background-color: #fafafa;
+}
+.module-extend {
+  margin-bottom: .3rem;
+  border-top: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
+  background-color: #ffffff;
+}
+.module-name {
+  border-bottom: 1px solid #e0e0e0;
+}
+.module-name .name {
+  margin: .22rem 0;
+  padding-left: .24rem;
+  height: .36rem;
+  line-height: .35rem;
+  font-size: 16px;
+  color: #555555;
+  border-left: .06rem solid #326fd3;
+}
+.module-header {
+  height: 42px;
+  line-height: 42px;
+  background-color: #f8f8f8;
+  border-bottom: 1px solid #dfdfdf;
+  font-size: 16px;
+}
+.module-header .header-nav {
+  float: right;
+  width: 40px;
+  height: 42px;
+  text-indent: -999em;
+  overflow: hidden;
+  background: url(http://mjs.sinaimg.cn/wap/module/header_footer/201509011010/images/head_foot_ico.png) no-repeat 8px -44px;
+  background-size: 50px auto;
+}
+.module-header .header-user {
+  float: right;
+  width: 30px;
+  height: 30px;
+  margin-top: 6px;
+  border-radius: 9999px;
+  overflow: hidden;
+  background: url(http://mjs.sinaimg.cn/wap/module/header_footer/201509011010/images/head_foot_ico.png?t=1462438987589) no-repeat 0 -164px;
+  background-size: 50px auto;
+}
+.module-header .header-user img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.module-header .header-logo {
+  float: left;
+  position: relative;
+  width: 52px;
+  height: 42px;
+  overflow: hidden;
+  border-right: 1px solid #dfdfdf;
+  color: #1a1a1a;
+  text-align: center;
+}
+.module-header .header-logo:after {
+  content: '';
+  position: absolute;
+  width: 1px;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: #fff;
+}
+.module-header .crumble-item {
+  float: left;
+  padding: 0 12px 0 8px;
+  color: #1a1a1a;
+  background: url(http://mjs.sinaimg.cn/wap/module/header_footer/201509011010/images/head_foot_ico.png) no-repeat right -92px;
+  background-size: 50px auto;
+}
+.module-article {
+  padding: .4rem .3rem .6rem;
+}
+.module-article .title {
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 1.2;
+  text-align: justify;
+  word-break: break-all;
+  word-wrap: break-word;
+}
+.module-article .extra {
+  padding-top: .2rem;
+  min-height: .55rem;
+  color: #999;
+  font-size: 12px;
+  border-bottom: 1px solid #e0e0e0;
+  line-height: 1.2;
+}
+.module-article .tags {
+  display: none;
+  margin-top: .25rem;
+}
+.module-article .tag {
+  color: #0583e6;
+  padding-left: .1rem;
+  padding-right: .15rem;
+}
+.module-article .author {
+  margin-top: .35rem;
+  text-align: justify;
+  word-break: break-all;
+  word-wrap: break-word;
+  line-height: 1.2;
+}
+.module-article .main-body {
+  position: relative;
+  margin-top: .3rem;
+  text-align: justify;
+  word-break: break-all;
+  word-wrap: break-word;
+  color: #505050;
+  font-size: 18px;
+  line-height: 1.6;
+  overflow: hidden;
+}
+.module-article .main-body img {
+  display: block;
+  margin: .2rem auto;
+  max-width: 100%;
+}
+.module-article .main-body a {
+  color: #0583e6;
+}
+.module-article .main-body u,
+.module-article .main-body ins {
+  text-decoration: none;
+}
+.module-article .main-body p,
+.module-article .main-body div {
+  margin-bottom: 1em;
+}
+.module-article .main-body p:last-child,
+.module-article .main-body div:last-child {
+  margin-bottom: 0;
+}
+.module-article .main-body iframe {
+  border: none;
+  width: 1px;
+  min-width: 100%;
+}
+.module-article .main-body video {
+  width: 100%;
+  max-height: 200px;
+  background-color: #000000;
+}
+.module-article .unfold-box {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+.module-article .unfold-mask {
+  margin-bottom: 0 !important;
+  height: .8rem;
+  background: linear-gradient(to bottom, rgba(250, 250, 250, 0), rgba(250, 250, 250, 0.3) 20%, #fafafa);
+}
+.module-article .unfold-btn {
+  padding-top: .15rem;
+  height: .6rem;
+  line-height: .6rem;
+  background-color: #fafafa;
+  text-align: center;
+}
+.module-article .unfold-line {
+  position: relative;
+  top: -0.3rem;
+  border-top: 1px dotted #e0e0e0;
+}
+.module-article .unfold-words {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  width: 2.3rem;
+  height: 100%;
+  background-color: #fafafa;
+  font-size: 14px;
+  color: #3990e6;
+}
+.module-article .unfold-icon {
+  margin-left: .15rem;
+  vertical-align: middle;
+  display: inline-block;
+  width: .25rem;
+  height: .14rem;
+  background: url('http://n.sinaimg.cn/finance/toutiao/images/article-btn-unfold.png') no-repeat 0 0;
+  background-size: 100% 100%;
+}
+.bigimg-popup-container {
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin-left: 0 !important;
+  margin-top: 0 !important;
+  background-color: #000000;
+}
+.bigimg-popup-container .img-box {
+  width: 100%;
+  height: 100%;
+}
+.bigimg-popup-container img {
+  width: 100%;
+}
+.font-size-0 .module-article .title {
+  font-size: 22px;
+}
+.font-size-0 .module-article .main-body {
+  font-size: 17px;
+}
+.font-size-1 .module-article .title {
+  font-size: 24px;
+}
+.font-size-1 .module-article .main-body {
+  font-size: 18px;
+}
+.font-size-2 .module-article .title {
+  font-size: 26px;
+}
+.font-size-2 .module-article .main-body {
+  font-size: 20px;
+}
+.font-size-3 .module-article .title {
+  font-size: 28px;
+}
+.font-size-3 .module-article .main-body {
+  font-size: 22px;
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+  .module-article .extra {
+    border: none;
+  }
+  .module-article .extra:after {
+    content: '';
+    display: block;
+    height: 1px;
+    background-color: #e0e0e0;
+    clear: both;
+    -webkit-transform: scale(1, 0.5);
+    transform: scale(1, 0.5);
+  }
+  .module-extend {
+    border: none;
+  }
+  .module-extend:before,
+  .module-extend:after {
+    content: '';
+    display: block;
+    height: 1px;
+    background-color: #e0e0e0;
+    clear: both;
+    -webkit-transform: scale(1, 0.5);
+    transform: scale(1, 0.5);
+  }
+  .module-name {
+    border: none;
+  }
+  .module-name:after {
+    content: '';
+    display: block;
+    height: 1px;
+    background-color: #e0e0e0;
+    clear: both;
+    -webkit-transform: scale(1, 0.5);
+    transform: scale(1, 0.5);
+  }
+  .module-recommend:after {
+    height: 0;
+  }
+}
