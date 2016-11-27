@@ -445,7 +445,7 @@ $(function () {
       + '<label class="control-label">选项</label>'
       + '<div class="input-group">'
       + '<span class="input-group-addon"><i class="fa fa-pencil"></i></span>'
-      + '<input ' + strReadonly + ' class="form-control" type="text" name="vote[options][' + randomId + '][option]" value="' + (option ? option.option : '') + '">'
+      + '<input ' + strReadonly + ' class="form-control" type="text" name="vote[options][' + randomId + '][content]" value="' + (option ? option.option : '') + '">'
       + '<input type="hidden" name="vote[options][' + randomId + '][id]" value="' + (option ? option.id : '') + '">'
       + '</div>'
       + '</div>'
