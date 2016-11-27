@@ -207,7 +207,6 @@ class ArticleController extends Controller
         $filter->between('created_at', trans('admin::lang.created_at'))->datetime();
 
 
-        //dd($filterValues);
         $articles = $filter->execute();
         $query = Input::all();
         $articles->appends($query);
@@ -216,7 +215,7 @@ class ArticleController extends Controller
 
         //$query = Input::all();
         //$articles = Article::with('articleInfo', 'author')->where('state', 0)->orderBy('id', 'desc')->paginate()->appends($query);
-        $filterValues = array_filter(Input::only('id', 'title', 'create_at[start]', 'create_at[end]', 'channel_id'), function($item) {
+        $filterValues = array_filter(Input::only('id', 'title', 'created_at'), function($item) {
             return !is_null($item);
         });
         $filterValues['channel_id'] = $channel_id;
