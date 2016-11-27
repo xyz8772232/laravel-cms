@@ -70,9 +70,9 @@ class Channel extends Model
 
         if (empty($elements)) {
             if ($deletable) {
-                $elements = static::orderByRaw('`order` = 0,`order`')->get()->makeVisible('deletable')->toArray();
+                $elements = static::orderByRaw('`order` = 0,`order`')->orderBy('created_at')->get()->makeVisible('deletable')->toArray();
             } else {
-                $elements = static::orderByRaw('`order` = 0,`order`')->get()->toArray();
+                $elements = static::orderByRaw('`order` = 0,`order`')->orderBy('created_at')->get()->toArray();
             }
         }
 

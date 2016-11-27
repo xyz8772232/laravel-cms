@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
   <section class="content-header">
@@ -13,13 +13,13 @@
         <div class="box">
           <div class="box-header">
           <form>
-            <a href="{{ route('articles.create') }}" class="btn btn-sm btn-primary link-create-news">新闻编辑</a>
+            <a href="{{ route('articles.create', ['channel_id' => $filterValues['channel_id']]) }}" class="btn btn-sm btn-primary link-create-news">发布新闻</a>
             <div class="form-inline pull-right">
               <div class="input-group input-group-sm">
                 <span class="input-group-addon"><strong>频道</strong></span>
                 <select class="select-line" data-placeholder="选择关键字" name="channel_id" id="channelId">
                   @foreach( $options as $key => $option)
-                  <option value="{{ $key }}">{{ $option }}</option>
+                  <option value="{{ $key }}" @if($filterValues['channel_id'] == $key) selected @endif>{{ $option }}</option>
                   @endforeach
                 </select>
               </div>

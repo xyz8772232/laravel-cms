@@ -35,13 +35,8 @@ class ChannelController extends Controller
         $description = 'description';
         $channels = Channel::toTree([], 0, true);
 
-        return view('admin.channel.index', ['header' => $header, 'description' => $description, 'channels' => $channels]);
-
-//        return Admin::content(function(Content $content) {
-//          $content->header('header');
-//          $content->description('description');
-//          $content->body($this->grid());
-//      });
+        return view('admin.channel.index',
+            ['header' => $header, 'description' => $description, 'channels' => $channels]);
     }
 
     public function tree($id = 0)
@@ -127,7 +122,7 @@ class ChannelController extends Controller
     {
         $parent_id = Input::get('parent_id', 0);
         if (empty($parent_id)) {
-            $grade = 0;
+            $grade = 1;
         } else {
             $grade = Channel::find($parent_id)->grade + 1;
         }

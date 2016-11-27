@@ -59,7 +59,7 @@ class Permission
 //
 //        response($content)->send();
 //        exit;
-        exit(Tool::showError('无权限'));
+        Tool::showError('无权限')->send();
+        exit;
     }
-
 }

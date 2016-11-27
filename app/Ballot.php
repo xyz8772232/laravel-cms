@@ -17,4 +17,25 @@ class Ballot extends Model
     {
         return $this->hasMany('App\BallotChoice');
     }
+
+    public function getPkAttribute()
+    {
+        return $this->type == 2;
+    }
+
+    public function getVoteAttribute()
+    {
+        return $this->type == 0 || $this->type == 1;
+    }
+
+    public function getSingleVoteAttribute()
+    {
+        return $this->type == 0;
+    }
+
+    public function getMultiVoteAttribute()
+    {
+        return $this->type == 1;
+    }
+
 }

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
   <section class="content-header">
@@ -31,8 +31,7 @@
               <div class="form-group">
                 <label for="type" class="col-sm-2 control-label">图片新闻</label>
                 <div class="col-sm-6">
-                  <input type="checkbox" id="typeCheckbox"/>
-                  <input type="hidden" id="typeForm" name="type" value="0">
+                  <input type="checkbox" id="typeCheckbox" name="type" value="1" @if(old('type')) checked @endif/>
                 </div>
               </div>
               <div class="form-group">
@@ -40,7 +39,7 @@
                 <div class="col-sm-6">
                   <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
-                    <input type="text" name="title" value="" class="form-control" placeholder="输入标题">
+                    <input type="text" name="title" value="{{ old('title') }}" class="form-control" placeholder="输入标题">
                   </div>
                   <div class="title-font">
                     <div class="title-weight">
@@ -257,9 +256,7 @@
   <script src="{{ asset("/packages/admin/ueditor-utf8-php/ueditor.all.min.js") }}"></script>
   <script>
     var CHANNEL = {!! json_encode($channels) !!};
-    var INIT_CONFIG = {
-
-    };
+    var INIT_CONFIG = {!! json_encode($initConfig) !!};
   </script>
   <script src="{{ asset ("/js/article-edit.js") }}"></script>
 @endsection

@@ -80,7 +80,7 @@ class BallotController extends Controller
             $grid->id('ID')->sortable();
             $grid->article_id('文章id');
             $grid->type('种类')->value(function($id) {
-                $names = ['投票', 'PK'];
+                $names = ['投票-单选','投票-多选', 'PK'];
                 return $names[$id];
             });
 

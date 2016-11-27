@@ -15,6 +15,7 @@ use App\SortLink;
 use App\Tool;
 use App\Permission;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Grid;
@@ -97,7 +98,7 @@ class ArticleController extends Controller
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index()
+    public function channel()
     {
         $header = '待审核文章';
         $description = '列表';
@@ -182,17 +183,19 @@ class ArticleController extends Controller
             compact('header', 'description', 'articles', 'options', 'filterValues', 'tableHeaders', 'channels'));
     }
 
-    public function channel($id = 1)
+    public function index()
     {
+
         $header = '频道文章';
         $description = '全部';
+        $channel_id = (int)Input::get('channel_id', 0);
         $channels = Channel::toTree([], 0);
         $options = [0 => '全部'] + Channel::buildSelectOptions([], 0, str_repeat('&nbsp;', 1));
 
         //查询条件处理
         $model = new Model(Admin::getModel(Article::class));
-        if ($id) {
-            $channelIds = array_merge(Channel::branchIds([], $id), [$id]);
+        if ($channel_id) {
+            $channelIds = array_merge(Channel::branchIds([], $channel_id), [$channel_id]);
             $conditions[] = ['whereIn' => ['channel_id', $channelIds]];
             $model->addConditions($conditions);
         }
@@ -218,6 +221,7 @@ class ArticleController extends Controller
         $filterValues = array_filter(Input::only('id', 'title', 'create_at[start]', 'create_at[end]', 'channel_id'), function($item) {
             return !is_null($item);
         });
+        $filterValues['channel_id'] = $channel_id;
         $tableHeaders = [
             [
                 'name' => 'is_important',
@@ -298,9 +302,15 @@ class ArticleController extends Controller
         //内容存储
         if ($request->type == 1 && $request->contentPic) {
             $contentPic = $request->contentPic;
-            $contentPic = json_encode(collect($contentPic)->values()->sortBy('order')->values()->all());
+            $contentPic = json_encode(collect($contentPic)->values()->sortBy('order')->map(function($value) {
+                return [
+                    'img' => cms_local_uri($value['img']),
+                    'title' => $value['title'],
+                ];
+            })->all());
             $request->merge(['content' => $contentPic]);
         }
+        //dd($request->all());
 
         $rules = [
             'title' => 'required|max:50',
@@ -322,7 +332,7 @@ class ArticleController extends Controller
 
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return redirect()->to('/admin/articles/create')
+            return redirect()->to('/admin/articles/create?channel_id='.$request->channel_id)
                 ->withInput($request->input())
                 ->withErrors($validator->errors());
         }
@@ -767,17 +777,25 @@ class ArticleController extends Controller
      */
     public function create()
     {
-        $header = '发表文章';
-        $description = '描述';
+        $header = '发布新闻';
+        $description = '';
         $keywords = Keyword::pluck('name', 'id');
         $channels = Channel::toTree([], 0);
+        if ($channel_id = Input::get('channel_id')) {
+            $parentIds = Channel::parentIds($channel_id);
+        }
+
+        $initConfig =  [
+            'channel' => isset($parentIds) ? array_values($parentIds) : null,
+        ];
 
         return view('admin.article.create',
             [
                 'header' => $header,
                 'description' => $description,
                 'keywords' => $keywords,
-                'channels' => $channels
+                'channels' => $channels,
+                'initConfig' => $initConfig,
             ]);
     }
 
@@ -805,7 +823,7 @@ class ArticleController extends Controller
         $ballot = $article->ballot;
 
         $slide = SortLink::where('article_id', $id)->first();
-        if ($ballot) {
+        if ($ballot->vote ?? false) {
             $voteOptions = $ballot->choices->map(function($val) {
                 return [
                     'id' => $val->id,

@@ -48,7 +48,7 @@ class CountArticles extends Command
         foreach (range(3, 1) as $grade) {
             $channels  = Channel::where('grade', $grade)->get();
             foreach ($channels as $channel) {
-                !isset($articleNums[$channel->id]) && $articleNums[$channel->id] = 0;
+                !isset($articleNums[$channel->id]) && $articleNums[$channel->id] = Article::where('channel_id', $channel->id)->count();
                 if ($channel->children_channel) {
                     foreach ($channel->children_channel as $child) {
                         $articleNums[$channel->id] += $articleNums[$child->id];

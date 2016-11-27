@@ -8,6 +8,8 @@ use App\Photo;
 use Encore\Admin\Facades\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Validator;
 
 class PhotoController extends Controller
 {
@@ -72,6 +74,28 @@ class PhotoController extends Controller
             return Tool::showSuccess('上传成功', ['path' => $path]);
         }
         return Tool::showError();
+    }
+
+    public function batchUpload()
+    {
+        $rules = [
+            'photos.*' => 'required|image',
+            'watermark' => 'required|in:0,1',
+        ];
+
+        $validator = Validator::make(Input::all(), $rules);
+
+        if ($validator->fails()) {
+            return Tool::showError('图片不符合格式');
+        }
+
+        $uid = Admin::user()->id;
+        $watermark = (boolean)Input::get('watermark');
+        foreach (Input::get('photos') as $photo) {
+            $path = app('fileUpload')->prepare($photo, $watermark);
+            Photo::create(['admin_user_id' => $uid, 'path' => $path]);
+        }
+        return Tool::showSuccess('上传成功');
     }
 
 

@@ -2,12 +2,23 @@
 
 return [
 
+    /*
+     * Laravel-admin name.
+     */
     'name'  => 'CMS后台管理系统',
-
+    /*
+     * Laravel-admin url prefix.
+     */
     'prefix'    => 'admin',
 
+    /*
+     * Laravel-admin install directory.
+     */
     'directory' => app_path('Admin'),
 
+    /*
+     * Laravel-admin title.
+     */
     'title'  => 'Admin',
 
     'auth' => [
@@ -16,6 +27,9 @@ return [
         'model'    => Encore\Admin\Auth\Database\Administrator::class,
     ],
 
+    /*
+     * Laravel-admin upload setting.
+     */
     'upload'  => [
 
         'disk' => 'admin',
@@ -28,6 +42,9 @@ return [
         'host' => 'http://cms.app/upload/',
     ],
 
+    /*
+     * Laravel-admin database setting.
+     */
     'database' => [
         'users_table' => 'admin_users',
         'users_model' => Encore\Admin\Auth\Database\Administrator::class,
@@ -41,11 +58,11 @@ return [
         'menu_table'  => 'admin_menu',
         'menu_model'  => Encore\Admin\Auth\Database\Menu::class,
 
+        'operation_log_table'    => 'admin_operation_log',
+        'user_permissions_table' => 'admin_user_permissions',
         'role_users_table'       => 'admin_role_users',
         'role_permissions_table' => 'admin_role_permissions',
         'role_menu_table'        => 'admin_role_menu',
-
-        'operation_log_table' => 'admin_operation_log',
     ],
 
     /*
@@ -72,4 +89,6 @@ return [
     'layout'  => ['sidebar-mini'],
 
     'version'   => '1.0',
+
+    'local_uri_str' => '<!--CMS_LOCAL_URI-->',
 ];
