@@ -22,3 +22,10 @@ if (! function_exists('cms_local_uri')) {
         return config('admin.local_uri_str').$local_path;
     }
 }
+
+if (! function_exists('cms_web_uri')) {
+    function cms_web_uri($local_path)
+    {
+        return str_replace(config('admin.local_uri_str'), config('admin.upload.host'), $local_path);
+    }
+}

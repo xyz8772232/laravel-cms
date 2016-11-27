@@ -18,10 +18,7 @@
                     <div class="icon">
                         <i class="fa fa-book"></i>
                     </div>
-                    <a href="/admin/articles" class="small-box-footer">
-                        更多&nbsp;
-                        <i class="fa fa-arrow-circle-right"></i>
-                    </a>
+                    <div class="small-box-footer"></div>
                 </div>
             </div>
             <div class="col-md-6">
@@ -33,10 +30,8 @@
                     <div class="icon">
                         <i class="fa fa-file"></i>
                     </div>
-                    <a href="/admin/orders" class="small-box-footer">
-                        更多&nbsp;
-                        <i class="fa fa-arrow-circle-right"></i>
-                    </a>
+                    <div class="small-box-footer">
+                    </div>
                 </div>
             </div>
         </div>

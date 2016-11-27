@@ -39,7 +39,7 @@ return [
             'file'   => 'file',
         ],
 
-        'host' => 'http://cms.app/upload/',
+        'host' => 'http://yun.app/upload/',
     ],
 
     /*

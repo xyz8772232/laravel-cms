@@ -20,7 +20,7 @@
     <section class="module-article">
         <h1 class="title">{{ $article->title }}</h1>
         <div class="extra">
-        <div class="extra-info">{{ $article->created_at }} {{$article->author->name}}</div>
+        <div class="extra-info">{{ $article->published_at }} {{$article->author->name}}</div>
         </div>
         <article class="main-body">
             {!! $article->content !!}

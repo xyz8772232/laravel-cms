@@ -11,18 +11,6 @@
     <div class="row">
       <div class="col-md-12">
         <div class="box box-info">
-          <div class="box-header with-border">
-            <h3 class="box-title">创建</h3>
-            <div class="box-tools">
-              <div class="btn-group pull-right">
-                <a href="javascript:void(0);" class="btn btn-sm btn-warning item_delete" data-id=""><i
-                  class="fa fa-trash"></i>&nbsp;删除</a>
-              </div>
-              <div class="btn-group pull-right" style="margin-right: 10px">
-                <a href="/admin/articles" class="btn btn-sm btn-default"><i class="fa fa-list"></i>&nbsp;列表</a>
-              </div>
-            </div>
-          </div>
           <!-- /.box-header -->
           <!-- form start -->
           <form action="/admin/articles" method="post" accept-charset="UTF-8" class="form-horizontal"
