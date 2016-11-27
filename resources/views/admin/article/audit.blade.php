@@ -61,7 +61,7 @@
                     <td><input type="checkbox" class="grid-item e-select" data-id="{{ $article->id }}"></td>
                     <td><i class="fa @if($article->is_important) fa-star @else fa-star-o @endif text-danger"></i></td>
                     <td>{{ $article->id }}</td>
-                    <td class="news-title">@if($article->link_id)<i class="fa fa-link"></i> @endif @if($article->is_headline)<span class="news-sign">[头]</span> @endif @if($article->type == 1) <i class="fa fa-file-image-o"></i> @endif <a href="{{ route('articles.preview', ['id' => $article->id]) }}">{{ $article->title }}</a></td>
+                    <td class="news-title">@if($article->link_id)<i class="fa fa-link text-danger"></i> @endif @if($article->is_headline)<span class="news-sign text-danger">[头]</span> @endif @if($article->type == 1) <i class="fa fa-file-image-o text-danger"></i> @endif <a href="{{ route('articles.preview', ['id' => $article->id]) }}">{{ $article->title }}</a></td>
                     <td>{{ $article->author_name }}</td>
                     <td>{{ $article->created_at }}</td>
                     <td>
