@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Permission;
 use App\Tool;
 use App\Photo;
 use Encore\Admin\Facades\Admin;
@@ -71,7 +72,7 @@ class PhotoController extends Controller
         $result = Photo::create(['admin_user_id' => $uid, 'path' => $path]);
 
         if ($result) {
-            return Tool::showSuccess('上传成功', ['path' => $path]);
+            return Tool::showSuccess('上传成功', ['path' => cms_local_to_web($path)]);
         }
         return Tool::showError();
     }
@@ -80,7 +81,7 @@ class PhotoController extends Controller
     {
         $rules = [
             'photos.*' => 'required|image',
-            'watermark' => 'required|in:0,1',
+            'watermark' => 'in:0,1',
         ];
 
         $validator = Validator::make(Input::all(), $rules);
@@ -91,7 +92,8 @@ class PhotoController extends Controller
 
         $uid = Admin::user()->id;
         $watermark = (boolean)Input::get('watermark');
-        foreach (Input::get('photos') as $photo) {
+
+        foreach (Input::file('photos') as $photo) {
             $path = app('fileUpload')->prepare($photo, $watermark);
             Photo::create(['admin_user_id' => $uid, 'path' => $path]);
         }
@@ -101,20 +103,10 @@ class PhotoController extends Controller
 
     public function destroy($id)
     {
-        $changeableField = [
-            'channel',
-            'state',
-            'is_headline',
-            'is_soft',
-            'is_political',
-            'is_international',
-            'is_important',
-        ];
-
-
-        $this->authorizeForUser(Admin::user(), 'delete', Photo::class);
-        //Permission::allow('responsible_editor');
-        $result = Photo::destroy($id);
+        //$this->authorizeForUser(Admin::user(), 'delete', Photo::class);
+        Permission::allow(config('admin.admin_editors'));
+        $ids = explode(',', $id);
+        $result = Photo::clean($ids);
         if ($result) {
             return Tool::showSuccess();
         }

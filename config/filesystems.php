@@ -52,6 +52,7 @@ return [
             'driver' => 'local',
             'root' => public_path('upload'),
             'visibility' => 'public',
+            'url' => 'http://yun.app/upload',
         ],
 
         'public' => [

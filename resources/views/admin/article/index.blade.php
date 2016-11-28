@@ -63,7 +63,7 @@
                     <td><i class="fa @if($article->is_important) fa-star @else fa-star-o @endif text-danger"></i></td>
                     <td>{{ $article->id }}</td>
                     <td>@if($article->online)<i class="fa fa-check" style="color:red"></i>@elseif($article->state==0) <span class="badge bg-green">未提交</span> @else <span class="badge bg-red">待审核</span> @endif</td>
-                    <td class="news-title">@if($article->link_id)<i class="fa fa-link text-danger"></i> @endif @if($article->is_headline)<span class="news-sign text-danger">[头]</span> @endif @if($article->type == 1) <i class="fa fa-file-image-o text-danger"></i> @endif <a href="{{ route('articles.preview', ['id' => $article->id]) }}">{{ $article->title }}</a></td>
+                    <td class="news-title">@if($article->link_id)<i class="fa fa-link text-danger"></i> @endif @if($article->is_headline)<span class="news-sign @if($article->is_headline_online) text-danger @endif">[头]</span> @endif @if($article->is_slide)<span class="news-sign @if($article->is_slide_online) text-danger @endif">[幻]</span> @endif @if($article->type == 1) <i class="fa fa-file-image-o text-danger"></i> @endif <a href="{{ route('articles.preview', ['id' => $article->id]) }}">{{ $article->title }}</a></td>
                     <td>{{ $article->author_name }}</td>
                     <td>{{ $article->created_at }}</td>
                     <td>{{ $article->view_num }}</td>

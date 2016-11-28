@@ -31,12 +31,12 @@
                   </div>
                   <div class="title-font">
                     <div class="title-weight">
-                      <input type="checkbox" name="title_bold" value="1"/> 粗体
+                      <input type="checkbox" name="title_bold" value="1" @if(old('title_bold')) checked @endif/> 粗体
                     </div>
                     <div class="title-color-label">颜色:</div>
                     <div class="title-color input-group" id="titleColor">
                       <span class="input-group-addon"><i></i></span>
-                      <input class="form-control" type="text" name="title_color" value="#333" placeholder="输入标题颜色"/>
+                      <input class="form-control" type="text" name="title_color" value="{{old('title_color') ?: '#333333'}}" placeholder="输入标题颜色"/>
                     </div>
                   </div>
                 </div>
@@ -46,7 +46,7 @@
                 <div class="col-sm-6">
                   <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
-                    <input type="text" name="subtitle" value=""
+                    <input type="text" name="subtitle" value="{{ old('subtitle') }}"
                            class="form-control" placeholder="输入副标题">
                   </div>
                 </div>
@@ -60,7 +60,7 @@
               <div class="form-group">
                 {!! Form::label('keywords','关键字', ['class' => 'col-sm-2 control-label']) !!}
                 <div class="col-sm-6">
-                  {!! Form::select('keywords[]',$keywords,null,['class'=>'form-control','multiple'=>'multiple', 'data-placeholder' => '选择关键字', 'id' => 'keywords']) !!}
+                  {!! Form::select('keywords[]',$keywords,old('keywords'),['class'=>'form-control','multiple'=>'multiple', 'data-placeholder' => '选择关键字', 'id' => 'keywords']) !!}
                 </div>
               </div>
               <div class="form-group">
@@ -79,13 +79,13 @@
                 <label for="description" class="col-sm-2 control-label">内容简介</label>
                 <div class="col-sm-6">
                   <textarea name="description" class="form-control" rows="3"
-                                                    placeholder="输入内容简介"></textarea>
+                                                    placeholder="输入内容简介">{{old('description')}}</textarea>
                 </div>
               </div>
               <div class="form-group" id="normalArticle">
                 <label for="content" class="col-sm-2 control-label">正文内容</label>
                 <div class="col-sm-8">
-                  <script id="content" name="content" type="text/plain"></script>
+                  <script id="content" name="content" type="text/plain">@if(old('type') == 0){!! old('content') !!}@endif</script>
                 </div>
               </div>
               <div class="form-group" id="picArticle">
@@ -99,7 +99,7 @@
                 <div class="col-sm-6">
                   <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
-                    <input type="text" id="source" name="source" value="" class="form-control"
+                    <input type="text" id="source" name="source" value="{{old('source')}}" class="form-control"
                            placeholder="输入信息来源">
                   </div>
                 </div>
@@ -109,7 +109,7 @@
                 <div class="col-sm-6">
                   <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
-                    <input type="text" id="orgUrl" name="original_url" value="" class="form-control"
+                    <input type="text" id="orgUrl" name="original_url" value="{{old('original_url')}}" class="form-control"
                            placeholder="输入原始链接">
                   </div>
                 </div>
@@ -173,16 +173,6 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-2 control-label">属性</label>
-                <div class="col-sm-6 input-line-group">
-                  <input class="input-line" type="checkbox" name="is_headline" value="1"/> 头条
-                  <input class="input-line" type="checkbox" name="is_soft" value="1"/> 软文
-                  <input class="input-line" type="checkbox" name="is_political" value="1"/> 政治风险
-                  <input class="input-line" type="checkbox" name="is_international" value="1"/> 国际
-                  <input class="input-line" type="checkbox" name="is_slide" value="1"/> 幻灯片
-                </div>
-              </div>
-              <div class="form-group">
                 <label class="col-sm-2 control-label">所属频道</label>
                 <div class="col-sm-6 input-line-group" id="channel">
                   <select class="select-line e-channel" name="channels[1]"></select>
@@ -192,12 +182,17 @@
                 </div>
               </div>
               @if(Admin::user()->can('article-online'))
-              <div class="form-group">
-                <label class="col-sm-2 control-label">上线</label>
-                <div class="col-sm-6 input-line-group">
-                  <input class="input-line" type="checkbox" name="state" value="1"/>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">属性</label>
+                  <div class="col-sm-6 input-line-group">
+                    <input class="input-line" type="checkbox" name="is_headline" value="1" @if(old('is_headline')) checked @endif/> 头条
+                    <input class="input-line" type="checkbox" name="is_soft" value="1" @if(old('is_soft')) checked @endif/> 软文
+                    <input class="input-line" type="checkbox" name="is_political" value="1" @if(old('is_political')) checked @endif/> 政治风险
+                    <input class="input-line" type="checkbox" name="is_international" value="1" @if(old('is_international')) checked @endif/> 国际
+                    <input class="input-line" type="checkbox" name="is_slide" value="1" @if(old('is_slide')) checked @endif/> 幻灯片
+                    <input class="input-line" type="checkbox" name="state" value="1" @if(old('state')) checked @endif/> 上线
+                  </div>
                 </div>
-              </div>
               @endif
             </div>
             <!-- /.box-body -->
@@ -246,5 +241,5 @@
     var CHANNEL = {!! json_encode($channels) !!};
     var INIT_CONFIG = {!! json_encode($initConfig) !!};
   </script>
-  <script src="{{ asset_with_version("/js/article-edit.js") }}"></script>
+  <script src="{{ asset_with_version("/js/article.edit.js") }}"></script>
 @endsection

@@ -12,20 +12,28 @@ if (! function_exists('asset_with_version')) {
      */
     function asset_with_version($path, $secure = null)
     {
-        return app('url')->asset($path, $secure).'?version='.env('ASSET_VERSION');
+        $version = env('ASSET_VERSION');
+        $version_str = isset($version) ? '?v='.$version : '';
+        return app('url')->asset($path, $secure).$version_str;
     }
 }
 
-if (! function_exists('cms_local_uri')) {
-    function cms_local_uri($local_path)
+if (! function_exists('cms_web_to_local')) {
+    function cms_web_to_local($path)
     {
-        return config('admin.local_uri_str').$local_path;
+        if (strpos($path, config('admin.upload.host')) === 0) {
+            return str_replace(config('admin.upload.host'), config('admin.local_uri_str'), $path);
+        }
+        return config('admin.local_uri_str').$path;
     }
 }
 
-if (! function_exists('cms_web_uri')) {
-    function cms_web_uri($local_path)
+if (! function_exists('cms_local_to_web')) {
+    function cms_local_to_web($local_path)
     {
-        return str_replace(config('admin.local_uri_str'), config('admin.upload.host'), $local_path);
+        if (strpos($local_path, config('admin.local_uri_str')) === 0) {
+            return str_replace(config('admin.local_uri_str'), config('admin.upload.host'), $local_path);
+        }
+        return config('admin.upload.host').$local_path;
     }
 }

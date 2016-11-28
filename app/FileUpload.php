@@ -3,10 +3,8 @@
 namespace App;
 
 use Encore\Admin\Form\Field;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
@@ -63,29 +61,32 @@ class FileUpload
 
         $this->original = $file->getRealPath();
 
-        $originalPicPath =  $this->uploadAndDeleteOriginal($file);
-
-        if ($addWatermark) {
-            $img = Image::make(config('filesystems.disks.admin.root').'/'.$originalPicPath);
-            $watermarkPath = config('filesystems.disks.admin.root').'/'.Watermark::find(1)->path;
-            $img->insert($watermarkPath, 'bottom-right', 15, 10);
-            $img->save();
-        }
+        $originalPicPath =  $this->uploadAndDeleteOriginal($file, $addWatermark);
 
         return $originalPicPath;
     }
 
     /**
      * @param $file
+     * @param $addWatermark
      *
      * @return mixed
      */
-    protected function uploadAndDeleteOriginal(UploadedFile $file)
+    protected function uploadAndDeleteOriginal(UploadedFile $file, $addWatermark = false)
     {
         $this->renameIfExists($file);
 
         $target = $this->directory.'/'.$this->name;
 
+        if ($addWatermark) {
+            $watermark = Watermark::where('status', 1)->orderBy('id')->first();
+            if ($watermark) {
+                $watermarkResource = $this->storage->get($watermark->path);
+                $img = Image::make($file->getRealPath());
+                $img->insert($watermarkResource, 'bottom-right', 2, 2);
+                $img->save();
+            }
+        }
         $this->storage->put($target, file_get_contents($file->getRealPath()));
 
         $this->destroy();

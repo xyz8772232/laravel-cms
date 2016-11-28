@@ -183,7 +183,7 @@
                   {!! Form::checkbox('is_soft', 1, null, ['class' => 'input-line']) !!} 软文
                   {!! Form::checkbox('is_political', 1, null, ['class' => 'input-line']) !!} 政治风险
                   {!! Form::checkbox('is_international', 1, null, ['class' => 'input-line']) !!} 国际
-                  {!! Form::checkbox('is_slide', 1, (bool)$slide, ['class' => 'input-line']) !!} 幻灯片
+                  {!! Form::checkbox('is_slide', 1, null, ['class' => 'input-line']) !!} 幻灯片
                   {!! Form::checkbox('state', 1, null, ['class' => 'input-line']) !!} 上线
                 </div>
               </div>

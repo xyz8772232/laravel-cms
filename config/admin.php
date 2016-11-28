@@ -91,4 +91,6 @@ return [
     'version'   => '1.0',
 
     'local_uri_str' => '<!--CMS_LOCAL_URI-->',
+
+    'admin_editors' => ['administrator', 'responsible_editor'],
 ];

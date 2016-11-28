@@ -300,7 +300,7 @@ class ArticleController extends Controller
             $contentPic = $request->contentPic;
             $contentPic = json_encode(collect($contentPic)->values()->sortBy('order')->map(function($value) {
                 return [
-                    'img' => cms_local_uri($value['img']),
+                    'img' => cms_web_to_local($value['img']),
                     'title' => $value['title'],
                 ];
             })->all());
@@ -477,13 +477,16 @@ class ArticleController extends Controller
 
     public function update($id, Request $request)
     {
-
         //内容存储
         if ($request->type == 1 && $request->contentPic) {
             $contentPic = $request->contentPic;
-            $contentPic = json_encode(collect($contentPic)->values()->sortBy('order')->map(function($val) {
-                return collect($val)->only('img', 'title')->all();
+            $contentPic = json_encode(collect($contentPic)->values()->sortBy('order')->map(function($value) {
+                return [
+                    'img' => cms_web_to_local($value['img']),
+                    'title' => $value['title'],
+                ];
             })->all());
+
             $request->merge(['content' => $contentPic]);
         }
 
@@ -494,11 +497,12 @@ class ArticleController extends Controller
             'type' => 'in:0,1',
             'title_bold' => 'in:0,1',
             'is_headline' => 'in:0,1',
+            'is_slide' => 'in:0,1',
             'is_soft' => 'in:0,1',
             'is_political' => 'in:0,1',
             'is_international' => 'in:0,1',
             'is_important' => 'in:0,1',
-            'publish_at' => 'date',
+            'published_at' => 'date',
             'original_url' => 'url',
             'state' => 'in:0,1',
         ];
@@ -508,63 +512,83 @@ class ArticleController extends Controller
 
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return redirect()->to('/admin/articles/'.$id)
+            return redirect(route('articles.update', ['id' => $id]))
                 ->withInput($request->input())
                 ->withErrors($validator->errors());
         }
 
         $article = Article::with('keywords', 'content')->find($id);
 
-        $canUpdateField = [
+        if ($article->online) {
+            if (Admin::user()->isRole(config('admin.admin_editors'))) {
+                return redirect(route('articles.update', ['id' => $id]))
+                    ->withInput($request->input())
+                    ->withErrors('无修改权限');
+            }
+        }
+
+
+        $updateFields = [
             'title',
-            'state',
-            'is_political',
-            'is_international',
-            'is_important',
-            'keywords',
-            'content',
-            'cover_pic',
-            'subtitle',
             'title_color',
             'title_bold',
+            'state',
+            'subtitle',
             'description',
             'source',
             'original_url',
             'published_at',
+            'is_political',
+            'is_international',
+            'is_important',
         ];
 
-        $input = collect(Input::only($canUpdateField))->filter(function ($value) {
-            return !is_null($value);
+        collect($updateFields)->map(function ($field) use ($request, $article) {
+            isset($request->$field) && $article->$field = $request->$field;
         });
+
+
+        //封面图处理
+        if (!empty($request->file('cover_pic'))) {
+            $coverFile = $request->file('cover_pic');
+            $coverName = uniqid('cover_').'.'.$coverFile->guessExtension();
+            $article->cover_pic = $coverFile->storeAs('cover_pic', $coverName, 'admin');
+        } else {
+            $article->cover_pic = $request->cover_pic;
+        }
+
+        //dd($request->cover_pic);
 
         //  更新内容
-        if ($input->has('content')) {
-            $content = $article->content()->first();
-            if ($content->content !== $input->get('content')) {
-                $content->content = $input->get('content');
-                $content->save();
-            }
-        }
+        $content = $article->content()->first();
+        $content->content = $request->content;
+        $content->save();
 
-        //同步关键字
-        if ($input->has('keywords')) {
-            $article->keywords()->sync($input->get('keywords'));
-        }
-
-        //更新封面图
-        if ($input->has('cover_pic') && $request->hasFile('cover_pic')) {
-            $article->cover_pic = app('fileUpload')->prepare($request->file('cover_pic'));
-        }
-        $input->except(['content', 'keywords', 'cover_pic'])->map(function ($value, $key) use ($article) {
-            $article->$key = $value;
-        });
+        //关键字同步
+        $keywords = is_array($request->keywords) ? array_filter($request->keywords) : [];
+        $article->keywords()->sync($keywords);
 
         $result = $article->save();
+
+        //headline处理
+        if ($request->is_headline) {
+            Tool::handleSortLink($article, 'add');
+        } else {
+            Tool::handleSortLink($article, 'delete');
+        }
+
+        //slide处理
+        if ($request->is_slide) {
+            Tool::handleSortPhoto($article, 'add');
+        } else {
+            Tool::handleSortPhoto($article, 'delete');
+        }
+
         if ($result) {
             return redirect(Tool::resource())
                 ->withSuccess('更新文章成功');
         }
-        return back()->withInput()->withErrors('更新文章失败');
+        return redirect(route('articles.update', ['id' => $id]))->withInput()->withErrors('更新文章失败');
     }
 
     /**
@@ -822,7 +846,7 @@ class ArticleController extends Controller
         if ($article->type == 1) {
             $contentPics = collect(json_decode($article->content, true))->map(function($value) {
                 return [
-                    'img' => cms_web_uri($value['img']),
+                    'img' => cms_local_to_web($value['img']),
                      'title' => $value['title'],
                         ];
             })->all();
