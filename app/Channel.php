@@ -16,7 +16,7 @@ class Channel extends Model
      */
     protected $appends = ['deletable'];
 
-    protected $visible = ['id', 'name', 'grade', 'parent_id'];
+    protected $visible = ['id', 'name', 'grade', 'parent_id', 'order'];
 
     protected $fillable = ['name', 'admin_user_id', 'grade', 'order', 'parent_id'];
 
@@ -89,6 +89,28 @@ class Channel extends Model
         }
 
         return $branch;
+    }
+
+    public static function menu(array $channels = [])
+    {
+        if (empty($channels)) {
+            $channels = static::toTree([], 1);
+        }
+        $menu = [];
+        foreach ($channels as $channel) {
+            $item['order'] = $channel['order'];
+            $item['title'] = $channel['name'];
+            $item['icon'] = '';
+            $item['uri'] = ($channel['grade'] == 3 || empty($channel['children'])) ? 'articles?channel_id='.$channel['id']: '';
+            $item['roles'] = [];
+            if (!empty($channel['children']) && ($channel['grade'] < 3)) {
+                $item['children'] = static::menu($channel['children']);
+            } else {
+            }
+            $menu[] = $item;
+            unset($item);
+        }
+        return $menu;
     }
 
     /**

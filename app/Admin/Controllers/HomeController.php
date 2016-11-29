@@ -10,7 +10,7 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $header = '新闻频道';
+        $header = '新闻';
         $description = '文章统计';
         $newsChannel = Channel::where('name', '新闻')->first();
         $articleNums = Cache::get(config('redis.articleNums'));

@@ -3,7 +3,6 @@
 namespace App\Admin\Controllers;
 
 use App\AppPhoto;
-use App\SortPhoto;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Facades\Admin;
@@ -22,8 +21,8 @@ class AppPhotoController extends Controller
      */
     public function index()
     {
-        $header = '启动幻灯片';
-        $description = '描述';
+        $header = 'APP';
+        $description = '启动幻灯片';
         $photos = AppPhoto::orderBy('order', 'asc');
         return view('admin.app.photo', compact('header', 'description', 'photos'));
         return Admin::content(function (Content $content) {

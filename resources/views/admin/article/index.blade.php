@@ -93,7 +93,7 @@
                 共<span class="text-primary">{{ $articles->total() }}</span>篇文章
               </span>
             </div>
-              {{ $articles->appends(['sort' => 'votes'])->links('admin::pagination') }}
+              {{ $articles->links('admin::pagination') }}
           </div>
           <!-- /.box-body -->
         </div>

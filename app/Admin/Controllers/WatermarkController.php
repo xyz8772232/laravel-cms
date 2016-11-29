@@ -23,8 +23,8 @@ class WatermarkController extends Controller
 
     public function index()
     {
-        $header = '水印图';
-        $description = '描述';
+        $header = '系统';
+        $description = '水印';
         $watermark = Watermark::find(1);
         $image['path'] = asset('upload/'.$watermark->path);
         $image['caption'] = pathinfo($watermark->path, PATHINFO_BASENAME);
@@ -47,18 +47,26 @@ class WatermarkController extends Controller
         $uid = Admin::user()->id;
 
         $path = app('fileUpload')->prepare($file);
-        $watermark = Watermark::find(1);
-        if (!$watermark) {
-            $watermark = new Watermark();
-            $watermark->status = 1;
+        $watermark = Watermark::where('status', 1)->first();
+        if ($watermark) {
+            $watermark->path = $path;
+            $watermark->admin_user_id = $uid;
+            $result = $watermark->save();
+        } else {
+            $result = $watermark->create(['path' => $path, 'admin_user_id' => $uid, 'status' => 1]);
         }
-        $watermark->path = $path;
-        $watermark->admin_user_id = $uid;
 
-        if ($watermark->save()) {
-            return Tool::showSuccess();
+        if (!$result) {
+            return back()->withErrors('上传失败');
+        } else {
+            return back();
         }
-        return Tool::showError();
+
+
+//        if ($result) {
+//            return Tool::showSuccess();
+//        }
+//        return Tool::showError();
     }
 
     /**

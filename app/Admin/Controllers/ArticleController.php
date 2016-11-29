@@ -185,9 +185,10 @@ class ArticleController extends Controller
     public function index()
     {
 
-        $header = '频道文章';
-        $description = '全部';
+        $header = '新闻';
         $channel_id = (int)Input::get('channel_id', 1);
+        $channel_name = Channel::find($channel_id)->name;
+        $description = $channel_name;
         $channels = Channel::toTree([], 0);
         $options = [1 => '新闻'] + Channel::buildSelectOptions([], 1, str_repeat('&nbsp;', 1));
 
@@ -204,16 +205,13 @@ class ArticleController extends Controller
         $filter = new Filter($model);
         $filter->like('title', '标题');
         $filter->between('created_at', trans('admin::lang.created_at'))->datetime();
-
-
         $articles = $filter->execute();
         $query = Input::all();
         $articles->appends($query);
+        //dd($articles);
         //dd($articles->last());
         //dd($filter->conditions(), $filter->execute());
 
-        //$query = Input::all();
-        //$articles = Article::with('articleInfo', 'author')->where('state', 0)->orderBy('id', 'desc')->paginate()->appends($query);
         $filterValues = array_filter(Input::only('id', 'title', 'created_at'), function($item) {
             return !is_null($item);
         });
@@ -337,7 +335,6 @@ class ArticleController extends Controller
         $insertFields = [
             'title',
             'type',
-            'state',
             'is_soft',
             'is_political',
             'is_international',
@@ -409,11 +406,14 @@ class ArticleController extends Controller
             })->all();
         }
 
-        $is_headline = (boolean)$request->is_headline;
-        $is_slide = (boolean)$request->is_slide;
-
         try {
-            $exception = DB::transaction(function () use ($article, $keywords, $content, $ballot, $ballotChoices, $newsLinks, $is_headline, $is_slide) {
+            $exception = DB::transaction(function () use ($article, $keywords, $content, $ballot, $ballotChoices, $newsLinks, $request) {
+
+                if (Admin::user()->isRole(config('admin.admin_editors'))) {
+                    if ($request->online) {
+                        $article->state = 2;
+                    }
+                }
                 $article->save();
                 $article->keywords()->sync($keywords);
                 $article->content()->save(new Content(['content' => $content]));
@@ -436,18 +436,20 @@ class ArticleController extends Controller
                     Article::insert($newsLinks);
                 }
 
-                $now = Carbon::now()->toDateTimeString();
+                if (Admin::user()->isRole(config('admin.admin_editors'))) {
+                    $now = Carbon::now()->toDateTimeString();
 
-                if ($is_headline) {
-                    $article->sortLink()->create([
-                        'deleted_at' => $now,
-                    ]);
-                }
+                    if ($request->is_headline) {
+                        $article->sortLink()->create([
+                            'deleted_at' => $now,
+                        ]);
+                    }
 
-                if ($is_slide) {
-                    $article->sortPhoto()->create([
-                        'deleted_at' => $now,
-                    ]);
+                    if ($request->is_slide) {
+                        $article->sortPhoto()->create([
+                            'deleted_at' => $now,
+                        ]);
+                    }
                 }
 
             });
@@ -519,15 +521,6 @@ class ArticleController extends Controller
 
         $article = Article::with('keywords', 'content')->find($id);
 
-        if ($article->online) {
-            if (Admin::user()->isRole(config('admin.admin_editors'))) {
-                return redirect(route('articles.update', ['id' => $id]))
-                    ->withInput($request->input())
-                    ->withErrors('无修改权限');
-            }
-        }
-
-
         $updateFields = [
             'title',
             'title_color',
@@ -553,8 +546,8 @@ class ArticleController extends Controller
             $coverFile = $request->file('cover_pic');
             $coverName = uniqid('cover_').'.'.$coverFile->guessExtension();
             $article->cover_pic = $coverFile->storeAs('cover_pic', $coverName, 'admin');
-        } else {
-            $article->cover_pic = $request->cover_pic;
+        } elseif(empty($request->cover_pic_old)){
+            $article->cover_pic = null;
         }
 
         //dd($request->cover_pic);
@@ -568,27 +561,35 @@ class ArticleController extends Controller
         $keywords = is_array($request->keywords) ? array_filter($request->keywords) : [];
         $article->keywords()->sync($keywords);
 
+
+        if (Admin::user()->isRole(config('admin.admin_editors'))) {
+            //headline处理
+            if ($request->is_headline) {
+                Tool::handleSortLink($article, 'add');
+            } else {
+                Tool::handleSortLink($article, 'delete');
+            }
+
+            //slide处理
+            if ($request->is_slide) {
+                Tool::handleSortPhoto($article, 'add');
+            } else {
+                Tool::handleSortPhoto($article, 'delete');
+            }
+
+            //上线状态处理
+            if ($request->online) {
+                $article->state = 2;
+            }
+        }
+
         $result = $article->save();
 
-        //headline处理
-        if ($request->is_headline) {
-            Tool::handleSortLink($article, 'add');
-        } else {
-            Tool::handleSortLink($article, 'delete');
-        }
-
-        //slide处理
-        if ($request->is_slide) {
-            Tool::handleSortPhoto($article, 'add');
-        } else {
-            Tool::handleSortPhoto($article, 'delete');
-        }
-
         if ($result) {
-            return redirect(Tool::resource())
+            return redirect(route('articles.edit', ['id' => $id]))
                 ->withSuccess('更新文章成功');
         }
-        return redirect(route('articles.update', ['id' => $id]))->withInput()->withErrors('更新文章失败');
+        return redirect(route('articles.edit', ['id' => $id]))->withInput()->withErrors('更新文章失败');
     }
 
     /**
@@ -870,9 +871,16 @@ class ArticleController extends Controller
             })->all();
         }
 
+        if (!empty($article->cover_pic)) {
+            $coverPic = [
+                'img' => $article->cover_pic ? cms_local_to_web($article->cover_pic) : null,
+                'title' => $article->cover_pic ? basename($article->cover_pic) : null,
+            ];
+        }
+
         $initConfig = [
             'status' => 1,
-            'coverPic' => $article->cover_pic ? asset('upload/'.$article->cover_pic) : null,
+            'coverPic' => $coverPic ?? null,
             'contentPics' => $contentPics ?? null,
             'channel' => array_values($parentIds),
             'newsLinks' => $links,

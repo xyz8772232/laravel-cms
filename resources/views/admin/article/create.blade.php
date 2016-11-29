@@ -181,7 +181,7 @@
                   <select class="select-line e-channel" name="channels[4]"></select>
                 </div>
               </div>
-              @if(Admin::user()->can('article-online'))
+              @if(Admin::user()->isRole(config('admin.admin_editors')))
                 <div class="form-group">
                   <label class="col-sm-2 control-label">属性</label>
                   <div class="col-sm-6 input-line-group">
@@ -190,7 +190,7 @@
                     <input class="input-line" type="checkbox" name="is_political" value="1" @if(old('is_political')) checked @endif/> 政治风险
                     <input class="input-line" type="checkbox" name="is_international" value="1" @if(old('is_international')) checked @endif/> 国际
                     <input class="input-line" type="checkbox" name="is_slide" value="1" @if(old('is_slide')) checked @endif/> 幻灯片
-                    <input class="input-line" type="checkbox" name="state" value="1" @if(old('state')) checked @endif/> 上线
+                    <input class="input-line" type="checkbox" name="online" value="1" @if(old('online')) checked @endif/> 上线
                   </div>
                 </div>
               @endif
