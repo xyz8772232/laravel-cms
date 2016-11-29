@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\AppMessage;
+use App\Channel;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Facades\Admin;
@@ -22,17 +23,10 @@ class AppMessageController extends Controller
      */
     public function index()
     {
-        $header = 'APP消息';
-        $description = '描述';
+        $header = 'APP';
+        $description = '消息推送';
         return view('admin.app.message', ['header' => $header, 'description' => $description]);
 
-        return Admin::content(function (Content $content) {
-
-            $content->header('header');
-            $content->description('description');
-
-            $content->body($this->grid());
-        });
     }
 
     public function store()

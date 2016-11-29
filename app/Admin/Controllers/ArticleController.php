@@ -185,9 +185,10 @@ class ArticleController extends Controller
     public function index()
     {
 
-        $header = '频道文章';
-        $description = '全部';
+        $header = '新闻';
         $channel_id = (int)Input::get('channel_id', 1);
+        $channel_name = Channel::find($channel_id)->name;
+        $description = $channel_name;
         $channels = Channel::toTree([], 0);
         $options = [1 => '新闻'] + Channel::buildSelectOptions([], 1, str_repeat('&nbsp;', 1));
 
