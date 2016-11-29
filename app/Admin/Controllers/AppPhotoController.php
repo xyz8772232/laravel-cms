@@ -3,7 +3,6 @@
 namespace App\Admin\Controllers;
 
 use App\AppPhoto;
-use App\SortPhoto;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Facades\Admin;

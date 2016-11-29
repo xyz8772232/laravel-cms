@@ -175,7 +175,7 @@
                   {!! Form::select('channels[4]', [], null, ['class' => 'select-line e-channel', 'disabled' => 'disabled']) !!}
                 </div>
               </div>
-              @if(Admin::user()->can('article-online'))
+              @if(Admin::user()->isRole(config('admin.admin_editors')))
               <div class="form-group">
                 {!! Form::label(null, '属性', ['class' => 'col-sm-2 control-label']) !!}
                 <div class="col-sm-6 input-line-group">
@@ -184,7 +184,7 @@
                   {!! Form::checkbox('is_political', 1, null, ['class' => 'input-line']) !!} 政治风险
                   {!! Form::checkbox('is_international', 1, null, ['class' => 'input-line']) !!} 国际
                   {!! Form::checkbox('is_slide', 1, null, ['class' => 'input-line']) !!} 幻灯片
-                  {!! Form::checkbox('state', 1, null, ['class' => 'input-line']) !!} 上线
+                  {!! Form::checkbox('online', 1, null, ['class' => 'input-line']) !!} 上线
                 </div>
               </div>
               @endif
@@ -197,9 +197,6 @@
               <div class="col-sm-6">
                 <div class="btn-group pull-right">
                   {!! Form::button('修改文章', ['type' => 'submit', 'class' => 'btn btn-info pull-right']) !!}
-                </div>
-                <div class="btn-group pull-left">
-                  {!! Form::reset('撤销', ['class' => 'btn btn-warning']) !!}
                 </div>
               </div>
             </div>
