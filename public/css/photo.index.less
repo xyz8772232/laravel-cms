@@ -1,0 +1,73 @@
+// 头部
+.e-delete {
+  margin-left: 20px;
+}
+
+.e-upload {
+  margin-left: 5px;
+}
+
+// 主要
+.photo {
+  position: relative;
+  float: left;
+  margin: 15px 20px;
+  width: 243px;
+  height: 220px;
+  background-color: #1fa67a;
+  border: 1px solid #1fa67a;
+  overflow: hidden;
+  &.selected {
+    .icon-check {
+      visibility: visible;
+    }
+  }
+  .pic {
+    display: block;
+    width: 100%;
+    height: 160px;
+    background-color: #fff;
+  }
+  .footer {
+    padding: 0 10px;
+    color: #fff;
+  }
+  .e-copy {
+    float: right;
+    margin-top: 16px;
+    padding: 5px 8px;
+    background-color: #fff;
+    border-radius: 3px;
+    color: #1fa67a;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .icon-check {
+    margin-top: 17px;
+    font-size: 25px;
+    color: #fff;
+    visibility: hidden;
+  }
+}
+
+// 尾部
+.box-footer {
+  padding-right: 30px;
+}
+
+// 辅助
+.file-preview-thumbnails {
+  overflow-y: auto;
+  height: 235px;
+}
+.watermark{
+  margin-top: 20px;
+  text-align: left;
+  #watermark{
+    display: inline-block;
+    margin: 2px 0 0;
+    vertical-align: top;
+    width: auto;
+    height: auto;
+  }
+}

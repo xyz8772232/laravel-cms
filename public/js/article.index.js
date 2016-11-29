@@ -174,7 +174,6 @@ $(function () {
         cancelButtonText: '取消',
         showCancelButton: true,
         showLoaderOnConfirm: true,
-        allowOutsideClick: true,
         closeOnConfirm: false
       }, function (isConfirm) {
         isConfirm && confirmCallback && confirmCallback(ids);
@@ -183,8 +182,7 @@ $(function () {
       swal({
         title: '请先选择新闻',
         type: 'warning',
-        confirmButtonText: '确认',
-        allowOutsideClick: true
+        confirmButtonText: '确认'
       });
     }
   }
@@ -231,7 +229,6 @@ $(function () {
         cancelButtonText: '取消',
         showCancelButton: true,
         showLoaderOnConfirm: true,
-        allowOutsideClick: true,
         closeOnConfirm: false,
         customClass: 'transfer-swal'
       }, function (isConfirm) {
@@ -250,8 +247,7 @@ $(function () {
       swal({
         title: '请先选择新闻',
         type: 'warning',
-        confirmButtonText: '确认',
-        allowOutsideClick: true
+        confirmButtonText: '确认'
       });
     }
   }
@@ -291,7 +287,6 @@ $(function () {
       cancelButtonText: '取消',
       showCancelButton: true,
       showLoaderOnConfirm: true,
-      allowOutsideClick: true,
       closeOnConfirm: false,
       customClass: 'news-link-swal'
     }, function (isConfirm) {
