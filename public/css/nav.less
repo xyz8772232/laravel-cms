@@ -32,7 +32,8 @@
         background-color: #555;
         color: #ffffff;
       }
-      &.selected {
+      //&:first-child, // 测试用
+      &.active {
         background-color: #333;
         color: #ffffff;
         cursor: default;
@@ -42,17 +43,75 @@
       margin-right: 5px;
     }
   }
+  .menu-2 {
+    display: none;
+    //&:first-child, // 测试用
+    &.active {
+      display: block;
+    }
+    .menu-item {
+      cursor: pointer;
+      text-indent: 15px;
+      //&:first-child, // 测试用
+      &.active {
+        height: auto;
+        .menu-3 {
+          display: block;
+        }
+        .menu-icon{
+          -webkit-transform: rotate(90deg);
+          transform: rotate(90deg);
+        }
+      }
+    }
+    .menu-icon{
+      float: right;
+      margin-right: 15px;
+      text-indent: 0;
+      font-size: 18px;
+      margin-top: 16px;
+      -webkit-transition: -webkit-transform .25s;
+      transition: transform .25s;
+    }
+  }
+  .menu-3 {
+    display: none;
+    background-color: #e6e6e6;
+    .menu-item {
+      border-left: 4px solid transparent;
+      cursor: pointer;
+      text-indent: 15px;
+      &:hover {
+        color: #f97717;
+      }
+      &:first-child, // 测试用
+      &.active {
+        border-color: #f97717;
+        color: #f97717;
+      }
+    }
+  }
   .menu-item {
     height: 50px;
     line-height: 50px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    &:first-child, // 测试用
+    &:hover,
+    &.active {
+      .menu-text {
+        color: inherit;
+      }
+    }
+  }
+  .menu-text {
+    color: #3c3c3c;
   }
   ul {
     list-style: none;
     margin: 0;
     padding: 0;
-  }
-  a {
-    color: #3c3c3c;
   }
 }
 
@@ -140,7 +199,7 @@
     .menu-text {
       display: none;
     }
-    .sidebar-unfold{
+    .sidebar-unfold {
       font-size: 20px;
       -webkit-transform: rotate(180deg);
       transform: rotate(180deg);
