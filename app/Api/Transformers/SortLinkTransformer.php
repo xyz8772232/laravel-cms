@@ -13,13 +13,9 @@ class SortLinkTransformer extends TransformerAbstract
 {
     public function transform(SortLink $sortLink)
     {
-        return $sortLink;
-//        return [
-//            'id' => $sortLink->id,
-//            'article_id' => $sortLink->article->id,
-//            'url' => url('articles', ['id' => $sortLink->article->id]),
-//            'title' => $sortLink->article->title,
-//        ];
+        $sortLink->article->cover_pic = $sortLink->article->cover_pic ? cms_local_to_web($sortLink->article->cover_pic) : null;
+        $sortLink->article->url = route('articles.show', ['id' => $sortLink->article->id]);
+        return $sortLink->article->toArray();
     }
 
 }

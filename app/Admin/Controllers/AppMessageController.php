@@ -3,7 +3,6 @@
 namespace App\Admin\Controllers;
 
 use App\AppMessage;
-use App\Channel;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Facades\Admin;
@@ -15,6 +14,11 @@ use Illuminate\Support\Facades\Input;
 class AppMessageController extends Controller
 {
     use AdminController;
+
+    public function __construct()
+    {
+        $this->middleware('sidebar', ['only' => 'index']);
+    }
 
     /**
      * Index interface.

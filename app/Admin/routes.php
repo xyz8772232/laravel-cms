@@ -11,18 +11,18 @@ $router->resource('channels', ChannelController::class, ['as' => 'admin']);
 
 //文章管理相关
 $router->get('articles/audit_list', 'ArticleController@auditList');
-$router->get('articles/channel', ['uses' => 'ArticleController@channel', 'as' => 'articles.channel']);
+$router->get('articles/channel', ['uses' => 'ArticleController@channel', 'as' => 'admin.articles.channel']);
 $router->post('articles/change/{id}', 'ArticleController@change');
 $router->post('articles/online/{id}', 'ArticleController@online');
 $router->post('articles/audit/{id}', 'ArticleController@audit');
 $router->post('articles/headline/{id}', 'ArticleController@headline');
 $router->post('articles/transfer/{id}', 'ArticleController@transfer');
 $router->post('articles/link/{article_id}', 'ArticleController@link');
-$router->get('articles/preview/{id}', ['uses' => 'ArticleController@preview', 'as' => 'articles.preview']);
-$router->resource('articles', ArticleController::class);
+$router->get('articles/preview/{id}', ['uses' => 'ArticleController@preview', 'as' => 'admin.articles.preview']);
+$router->resource('articles', ArticleController::class, ['as' => 'admin']);
 
-$router->resource('logs', ArticleLogController::class);
-$router->resource('keywords', KeywordController::class);
+$router->resource('logs', ArticleLogController::class, ['as' => 'admin']);
+$router->resource('keywords', KeywordController::class, ['as' => 'admin']);
 
 //Route::group([
 //    'prefix'        => config('admin.prefix'),
@@ -33,14 +33,14 @@ $router->resource('keywords', KeywordController::class);
 //});
 $router->post('comments/block/{id}', ['uses' => 'CommentController@block', 'as' => 'comments.block']);
 
-$router->resource('comments', CommentController::class);
+$router->resource('comments', CommentController::class, ['as' => 'admin']);
 
 $router->post('ballots/choice/{$id}', 'BallotController@addChoice');
-$router->resource('ballots', BallotController::class);
+$router->resource('ballots', BallotController::class, ['as' => 'admin']);
 
 $router->post('photos/upload', 'PhotoController@upload');
 $router->post('photos/batch_upload', 'PhotoController@batchUpload');
-$router->resource('photos', PhotoController::class);
+$router->resource('photos', PhotoController::class, ['as' => 'admin']);
 $router->get('watermarks', 'WatermarkController@index');
 $router->post('watermarks/save', 'WatermarkController@save');
 $router->get('watermarks/create', 'WatermarkController@create');
@@ -48,10 +48,10 @@ $router->get('watermarks/create', 'WatermarkController@create');
 $router->any('ueditor', 'UploadController@ueditorUpload');
 
 $router->post('sort_links/save', 'SortLinkController@save');
-$router->resource('sort_links', SortLinkController::class);
+$router->resource('sort_links', SortLinkController::class, ['as' => 'admin']);
 
 $router->post('sort_photos/save', 'SortPhotoController@save');
-$router->resource('sort_photos', SortPhotoController::class);
+$router->resource('sort_photos', SortPhotoController::class, ['as' => 'admin']);
 
-$router->resource('app_photos', AppPhotoController::class);
-$router->resource('app_messages', AppMessageController::class);
+$router->resource('app_photos', AppPhotoController::class, ['as' => 'admin']);
+$router->resource('app_messages', AppMessageController::class, ['as' => 'admin', 'middleware' => 'sidebar']);

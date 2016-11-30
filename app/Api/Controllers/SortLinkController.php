@@ -25,8 +25,13 @@ class SortLinkController extends BaseController
         $links = SortLink::with('article')->orderByRaw('`order` = 0,`order`')->orderBy('created_at')->paginate();
         $links = $this->paginator($links, new SortLinkTransformer);
         if (Input::get('page', 1) <= 1) {
-            $photos =  SortPhoto::with('article')->orderByRaw('`order` = 0,`order`')->orderBy('created_at')->get();
-            $links->addMeta('photos', $photos->toArray());
+            $sortPhotos =  SortPhoto::with('article')->orderByRaw('`order` = 0,`order`')->orderBy('created_at')->get();
+            $photoArticles = $sortPhotos->map(function($sortPhoto) {
+                $sortPhoto->article->cover_pic = $sortPhoto->article->cover_pic ? cms_local_to_web($sortPhoto->article->cover_pic) : null;
+                $sortPhoto->article->url = route('articles.show', ['id' => $sortPhoto->article->id]);
+                return $sortPhoto->article->toArray();
+            })->all();
+            $links->addMeta('photos', $photoArticles);
         }
         return $links;
     }

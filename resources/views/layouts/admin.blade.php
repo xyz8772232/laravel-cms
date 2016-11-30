@@ -45,7 +45,7 @@
     @include('admin.partials.header')
 
     @include('admin.partials.sidebar')
-
+    {{--{!! Menu::get('MyNavBar')->asUl() !!}--}}
     <div class="content-wrapper" id="pjax-container">
         @include('include.error')
         @yield('content')
