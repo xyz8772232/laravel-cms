@@ -1,0 +1,162 @@
+.skykiwi-main-sidebar {
+  position: absolute;
+  top: 60px;
+  left: 0;
+  height: 100%;
+  color: #333;
+  .sidebar-l {
+    float: left;
+    height: 100%;
+    width: 100px;
+    background-color: #e6e6e6;
+  }
+  .sidebar-r {
+    float: left;
+    height: 100%;
+    width: 200px;
+    background-color: #ececec;
+  }
+  .sidebar-unfold {
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .menu-1 {
+    .menu-item {
+      padding-left: 15px;
+      cursor: pointer;
+      &:hover {
+        background-color: #555;
+        color: #ffffff;
+      }
+      &.selected {
+        background-color: #333;
+        color: #ffffff;
+        cursor: default;
+      }
+    }
+    .menu-icon {
+      margin-right: 5px;
+    }
+  }
+  .menu-item {
+    height: 50px;
+    line-height: 50px;
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  a {
+    color: #3c3c3c;
+  }
+}
+
+.skykiwi-main-header {
+  height: 60px;
+  border-bottom: 5px solid #f97717;
+  background-color: #333;
+  // logo
+  .logo {
+    float: left;
+    width: 300px;
+    text-align: center;
+  }
+  .icon {
+    display: inline-block;
+    margin-top: 10px;
+    vertical-align: top;
+    height: 35px;
+  }
+  .logo-icon {
+    width: 39px;
+    background: url('/img/logo-icon.png') no-repeat;
+  }
+  .logo-text {
+    width: 107px;
+    background: url('/img/logo-text.png') no-repeat;
+  }
+  // user
+  .user {
+    float: right;
+    position: relative;
+    margin-right: 30px;
+    height: 100%;
+    line-height: 55px;
+    &.unfold {
+      .user-menu {
+        display: block;
+      }
+    }
+  }
+  .user-name {
+    color: #fff;
+    cursor: pointer;
+    .fa {
+      margin: 0 2px 0 5px;
+      font-size: 18px;
+      vertical-align: middle;
+    }
+  }
+  .user-menu {
+    display: none;
+    position: absolute;
+    top: 55px;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    width: 120px;
+    background-color: #f97717;
+    list-style: none;
+  }
+  .menu-item {
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+  }
+  .menu-a {
+    display: block;
+    color: #ffffff;
+  }
+}
+
+.content-wrapper {
+  margin-left: 300px;
+}
+
+.mini-nav {
+  .skykiwi-main-sidebar {
+    .sidebar-l {
+      width: 40px;
+    }
+    .menu-item {
+      padding-left: 0;
+      text-align: center;
+    }
+    .menu-text {
+      display: none;
+    }
+    .sidebar-unfold{
+      font-size: 20px;
+      -webkit-transform: rotate(180deg);
+      transform: rotate(180deg);
+    }
+  }
+  .skykiwi-main-header {
+    .logo {
+      width: 240px;
+    }
+  }
+  .content-wrapper {
+    margin-left: 240px;
+  }
+}
+
+.nav-fold-animation {
+  -webkit-transition: all .3s ease-in-out;
+  transition: all .3s ease-in-out;
+}

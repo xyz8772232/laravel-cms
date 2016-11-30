@@ -1,40 +1,35 @@
-<aside class="main-sidebar">
-
-    <!-- sidebar: style can be found in sidebar.less -->
-    <section class="sidebar">
-
-        <!-- Sidebar user panel (optional) -->
-        {{--<div class="user-panel">--}}
-            {{--<div class="pull-left image">--}}
-                {{--<img src="{{ asset ("/packages/admin/AdminLTE/dist/img/user2-160x160.jpg")}}" class="img-circle" alt="User Image">--}}
-            {{--</div>--}}
-            {{--<div class="pull-left info">--}}
-                {{--<p>{{ Admin::user()->name }}</p>--}}
-                {{--<!-- Status -->--}}
-                {{--<a href="#"><i class="fa fa-circle text-success"></i> {{ trans('admin::lang.online') }}</a>--}}
-            {{--</div>--}}
-        {{--</div>--}}
-
-        <!-- search form (Optional) -->
-        <!--<form action="#" method="get" class="sidebar-form">
-            <div class="input-group">
-                <input type="text" name="q" class="form-control" placeholder="Search...">
-              <span class="input-group-btn">
-                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-                </button>
-              </span>
-            </div>
-        </form>-->
-        <!-- /.search form -->
-
-        <!-- Sidebar Menu -->
-        <ul class="sidebar-menu">
-            <li class="header">{{ trans('admin::lang.menu') }}</li>
-
-            @each('admin.partials.menu', App\Admin::menu(), 'item')
-
+<aside class="skykiwi-main-sidebar clearfix">
+  <div class="sidebar-l nav-fold-animation">
+    <div class="sidebar-unfold" id="eSideBar"><i class="fa fa-chevron-circle-left "></i></div>
+    <ul class="menu-1">
+      @foreach(App\Admin::menu() as $item)
+      @if ($loop->index == 2)
+        <li class="menu-item selected">
+      @else
+        <li class="menu-item">
+      @endif
+         <i class="menu-icon fa {{$item['icon']}}"></i>
+         <span class="menu-text">{{$item['title']}}</span>
+        </li>
+      @endforeach
+    </ul>
+  </div>
+  <div class="sidebar-r">
+    <ul class="menu-2">
+      <li class="menu-item selected">
+        <span class="menu-text e-fold"></span>
+        <ul class="menu-3">
+          <li class="menu-item selected">
+            <a class="menu-text" href=""></a>
+          </li>
+          <li class="menu-item">
+            <a class="menu-text" href=""></a>
+          </li>
         </ul>
-        <!-- /.sidebar-menu -->
-    </section>
-    <!-- /.sidebar -->
+      </li>
+      <li class="menu-item">
+        <a class="menu-text" href=""></a>
+      </li>
+    </ul>
+  </div>
 </aside>

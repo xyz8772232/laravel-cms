@@ -121,15 +121,17 @@ $(function () {
   /**
    * 封面图
    */
+  var coverPic = INIT_CONFIG.coverPic;
   $('#coverPic').fileinput({
     overwriteInitial: true,
     showUpload: false,
     language: 'zh_CN',
     allowedFileTypes: ['image'],
-    initialPreview: INIT_CONFIG.coverPic ? [
-      '<img src="' + INIT_CONFIG.coverPic + '" class="file-preview-image">'
+    initialPreview: coverPic ? [
+      '<img src="' + coverPic.img + '" class="file-preview-image">'
+      + '<input type="hidden" name="cover_pic_old" value="' + coverPic.img + '">'
     ] : undefined,
-    initialCaption: ''
+    initialCaption: coverPic ? coverPic.title : ''
   });
 
   /**

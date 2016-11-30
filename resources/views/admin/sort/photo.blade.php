@@ -49,7 +49,6 @@
     }
     .sort-pic .pic {
       display: block;
-      border: 1px solid #ddd;
       width: 100%;
       height: 160px;
       background-color: #fff;
