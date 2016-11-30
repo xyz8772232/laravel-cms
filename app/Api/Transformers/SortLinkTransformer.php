@@ -13,10 +13,13 @@ class SortLinkTransformer extends TransformerAbstract
 {
     public function transform(SortLink $sortLink)
     {
-        return [
-            'id' => $sortLink->id,
-            'article_id' => $sortLink->article->id,
-        ];
+        return $sortLink;
+//        return [
+//            'id' => $sortLink->id,
+//            'article_id' => $sortLink->article->id,
+//            'url' => url('articles', ['id' => $sortLink->article->id]),
+//            'title' => $sortLink->article->title,
+//        ];
     }
 
 }

@@ -237,9 +237,5 @@
   <script src="{{ asset("/packages/admin/dragula/dragula.min.js") }}"></script>
   <script src="{{ asset("/packages/admin/ueditor-utf8-php/ueditor.config.js") }}"></script>
   <script src="{{ asset("/packages/admin/ueditor-utf8-php/ueditor.all.min.js") }}"></script>
-  <script>
-    var CHANNEL = {!! json_encode($channels) !!};
-    var INIT_CONFIG = {!! json_encode($initConfig) !!};
-  </script>
   <script src="{{ asset_with_version("/js/article.edit.js") }}"></script>
 @endsection

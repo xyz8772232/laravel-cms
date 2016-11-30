@@ -20,10 +20,11 @@ $api->version('v1', function ($api) {
         $api->get('comments', 'CommentController@index');
         $api->get('channels', 'ChannelController@index');
         $api->get('articles/channel/{id}', 'ArticleController@channel');
-        $api->get('articles/show/{id}', 'ArticleController@show');
+        $api->get('articles/{id}', 'ArticleController@show');
         //$api->post('ballots/answer/{id}', 'BallotController@answer');
         $api->get('sort_links', 'SortLinkController@index');
         $api->get('sort_photos', 'SortPhotoController@index');
+        $api->get('sort_links/with_photos', 'SortLinkController@withPhotos');
 
     });
 });

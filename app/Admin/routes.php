@@ -7,7 +7,7 @@ $router->get('/', 'HomeController@index');
 //频道管理相关
 $router->get('channels/tree/{id?}', 'ChannelController@tree');
 $router->post('channels/save', 'ChannelController@save');
-$router->resource('channels', ChannelController::class);
+$router->resource('channels', ChannelController::class, ['as' => 'admin']);
 
 //文章管理相关
 $router->get('articles/audit_list', 'ArticleController@auditList');

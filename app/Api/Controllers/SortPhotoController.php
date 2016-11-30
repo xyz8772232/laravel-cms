@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Api\Controllers;
+use App\Api\Transformers\SortPhotoTransformer;
 use App\SortPhoto;
 
 /**
@@ -13,8 +14,8 @@ class SortPhotoController extends BaseController
 
     public function index()
     {
-        return SortPhoto::with('article')->orderByRaw('`order` = 0,`order`')->orderBy('created_at')->get();
-
+        $photos =  SortPhoto::with('article')->orderByRaw('`order` = 0,`order`')->orderBy('created_at')->get();
+        return $this->collection($photos, new SortPhotoTransformer());
     }
 
     public function channel($id)

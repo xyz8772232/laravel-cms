@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Api\Controllers;
+use App\Api\Transformers\ArticleTransformer;
 use App\Article;
-use Dingo\Api\Routing\Helpers;
-
+use App\Channel;
 /**
  * Class ArticleController
  *
@@ -11,20 +11,24 @@ use Dingo\Api\Routing\Helpers;
  */
 class ArticleController extends BaseController
 {
-    use Helpers;
 
     public function index()
     {
 
     }
 
-    public function channel($id)
+    public function channel($channel_id)
     {
-        return Article::where('channel_id', $id)->get();
+        $channelIds = array_merge(Channel::branchIds([], $channel_id), [$channel_id]);
+        $articles = Article::where('state', 2)->whereIn('channel_id', $channelIds)->orderBy('published_at')->paginate();
+        //dd($articles);
+        //return $articles;
+        return $this->paginator($articles, new ArticleTransformer());
     }
 
     public function show($id)
     {
-        return Article::with('content')->find($id);
+        $article = Article::with('content')->findOrFail($id);
+        return $this->response->item($article, new ArticleTransformer());
     }
 }

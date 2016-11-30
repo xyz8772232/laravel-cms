@@ -22,6 +22,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
+use Laracasts\Utilities\JavaScript\JavaScriptFacade;
 
 class ArticleController extends Controller
 {
@@ -821,6 +822,11 @@ class ArticleController extends Controller
             'status' => 0,
             'channel' => isset($parentIds) ? array_values($parentIds) : null,
         ];
+
+        JavaScriptFacade::put([
+            'CHANNEL' => $channels,
+            'INIT_CONFIG' => $initConfig,
+        ]);
 
         return view('admin.article.create',
             [

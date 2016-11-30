@@ -79,6 +79,11 @@ class Article extends Model
     {
         return $query->where('state', 1);
     }
+
+    public function scopeOnline($query)
+    {
+        return $query->where('state', 2);
+    }
 //    public function getKeywordsAttribute() {
 //        return $this->keywords()->pluck('id');
 //    }

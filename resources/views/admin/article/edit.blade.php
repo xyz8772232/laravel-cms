@@ -82,6 +82,7 @@
               <div class="form-group" id="normalArticle">
                 {!! Form::label('content','正文内容', ['class' => 'col-sm-2 control-label']) !!}
                 <div class="col-sm-8">
+                  {{--<script id="content" name="content" type="text/plain">@if($article->type == 0){!! $article->content !!}@endif</script>--}}
                   <script id="content" name="content" type="text/plain">@if($article->type == 0){!! $article->content !!}@endif</script>
                 </div>
               </div>
