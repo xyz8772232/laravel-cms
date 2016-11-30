@@ -98,6 +98,7 @@ class Channel extends Model
         }
         $menu = [];
         foreach ($channels as $channel) {
+            $item['channel_id'] = $channel['id'];
             $item['order'] = $channel['order'];
             $item['title'] = $channel['name'];
             $item['icon'] = '';

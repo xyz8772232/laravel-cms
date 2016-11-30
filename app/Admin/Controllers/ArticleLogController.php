@@ -78,7 +78,7 @@ class ArticleLogController extends Controller
             $grid->id('ID')->sortable();
             $grid->article_id('文章id')->value(function ($articleId) {
                 if (Article::find($articleId)) {
-                    $editUrl = route('articles.edit', $articleId);
+                    $editUrl = route('admin.articles.edit', $articleId);
                     return "<a href='$editUrl'>$articleId</a>";
                 }
                 return $articleId;

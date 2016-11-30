@@ -4,6 +4,7 @@ namespace App;
 
 use Closure;
 use Cache;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Str;
 use Route;
 use Encore\Admin\Auth\Database\Menu;
@@ -271,16 +272,21 @@ class Admin
         if (Str::startsWith($uri, config('admin.prefix'))) {
             $menuUri = Str::replaceFirst(config('admin.prefix').'/','', $uri);
         }
-        if ($menuUri) {
-            $menu_id = Menu::where('uri', $menuUri)->first()->id;
-            if ($menu_id) {
-                return static::getParentIds($menu_id);
+
+        if ($menuUri == 'articles') {
+            $channel_id = Input::get('channel_id', 1);
+            $channelIds = Channel::parentIds($channel_id);
+            return ['channel' => $channelIds];
+        } else {
+            $menu = Menu::where('uri', $menuUri)->first();
+            if ($menu) {
+                return ['menu' => array_merge(static::ParentIds($menu->id), [$menu->id])];
             }
         }
         return [];
     }
 
-    private static function getParentIds($id, &$parentIds = [])
+    private static function ParentIds($id, &$parentIds = [])
     {
         $menu = Menu::find($id);
         if (empty($menu)) {
@@ -289,7 +295,7 @@ class Admin
         $parent_id = $menu['parent_id'];
         if ($parent_id) {
             $parentIds[] = $parent_id;
-            static::getParentIds($parent_id, $parentIds);
+            static::ParentIds($parent_id, $parentIds);
         }
         return $parentIds;
     }

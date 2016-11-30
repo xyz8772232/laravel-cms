@@ -61,9 +61,10 @@ class ArticleController extends Controller
 
         //$query = Input::all();
         //$articles = Article::with('articleInfo', 'author')->where('state', 0)->orderBy('id', 'desc')->paginate()->appends($query);
-        $filterValues = array_filter(Input::only('id', 'title', 'create_at[start]', 'create_at[end]', 'channel_id'), function($item) {
+        $filterValues = array_filter(Input::only('id', 'title', 'created_at'), function($item) {
             return !is_null($item);
         });
+        $filterValues['channel_id'] = $channel_id;
         $tableHeaders = [
             [
                 'name' => 'is_important',
@@ -462,11 +463,11 @@ class ArticleController extends Controller
         }
 
         if ($result) {
-            return redirect(Tool::resource())
-                ->withSuccess('New article Successfully Created.');
+            return redirect(route('admin.articles.index'))
+                ->withSuccess('发表文章成功.');
         }
 
-        return redirect()->to('admin/articles/create')->withInput()->withErrors('发表文章失败');
+        return redirect(route('admin.articles.create'))->withInput()->withErrors('发表文章失败');
     }
 
     /**
@@ -515,7 +516,7 @@ class ArticleController extends Controller
 
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return redirect(route('articles.update', ['id' => $id]))
+            return redirect(route('admin.articles.update', ['id' => $id]))
                 ->withInput($request->input())
                 ->withErrors($validator->errors());
         }
@@ -587,10 +588,10 @@ class ArticleController extends Controller
         $result = $article->save();
 
         if ($result) {
-            return redirect(route('articles.edit', ['id' => $id]))
+            return redirect(route('admin.articles.edit', ['id' => $id]))
                 ->withSuccess('更新文章成功');
         }
-        return redirect(route('articles.edit', ['id' => $id]))->withInput()->withErrors('更新文章失败');
+        return redirect(route('admin.articles.edit', ['id' => $id]))->withInput()->withErrors('更新文章失败');
     }
 
     /**

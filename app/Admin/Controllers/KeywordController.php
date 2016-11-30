@@ -23,8 +23,8 @@ class KeywordController extends Controller
     public function index()
     {
         return Admin::content(function(Content $content) {
-            $content->header('header');
-            $content->description('description');
+            $content->header('系统');
+            $content->description('关键词');
             $content->body($this->grid());
         });
     }
@@ -94,11 +94,14 @@ class KeywordController extends Controller
 
 
             $grid->model()->orderBy('id', 'desc');
+            $grid->disableExport();
+
 
             $grid->created_at(trans('admin::lang.created_at'))->value(function ($date) {
                     return Carbon::parse($date)->diffForHumans();
                 });
             $grid->filter(function($filter){
+                //$filter->useModal();
 
                 // sql: ... WHERE `user.name` LIKE "%$name%";
                 $filter->like('name', '关键词');

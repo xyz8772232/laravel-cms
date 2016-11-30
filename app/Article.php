@@ -17,6 +17,8 @@ class Article extends Model
         'is_headline' => 'boolean',
     ];
 
+    protected $appends = ['view_num', 'comment_num'];
+
     /**
      * 获取文章内容
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
@@ -107,6 +109,7 @@ class Article extends Model
     }
 
     public function getCommentNumAttribute() {
+        return rand(0, 1000);
         if ($this->articleInfo) {
             return $this->articleInfo->comment_num;
         }
