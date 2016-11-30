@@ -3,6 +3,9 @@
 namespace App;
 
 use Closure;
+use Cache;
+use Illuminate\Support\Str;
+use Route;
 use Encore\Admin\Auth\Database\Menu;
 use Encore\Admin\Layout\Content;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
@@ -234,10 +237,12 @@ class Admin
      */
     public static function menu()
     {
-        $menu = Menu::toTree();
-        $newsMenu = Channel::menu();
-        $menu[0]['children'] = $newsMenu;
-        return $menu;
+        return Cache::remember('admin_menu', 1, function () {
+            $menu = Menu::toTree();
+            $newsMenu = Channel::menu();
+            $menu[0]['children'] = $newsMenu;
+            return $menu;
+        });
     }
 
 
@@ -257,5 +262,35 @@ class Admin
     public function user()
     {
         return Auth::guard('admin')->user();
+    }
+
+    public static function activeSidebar()
+    {
+        $menuUri = '';
+        $uri = Route::current()->uri();
+        if (Str::startsWith($uri, config('admin.prefix'))) {
+            $menuUri = Str::replaceFirst(config('admin.prefix').'/','', $uri);
+        }
+        if ($menuUri) {
+            $menu_id = Menu::where('uri', $menuUri)->first()->id;
+            if ($menu_id) {
+                return static::getParentIds($menu_id);
+            }
+        }
+        return [];
+    }
+
+    private static function getParentIds($id, &$parentIds = [])
+    {
+        $menu = Menu::find($id);
+        if (empty($menu)) {
+            return $parentIds;
+        }
+        $parent_id = $menu['parent_id'];
+        if ($parent_id) {
+            $parentIds[] = $parent_id;
+            static::getParentIds($parent_id, $parentIds);
+        }
+        return $parentIds;
     }
 }
