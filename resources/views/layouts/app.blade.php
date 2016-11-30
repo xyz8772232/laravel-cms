@@ -22,6 +22,7 @@
     <script src="{{ asset ("/packages/admin/AdminLTE/plugins/jQuery/jQuery-2.1.4.min.js") }}"></script>
     <script src="{{ asset ("/packages/admin/AdminLTE/bootstrap/js/bootstrap.min.js") }}"></script>
     <script src="{{ asset ("/packages/admin/AdminLTE/dist/js/app.min.js") }}"></script>
+    <script src="{{ asset ("/js/nav.js") }}"></script>
     <script>
       // 设置X-CSRF-TOKEN
       $.ajaxSetup({
