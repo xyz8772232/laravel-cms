@@ -22,7 +22,7 @@ class SortLinkController extends BaseController
 
     public function withPhotos()
     {
-        $links = SortLink::with('article')->orderByRaw('`order` = 0,`order`')->orderBy('created_at')->makeVisible('comment_num')->paginate();
+        $links = SortLink::with('article')->orderByRaw('`order` = 0,`order`')->orderBy('created_at')->paginate();
         $links = $this->paginator($links, new SortLinkTransformer);
         if (Input::get('page', 1) <= 1) {
             $sortPhotos =  SortPhoto::with('article')->orderByRaw('`order` = 0,`order`')->orderBy('created_at')->get();

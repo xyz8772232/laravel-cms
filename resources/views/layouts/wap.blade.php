@@ -54,5 +54,6 @@
 </script>
 @yield('main')
 @yield('js')
+@include('wap.partials.footer')
 </body>
 </html>

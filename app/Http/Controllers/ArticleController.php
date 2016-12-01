@@ -16,7 +16,7 @@ class ArticleController extends Controller
 
     public function show($id)
     {
-        $article =  Article::where('state', 2)->where('id', $id)->firstOrFail();
+        $article =  Article::online()->where('id', $id)->firstOrFail();
         if ($article->type == 1) {
             return $this->photo($article);
         } else {
@@ -27,7 +27,13 @@ class ArticleController extends Controller
     //图片文章
     private function photo(Article $article)
     {
-        return view('wap.article.photo', compact('article'));
+        $contentPics = collect(json_decode($article->content, true))->map(function($value) {
+            return [
+                'img' => cms_local_to_web($value['img']),
+                'title' => $value['title'],
+            ];
+        })->all();
+        return view('wap.article.photo', compact('article', 'contentPics'));
 
     }
 

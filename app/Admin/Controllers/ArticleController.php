@@ -533,15 +533,18 @@ class ArticleController extends Controller
             'source',
             'original_url',
             'published_at',
-            'is_political',
-            'is_international',
-            'is_important',
+
         ];
 
         collect($updateFields)->map(function ($field) use ($request, $article) {
             isset($request->$field) && $article->$field = $request->$field;
         });
 
+        //特殊属性处理
+        $attributes = ['is_political', 'is_international', 'is_soft',];
+        collect($attributes)->map(function ($field) use ($request, $article) {
+            $article->$field = $request->$field ?? 0;
+        });
 
         //封面图处理
         if (!empty($request->file('cover_pic'))) {

@@ -93,4 +93,6 @@ return [
     'local_uri_str' => '<!--CMS_LOCAL_URI-->',
 
     'admin_editors' => ['administrator', 'responsible_editor'],
+
+    'news_column' => ['name' => '新闻', 'order' => 1],
 ];
