@@ -26,13 +26,11 @@
   }
   .menu-1 {
     .menu-item {
-      padding-left: 15px;
       cursor: pointer;
       &:hover {
         background-color: #555;
         color: #ffffff;
       }
-      //&:first-child, // 测试用
       &.active {
         background-color: #333;
         color: #ffffff;
@@ -41,30 +39,28 @@
     }
     .menu-icon {
       margin-right: 5px;
+      margin-left: 15px;
+    }
+    .menu-a {
+      display: block;
     }
   }
   .menu-2 {
     display: none;
-    //&:first-child, // 测试用
     &.active {
       display: block;
     }
     .menu-item {
       cursor: pointer;
       text-indent: 15px;
-      //&:first-child, // 测试用
       &.active {
-        height: auto;
-        .menu-3 {
-          display: block;
-        }
-        .menu-icon{
+        .menu-icon {
           -webkit-transform: rotate(90deg);
           transform: rotate(90deg);
         }
       }
     }
-    .menu-icon{
+    .menu-icon {
       float: right;
       margin-right: 15px;
       text-indent: 0;
@@ -72,6 +68,9 @@
       margin-top: 16px;
       -webkit-transition: -webkit-transform .25s;
       transition: transform .25s;
+    }
+    .menu-text {
+      display: block;
     }
   }
   .menu-3 {
@@ -84,29 +83,31 @@
       &:hover {
         color: #f97717;
       }
-      &:first-child, // 测试用
       &.active {
         border-color: #f97717;
         color: #f97717;
       }
     }
+    .menu-text {
+      display: block;
+    }
   }
   .menu-item {
-    height: 50px;
     line-height: 50px;
     white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    &:first-child, // 测试用
     &:hover,
     &.active {
-      .menu-text {
+      .menu-text,
+      .menu-a {
         color: inherit;
       }
     }
   }
-  .menu-text {
+  .menu-text,
+  .menu-a {
     color: #3c3c3c;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
   ul {
     list-style: none;
@@ -124,6 +125,8 @@
     float: left;
     width: 300px;
     text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
   }
   .icon {
     display: inline-block;
@@ -146,11 +149,6 @@
     margin-right: 30px;
     height: 100%;
     line-height: 55px;
-    &.unfold {
-      .user-menu {
-        display: block;
-      }
-    }
   }
   .user-name {
     color: #fff;
@@ -192,12 +190,19 @@
     .sidebar-l {
       width: 40px;
     }
-    .menu-item {
-      padding-left: 0;
-      text-align: center;
-    }
-    .menu-text {
+    .sidebar-r {
       display: none;
+    }
+    .menu-1 {
+      .menu-item {
+        text-align: center;
+      }
+      .menu-text {
+        display: none;
+      }
+      .menu-icon {
+        margin: 0;
+      }
     }
     .sidebar-unfold {
       font-size: 20px;
@@ -207,11 +212,14 @@
   }
   .skykiwi-main-header {
     .logo {
-      width: 240px;
+      width: 80px;
+    }
+    .logo-text {
+      display: none;
     }
   }
   .content-wrapper {
-    margin-left: 240px;
+    margin-left: 40px;
   }
 }
 
