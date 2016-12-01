@@ -23,8 +23,7 @@
   </div>
   <div class="sidebar-r" id="eMenu2">
     @foreach($menu as $grade1)
-    @if(Admin::user()->visible($grade1['roles']))
-      @if (!empty($grade1['children']))
+    @if(Admin::user()->visible($grade1['roles']) && !empty($grade1['children']))
             <ul class="menu-2
             @if((!empty($active_sidebar['channel']) && $grade1['title'] == '新闻') || (!empty($active_sidebar['menu']) && in_array($grade1['id'], $active_sidebar['menu'])))
             active
@@ -56,7 +55,11 @@
                     </ul>
                   </li>
                 @else
-                  <li class="menu-item">
+                  <li class="menu-item
+                  @if((!empty($active_sidebar['channel']) && $grade1['title'] == '新闻' && in_array($grade2['channel_id'], $active_sidebar['channel'])) || (($grade1['title'] != '新闻') && !empty($active_sidebar['menu']) && in_array($grade2['id'], $active_sidebar['menu'])))
+                          selected
+                        @endif
+                  ">
                       {{--<i class="menu-icon fa fa-angle-right"></i>--}}
                       @if(!empty($grade2['uri']))
                         <a class="menu-text" href="{{App\Admin::url($grade2['uri'])}}">{{$grade2['title']}}</a>
@@ -67,9 +70,6 @@
                 @endif
               @endforeach
             </ul>
-           @else
-               <ul class="menu-2"></ul>
-           @endif
       @else
           <ul class="menu-2"></ul>
       @endif
