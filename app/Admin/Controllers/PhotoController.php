@@ -17,8 +17,8 @@ class PhotoController extends Controller
 
     public function index()
     {
-        $header = '图片列表';
-        $description = '描述';
+        $header = '素材';
+        $description = '图片列表';
         $photos = Photo::orderBy('id', 'desc')->paginate(12);
         return view('admin.photo.index', ['header' => $header, 'description' => $description, 'photos' => $photos]);
     }

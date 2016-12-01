@@ -93,6 +93,10 @@ class BallotController extends Controller
             $grid->end_at('结束时间');
 
             $grid->created_at(trans('admin::lang.created_at'));
+
+            $grid->disableExport();
+            $grid->disableBatchDeletion();
+            $grid->disableCreation();
         });
     }
 

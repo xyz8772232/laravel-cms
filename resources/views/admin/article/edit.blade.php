@@ -13,7 +13,7 @@
         <div class="box box-info">
           <!-- /.box-header -->
           <!-- form start -->
-          {!! Form::model($article, ['url'=> route('articles.update', [$article->id]), 'class'=> 'form-horizontal', 'enctype' => 'multipart/form-data']) !!}
+          {!! Form::model($article, ['url'=> route('admin.articles.update', [$article->id]), 'class'=> 'form-horizontal', 'enctype' => 'multipart/form-data']) !!}
           {!! Form::hidden('id',$article->id) !!}
           {!! Form::hidden('_method','PUT') !!}
           <div class="box-body form-edit">

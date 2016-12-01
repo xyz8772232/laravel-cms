@@ -3,6 +3,10 @@
 namespace App;
 
 use Closure;
+use Cache;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Str;
+use Route;
 use Encore\Admin\Auth\Database\Menu;
 use Encore\Admin\Layout\Content;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
@@ -234,10 +238,12 @@ class Admin
      */
     public static function menu()
     {
-        $menu = Menu::toTree();
-        $newsMenu = Channel::menu();
-        $menu[0]['children'] = $newsMenu;
-        return $menu;
+        return Cache::remember('admin_menu', 1, function () {
+            $menu = Menu::toTree();
+            $newsMenu = Channel::menu();
+            $menu[0]['children'] = $newsMenu;
+            return $menu;
+        });
     }
 
 
@@ -257,5 +263,40 @@ class Admin
     public function user()
     {
         return Auth::guard('admin')->user();
+    }
+
+    public static function activeSidebar()
+    {
+        $menuUri = '';
+        $uri = Route::current()->uri();
+        if (Str::startsWith($uri, config('admin.prefix'))) {
+            $menuUri = Str::replaceFirst(config('admin.prefix').'/','', $uri);
+        }
+
+        if ($menuUri == 'articles') {
+            $channel_id = Input::get('channel_id', 1);
+            $channelIds = Channel::parentIds($channel_id);
+            return ['channel' => $channelIds];
+        } else {
+            $menu = Menu::where('uri', $menuUri)->first();
+            if ($menu) {
+                return ['menu' => array_merge(static::ParentIds($menu->id), [$menu->id])];
+            }
+        }
+        return [];
+    }
+
+    private static function ParentIds($id, &$parentIds = [])
+    {
+        $menu = Menu::find($id);
+        if (empty($menu)) {
+            return $parentIds;
+        }
+        $parent_id = $menu['parent_id'];
+        if ($parent_id) {
+            $parentIds[] = $parent_id;
+            static::ParentIds($parent_id, $parentIds);
+        }
+        return $parentIds;
     }
 }

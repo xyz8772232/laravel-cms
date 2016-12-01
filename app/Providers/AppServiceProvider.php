@@ -2,10 +2,13 @@
 
 namespace App\Providers;
 
+use App\Admin;
 use App\Article;
 use App\FileUpload;
 use App\Observers\ArticleObserver;
 use Carbon\Carbon;
+use View;
+use Route;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +22,11 @@ class AppServiceProvider extends ServiceProvider
     {
         Carbon::setLocale('zh');
         Article::observe(ArticleObserver::class);
+        View()->composer('admin.partials.sidebar', function($view) {
+            //dd(Admin::menu(), Admin::activeSidebar());
+            $view->with('active_sidebar', Admin::activeSidebar());
+            $view->with('menu', Admin::menu());
+        });
     }
 
     /**

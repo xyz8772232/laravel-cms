@@ -15,10 +15,10 @@ class AppMessageController extends Controller
 {
     use AdminController;
 
-    public function __construct()
-    {
-        $this->middleware('sidebar', ['only' => 'index']);
-    }
+//    public function __construct()
+//    {
+//        $this->middleware('sidebar', ['only' => 'index']);
+//    }
 
     /**
      * Index interface.

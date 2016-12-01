@@ -18,7 +18,7 @@
                 <span class="input-group-addon"><strong>频道</strong></span>
                 <select class="select-line" data-placeholder="选择关键字" name="channel_id" id="channelId">
                   @foreach( $options as $key => $option)
-                  <option value="{{ $key }}">{{ $option }}</option>
+                  <option value="{{ $key }}" @if($filterValues['channel_id'] == $key) selected @endif>{{ $option }}</option>
                   @endforeach
                 </select>
               </div>
@@ -33,10 +33,10 @@
               <div class="input-group input-group-sm">
                 <span class="input-group-addon"><strong>创建时间</strong></span>
                 <input type="text" class="form-control" id="createdAtStart"
-                       name="created_at[start]" value="{{ $filterValues['create_at[start]'] ?? null }}">
+                       name="created_at[start]" value="{{ $filterValues['created_at']['start'] ?? null }}">
                 <span class="input-group-addon" style="border-left: 0; border-right: 0;">-</span>
                 <input type="text" class="form-control" id="createdAtEnd"
-                       name="created_at[end]" value="{{ $filterValues['create_at[end]'] ?? null }}">
+                       name="created_at[end]" value="{{ $filterValues['created_at']['end'] ?? null }}">
               </div>
               <div class="input-group input-group-sm">
                 <div class="input-group-btn">
