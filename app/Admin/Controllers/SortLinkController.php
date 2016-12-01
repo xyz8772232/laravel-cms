@@ -4,17 +4,17 @@ namespace App\Admin\Controllers;
 
 use App\SortLink;
 use App\Tool;
+use Encore\Admin\Controllers\ModelForm;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
-use Encore\Admin\Controllers\AdminController;
 use Illuminate\Support\Facades\Input;
 
 class SortLinkController extends Controller
 {
-    use AdminController;
+    use ModelForm;
 
     /**
      * Index interface.

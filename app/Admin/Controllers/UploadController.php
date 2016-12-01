@@ -3,18 +3,10 @@
 namespace App\Admin\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Tool;
-use Encore\Admin\Auth\Database\Administrator;
-use Encore\Admin\Auth\Permission;
-use Encore\Admin\Controllers\AdminController;
 use App\Photo;
 use Encore\Admin\Facades\Admin;
-use Encore\Admin\Layout\Content;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 
 class UploadController extends Controller
