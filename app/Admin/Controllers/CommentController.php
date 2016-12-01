@@ -108,6 +108,7 @@ class CommentController extends Controller
             });
 
             $grid->disableCreation();
+            $grid->disableExport();
 
         });
     }

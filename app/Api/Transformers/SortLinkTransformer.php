@@ -15,7 +15,7 @@ class SortLinkTransformer extends TransformerAbstract
     {
         $sortLink->article->cover_pic = $sortLink->article->cover_pic ? cms_local_to_web($sortLink->article->cover_pic) : null;
         $sortLink->article->url = route('articles.show', ['id' => $sortLink->article->id]);
-        return $sortLink->article->toArray();
+        return $sortLink->article->makeVisible('comment_num')->toArray();
     }
 
 }

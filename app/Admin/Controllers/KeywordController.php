@@ -95,6 +95,7 @@ class KeywordController extends Controller
 
             $grid->model()->orderBy('id', 'desc');
             $grid->disableExport();
+            $grid->perPages([]);
 
 
             $grid->created_at(trans('admin::lang.created_at'))->value(function ($date) {

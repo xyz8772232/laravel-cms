@@ -19,6 +19,8 @@ class Article extends Model
 
     protected $appends = ['view_num', 'comment_num'];
 
+    protected $hidden = ['view_num', 'comment_num'];
+
     /**
      * 获取文章内容
      * @return \Illuminate\Database\Eloquent\Relations\HasOne

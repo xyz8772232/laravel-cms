@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Str;
 use Route;
 use Encore\Admin\Auth\Database\Menu;
-use Encore\Admin\Layout\Content;
+use Encore\Admin\Layout\Content as AdminContent;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
@@ -110,7 +110,7 @@ class Admin
     /**
      * @param Closure $callable
      *
-     * @return Content
+     * @return AdminContent
      */
     public function content(Closure $callable)
     {
@@ -119,7 +119,7 @@ class Admin
 
         Form::collectFieldAssets();
 
-        return new Content($callable);
+        return new AdminContent($callable);
     }
 
     /**
@@ -238,10 +238,14 @@ class Admin
      */
     public static function menu()
     {
+        $menu = Menu::toTree();
+        $newsMenu = Channel::menu();
+        $menu[config('admin.news_column.order')]['children'] = $newsMenu;
+        return $menu;
         return Cache::remember('admin_menu', 1, function () {
             $menu = Menu::toTree();
             $newsMenu = Channel::menu();
-            $menu[0]['children'] = $newsMenu;
+            $menu[config('admin.news_column.order')]['children'] = $newsMenu;
             return $menu;
         });
     }
@@ -252,7 +256,7 @@ class Admin
      *
      * @return Config
      */
-    public function title()
+    public static function title()
     {
         return config('admin.title');
     }
@@ -260,7 +264,7 @@ class Admin
     /**
      * @return mixed
      */
-    public function user()
+    public static function user()
     {
         return Auth::guard('admin')->user();
     }

@@ -2,25 +2,28 @@
   <div class="sidebar-l nav-fold-animation">
     <div class="sidebar-unfold" id="eSideBar"><i class="fa fa-chevron-circle-left "></i></div>
     <ul class="menu-1" id="eMenu1">
-      @foreach(App\Admin::menu() as $item)
-        <li class="menu-item e-select
-        @if((!empty($active_sidebar['channel']) && $item['title'] == '新闻') || (!empty($active_sidebar['menu']) && in_array($item['id'], $active_sidebar['menu']))) active @endif
-        " data-index="{{$loop->index}}">
-          @if (!empty($item['uri']))
-            <a class="menu-a" href="{{App\Admin::url($item['uri'])}}">
+      @foreach($menu as $item)
+        @if(Admin::user()->visible($item['roles']))
+          <li class="menu-item e-select
+          @if((!empty($active_sidebar['channel']) && $item['title'] == '新闻') || (!empty($active_sidebar['menu']) && in_array($item['id'], $active_sidebar['menu']))) active @endif
+          " data-index="{{$loop->index}}">
+            @if (!empty($item['uri']))
+              <a class="menu-a" href="{{App\Admin::url($item['uri'])}}">
+                <i class="menu-icon fa {{$item['icon']}}"></i>
+                <span class="menu-text">{{$item['title']}}</span>
+              </a>
+            @else
               <i class="menu-icon fa {{$item['icon']}}"></i>
               <span class="menu-text">{{$item['title']}}</span>
-            </a>
-          @else
-            <i class="menu-icon fa {{$item['icon']}}"></i>
-            <span class="menu-text">{{$item['title']}}</span>
-          @endif
-        </li>
+            @endif
+          </li>
+        @endif
       @endforeach
     </ul>
   </div>
   <div class="sidebar-r" id="eMenu2">
-    @foreach(App\Admin::menu() as $grade1)
+    @foreach($menu as $grade1)
+    @if(Admin::user()->visible($grade1['roles']))
       @if (!empty($grade1['children']))
             <ul class="menu-2
             @if((!empty($active_sidebar['channel']) && $grade1['title'] == '新闻') || (!empty($active_sidebar['menu']) && in_array($grade1['id'], $active_sidebar['menu'])))
@@ -54,7 +57,7 @@
                   </li>
                 @else
                   <li class="menu-item">
-                      <i class="menu-icon fa fa-angle-right"></i>
+                      {{--<i class="menu-icon fa fa-angle-right"></i>--}}
                       @if(!empty($grade2['uri']))
                         <a class="menu-text" href="{{App\Admin::url($grade2['uri'])}}">{{$grade2['title']}}</a>
                       @else
@@ -64,6 +67,9 @@
                 @endif
               @endforeach
             </ul>
+           @else
+               <ul class="menu-2"></ul>
+           @endif
       @else
           <ul class="menu-2"></ul>
       @endif
