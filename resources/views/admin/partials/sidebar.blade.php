@@ -23,7 +23,7 @@
   </div>
   <div class="sidebar-r" id="eMenu2">
     @foreach($menu as $grade1)
-    @if(Admin::user()->visible($grade1['roles']) && !empty($grade1['children']))
+        @if(Admin::user()->visible($grade1['roles']) && !empty($grade1['children']))
             <ul class="menu-2
             @if((!empty($active_sidebar['channel']) && $grade1['title'] == '新闻') || (!empty($active_sidebar['menu']) && in_array($grade1['id'], $active_sidebar['menu'])))
             active
@@ -70,9 +70,9 @@
                 @endif
               @endforeach
             </ul>
-      @else
+        @else
           <ul class="menu-2"></ul>
-      @endif
+        @endif
     @endforeach
   </div>
 </aside>
