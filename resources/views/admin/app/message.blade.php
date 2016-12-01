@@ -9,8 +9,8 @@
     </section>
 
     <section class="content">
-        <div class="row">
-            <div class="col-md-12">
+        <div>
+            <div class="box col-md-12">
                 <!-- form start -->
                 <form action="/admin/app_messages" method="post" accept-charset="UTF-8" class="form-horizontal"
                       enctype="multipart/form-data" pjax-container>
@@ -18,7 +18,7 @@
                         <div class="form-group 1">
                             <label for="content" class="col-sm-2 control-label">自定义推送内容</label>
                             <div class="col-sm-6">
-                                <textarea id="content" name="content" class="form-control" rows="3"
+                                <textarea id="content" name="content" class="form-control" rows="10"
                                           placeholder="输入 内容">
                                 </textarea>
                             </div>

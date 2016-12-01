@@ -81,7 +81,7 @@
 
     $.noty.defaults.layout = 'topRight';
     $.noty.defaults.theme = 'relax';
-    $.noty.defaults.timeout = 2000;
+    $.noty.defaults.timeout = 1500;
 </script>
 </body>
 </html>

@@ -178,4 +178,21 @@ class Tool extends Model
                 break;
         }
     }
+
+    /**
+     * menu是否active
+     * @param       $channelActive
+     * @param       $channelSidebar
+     * @param int   $id
+     * @param array $tree
+     *
+     * @return bool
+     */
+    public static function isActive($channelActive, $channelSidebar, $id = 0, $tree = [])
+    {
+        if (($channelActive === $channelSidebar) && (empty($id) && empty($tree) || in_array($id, $tree))) {
+            return true;
+        }
+        return false;
+    }
 }

@@ -10,6 +10,13 @@ class Keyword extends Model
     use SoftDeletes;
 
     /**
+     * 需要被转换成日期的属性。
+     *
+     * @var array
+     */
+    protected $dates = ['deleted_at', 'created_at', 'updated_at'];
+
+    /**
      * 可以被批量赋值的属性。
      *
      * @var array

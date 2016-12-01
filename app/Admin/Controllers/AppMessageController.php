@@ -15,11 +15,6 @@ class AppMessageController extends Controller
 {
     use ModelForm;
 
-//    public function __construct()
-//    {
-//        $this->middleware('sidebar', ['only' => 'index']);
-//    }
-
     /**
      * Index interface.
      *

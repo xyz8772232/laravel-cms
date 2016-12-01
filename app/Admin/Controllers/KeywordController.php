@@ -16,6 +16,10 @@ class KeywordController extends Controller
 {
     use ModelForm;
 
+//    public function __construct()
+//    {
+//        $this->middleware('sidebar', ['only' => 'index']);
+//    }
     /**
      * Index interface.
      * @return Content
@@ -73,6 +77,15 @@ class KeywordController extends Controller
     {
         if (empty(Input::get('administrate_id'))) {
             Input::merge(['admin_user_id' => (string)Admin::user()->id]);
+        }
+        $keyword = Keyword::onlyTrashed()->where('name', Input::get('name', ''))->first();
+        if ($keyword) {
+            $result = $keyword->restore();
+            if ($result) {
+                return redirect(route('admin.keywords.index'))->withSuccess('添加成功');
+            } else {
+                return back()->withErrors('添加失败');
+            }
         }
         return $this->form()->store();
     }
