@@ -3,9 +3,9 @@
 namespace App\Admin\Controllers;
 
 use Carbon\Carbon;
-use Encore\Admin\Controllers\AdminController;
 use App\Http\Controllers\Controller;
 use App\Keyword;
+use Encore\Admin\Controllers\ModelForm;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Facades\Admin;
@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Input;
 
 class KeywordController extends Controller
 {
-    use AdminController;
+    use ModelForm;
 
     /**
      * Index interface.

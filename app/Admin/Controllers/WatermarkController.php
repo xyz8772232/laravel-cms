@@ -3,11 +3,10 @@
 namespace App\Admin\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Tool;
 use App\Watermark;
 use Encore\Admin\Auth\Database\Administrator;
-use Encore\Admin\Controllers\AdminController;
 use App\Photo;
+use Encore\Admin\Controllers\ModelForm;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Form;
@@ -19,7 +18,7 @@ use Illuminate\Support\Facades\Auth;
 
 class WatermarkController extends Controller
 {
-    use AdminController;
+    use ModelForm;
 
     public function index()
     {

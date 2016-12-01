@@ -2,16 +2,16 @@
 
 namespace App\Admin\Controllers;
 
+use Encore\Admin\Controllers\ModelForm;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
-use Encore\Admin\Controllers\AdminController;
 
 class ExampleController extends Controller
 {
-    use AdminController;
+    use ModelForm;
 
     /**
      * Index interface.
