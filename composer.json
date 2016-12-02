@@ -15,7 +15,9 @@
         "tymon/jwt-auth": "0.5.*",
         "bupt1987/html-parser": "^3.0",
         "sunra/php-simple-html-dom-parser": "^1.5",
-        "laracasts/utilities": "~2.0"
+        "laracasts/utilities": "~2.0",
+        "unicodeveloper/laravel-emoji": "^1.0",
+        "iamcal/php-emoji": "dev-master"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
