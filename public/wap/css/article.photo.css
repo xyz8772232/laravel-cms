@@ -1,0 +1,85 @@
+html,
+body {
+  height: 100%;
+}
+.module-photo-article {
+  height: 100%;
+  position: relative;
+}
+.header {
+  box-sizing: border-box;
+  position: absolute;
+  z-index: 9;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 50px;
+  padding: 10px;
+  line-height: 30px;
+  background: rgba(0, 0, 0, 0.7);
+  font-size: 12px;
+  color: #fff;
+}
+.header .icon {
+  display: inline-block;
+}
+.header .comments {
+  float: right;
+  height: 100%;
+  color: #ffffff;
+}
+.header .icon-comments {
+  width: 22px;
+  height: 22px;
+  vertical-align: middle;
+  margin-right: 5px;
+  background: url('/wap/img/article.comments.png') no-repeat 0 0;
+  background-size: 100% 100%;
+}
+.photo-box {
+  height: 100%;
+  overflow: hidden;
+  background-color: #000;
+}
+.photo-box .photo {
+  height: 100%;
+}
+.photo-box .photo-img {
+  width: 100%;
+  max-height: 100%;
+}
+.photo-box .photo-title {
+  display: none;
+}
+.summary-box {
+  box-sizing: border-box;
+  position: absolute;
+  z-index: 9;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.7);
+  font-size: 14px;
+  color: #888;
+}
+.summary-box .title {
+  margin-bottom: 5px;
+  line-height: 24px;
+  font-size: 18px;
+  color: #ffffff;
+}
+.summary-box .pagination {
+  float: right;
+  width: auto;
+  font-size: 12px;
+}
+.summary-box .current-page {
+  font-size: 20px;
+}
+.summary-box .summary {
+  line-height: 1.5;
+  word-break: break-all;
+  word-wrap: break-word;
+  text-align: justify;
+}
