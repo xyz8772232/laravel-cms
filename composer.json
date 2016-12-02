@@ -15,8 +15,7 @@
         "tymon/jwt-auth": "0.5.*",
         "bupt1987/html-parser": "^3.0",
         "sunra/php-simple-html-dom-parser": "^1.5",
-        "laracasts/utilities": "~2.0",
-        "lavary/laravel-menu": "^1.6"
+        "laracasts/utilities": "~2.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

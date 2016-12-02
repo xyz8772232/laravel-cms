@@ -26,8 +26,8 @@ class ArticleLogController extends Controller
     {
         return Admin::content(function (Content $content) {
 
-            $content->header('header');
-            $content->description('description');
+            $content->header(trans('lang.system'));
+            $content->description(trans('lang.article_log'));
 
             $content->body($this->grid());
         });

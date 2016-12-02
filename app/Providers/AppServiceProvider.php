@@ -25,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
         Blade::directive('define', function($expression) {
             return "<?php $expression; ?>";
         });
-        View::composer(['admin.partials.sidebar', 'admin.partials.sidebar1'], function($view) {
+        View::composer(['admin.partials.sidebar',], function($view) {
             //dd(Admin::menu(), Admin::activeSidebar());
             $view->with('active_sidebar', Admin::activeSidebar());
             $view->with('menu', Admin::menu());

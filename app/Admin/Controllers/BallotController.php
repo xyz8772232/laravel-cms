@@ -94,6 +94,10 @@ class BallotController extends Controller
 
             $grid->created_at(trans('admin::lang.created_at'));
 
+            $grid->filter(function($filter) {
+                $filter->is('article_id', '文章id');
+            });
+
             $grid->disableExport();
             $grid->disableBatchDeletion();
             $grid->disableCreation();

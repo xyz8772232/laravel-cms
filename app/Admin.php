@@ -287,7 +287,7 @@ class Admin
                 return ['menu' => array_merge(static::ParentIds($menu->id), [$menu->id])];
             }
         }
-        return [];
+        return ['menu' => []];
     }
 
     private static function ParentIds($id, &$parentIds = [])
