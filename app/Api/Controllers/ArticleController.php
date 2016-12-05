@@ -20,7 +20,7 @@ class ArticleController extends BaseController
     public function channel($channel_id)
     {
         $channelIds = array_merge(Channel::branchIds([], $channel_id), [$channel_id]);
-        $articles = Article::where('state', 2)->whereIn('channel_id', $channelIds)->orderBy('published_at')->paginate();
+        $articles = Article::where('state', 2)->whereIn('channel_id', $channelIds)->orderBy('published_at', 'desc')->paginate();
         //dd($articles);
         //return $articles;
         return $this->paginator($articles, new ArticleTransformer());

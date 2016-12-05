@@ -39,7 +39,8 @@ return [
             'file'   => 'file',
         ],
 
-        'host' => 'http://yun.app/upload/',
+        //'host' => 'http://yun.app/upload/',
+        'host' => 'http://59.110.23.172/upload/',
     ],
 
     /*
