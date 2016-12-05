@@ -26,7 +26,9 @@
             {!! $article->content !!}
         </article>
         @foreach($comments as $comment)
-            <div>{{ $comment->content }} <span>{{ $comment->user_nick }}</span></div>
+            <div>{{ $comment->content }} <span>{{ $comment->user_nick }}</span>
+                @if ($comment->reply_to_id)回复:<span>{{ $comment->parent->user_nick }}</span> @endif
+            </div>
         @endforeach
     </section>
 @endsection
