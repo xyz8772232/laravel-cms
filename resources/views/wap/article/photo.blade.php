@@ -21,6 +21,9 @@
 
 @section('main')
   <section class="module-photo-article">
+    <header class="header">
+      <a class="comments" href=><i class="icon icon-comments"></i>200</a>
+    </header>
     <div class="photo-box swiper-container">
       <div class="swiper-wrapper">
         @foreach ($contentPics as $photo)
@@ -34,7 +37,7 @@
       </div>
     </div>
     <div class="summary-box">
-      <h1 class="title">{{ $article->title }}</h1>
+      <div class="title">{{ $article->title }}<div class="pagination"></div></div>
       <p class="summary"></p>
     </div>
   </section>

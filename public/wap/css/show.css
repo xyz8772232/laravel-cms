@@ -194,7 +194,7 @@ body {
   display: inline-block;
   width: .25rem;
   height: .14rem;
-  background: url('http://n.sinaimg.cn/finance/toutiao/images/article-btn-unfold.png') no-repeat 0 0;
+  background: url('/wap/img/article-btn-unfold.png') no-repeat 0 0;
   background-size: 100% 100%;
 }
 .bigimg-popup-container {
