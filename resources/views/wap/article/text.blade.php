@@ -25,6 +25,9 @@
         <article class="main-body">
             {!! $article->content !!}
         </article>
+        @foreach($comments as $comment)
+            <div>{{ $comment->content }} <span>{{ $comment->user_nick }}</span></div>
+        @endforeach
     </section>
 @endsection
 
