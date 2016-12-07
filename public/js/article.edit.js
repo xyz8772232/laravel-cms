@@ -158,7 +158,7 @@ $(function () {
   $('#typeCheckbox').bootstrapSwitch({
     size: 'small',
     onInit: function (e, state) {
-      state || UE.getEditor('content', );
+      state || UE.getEditor('content');
       switchArticleType(e, state);
     },
     onSwitchChange: switchArticleType
