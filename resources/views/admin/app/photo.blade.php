@@ -42,9 +42,6 @@
               <div class="btn-group pull-right">
                 <button type="submit" class="btn btn-info pull-right">提交</button>
               </div>
-              <div class="btn-group pull-left">
-                <input type="reset" class="btn btn-warning" value="撤销"/>
-              </div>
             </div>
           </div>
           <!-- /.box-footer -->
