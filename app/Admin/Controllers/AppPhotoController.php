@@ -3,12 +3,15 @@
 namespace App\Admin\Controllers;
 
 use App\AppPhoto;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Encore\Admin\Controllers\ModelForm;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
+use App\Tool;
 
 class AppPhotoController extends Controller
 {
@@ -32,6 +35,37 @@ class AppPhotoController extends Controller
 
             $content->body($this->grid());
         });
+    }
+
+    /**
+     * 上传
+     * @param Request $request
+     *
+     * @return mixed
+     */
+    public function upload(Request $request)
+    {
+        $this->validate($request, [
+            'photo' => 'required|image',
+            'order' => 'required|in:1,2,3',]);
+
+        $photo = $request->file('photo');
+        $uid = Admin::user()->id;
+        $path = app('fileUpload')->prepare($photo);
+        $order = $request->order;
+        $previous = AppPhoto::where('order', $order)->first();
+        if ($previous) {
+            $previous->path = $path;
+            $previous->created_at = Carbon::now();
+            $result = $previous->save();
+        } else {
+            $result = AppPhoto::create(['admin_user_id' => $uid, 'path' => $path, 'order' => $order]);
+        }
+
+        if ($result) {
+            return Tool::showSuccess('上传成功', ['path' => cms_local_to_web($path)]);
+        }
+        return Tool::showError();
     }
 
     /**

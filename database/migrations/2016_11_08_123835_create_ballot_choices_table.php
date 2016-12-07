@@ -17,6 +17,7 @@ class CreateBallotChoicesTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('ballot_id')->comment('所属ballot');
             $table->string('content')->comment('选项内容');
+            $table->unsignedInteger('approve_num')->comment('赞同数');
             $table->timestamps();
 
             $table->index('ballot_id');

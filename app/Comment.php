@@ -9,7 +9,11 @@ class Comment extends Model
 {
     use SoftDeletes;
 
+    //protected $appends = ['reply_to_user_nick'];
+
     protected $fillable = ['content', 'reply_to_id', 'article_id', 'user_id', 'user_nick'];
+
+    //protected $hidden = ['reply_to_user_nick'];
 
     public function article()
     {
@@ -20,4 +24,12 @@ class Comment extends Model
     {
         return $this->belongsTo('App\Comment', 'reply_to_id');
     }
+
+//    public function getReplyToUserNickAttribute()
+//    {
+//        if (static::getAttribute('reply_to_id')) {
+//            return static::parent()->first()->user_nick;
+//        }
+//        return null;
+//    }
 }

@@ -53,5 +53,6 @@ $router->resource('sort_links', SortLinkController::class, ['as' => 'admin']);
 $router->post('sort_photos/save', 'SortPhotoController@save');
 $router->resource('sort_photos', SortPhotoController::class, ['as' => 'admin']);
 
+$router->post('app_photos/upload', 'AppPhotoController@upload');
 $router->resource('app_photos', AppPhotoController::class, ['as' => 'admin']);
 $router->resource('app_messages', AppMessageController::class, ['as' => 'admin', 'middleware' => 'sidebar']);

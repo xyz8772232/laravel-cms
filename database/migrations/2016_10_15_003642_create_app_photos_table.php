@@ -18,9 +18,9 @@ class CreateAppPhotosTable extends Migration
         Schema::create($tableName, function (Blueprint $table) {
             $table->increments('id');
             $table->string('path')->comment('图片存储路径');
-            $table->unsignedInteger('order')->comment('顺序');
+            $table->unsignedTinyInteger('order')->default(0)->comment('顺序');
             $table->unsignedInteger('admin_user_id')->comment('上传人id');
-            $table->unsignedTinyInteger('status')->comment('状态');
+            $table->unsignedTinyInteger('status')->default(0)->comment('状态');
             $table->timestamps();
             $table->softDeletes();
 

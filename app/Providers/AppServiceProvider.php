@@ -4,10 +4,12 @@ namespace App\Providers;
 
 use App\Admin;
 use App\Article;
+use App\BallotAnswer;
 use View;
 use Blade;
 use App\FileUpload;
 use App\Observers\ArticleObserver;
+use App\Observers\BallotAnswerObserver;
 use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
 
@@ -22,6 +24,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Carbon::setLocale('zh');
         Article::observe(ArticleObserver::class);
+        BallotAnswer::observe(BallotAnswerObserver::class);
         Blade::directive('define', function($expression) {
             return "<?php $expression; ?>";
         });
