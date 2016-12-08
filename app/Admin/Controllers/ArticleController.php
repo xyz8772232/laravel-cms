@@ -266,21 +266,34 @@ class ArticleController extends Controller
 
     public function preview($id)
     {
-        $rules = [
-            'id' => 'required|integer|exists:articles,id,state,0',
-        ];
-
-        $validator = Validator::make(Input::all(), $rules);
-        if ($validator->fails()) {
-            return redirect()->to('/admin/articles/create')
-                ->withInput($request->input())
-                ->withErrors($validator->errors());
+        $article =  Article::where('id', $id)->firstOrFail();
+        if ($article->type == 1) {
+            return $this->photo($article);
+        } else {
+            return $this->text($article);
         }
+    }
 
-        $article = Article::find($id);
+    //图片文章
+    private function photo(Article $article)
+    {
+        $contentPics = collect(json_decode($article->content, true))->map(function($value) {
+            return [
+                'img' => cms_local_to_web($value['img']),
+                'title' => $value['title'],
+            ];
+        })->all();
+        return view('wap.article.photo', compact('article', 'contentPics'));
 
-        return view('admin.article.preview', compact('header', 'description', 'article'));
+    }
 
+    //普通文章
+    private function text(Article $article)
+    {
+        $comments = [];
+        $ballot = [];
+        //dd($ballot);
+        return view('wap.article.text', compact('article', 'comments', 'ballot'));
     }
 
     /**
