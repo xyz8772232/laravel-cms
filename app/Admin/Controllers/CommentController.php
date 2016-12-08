@@ -2,7 +2,6 @@
 
 namespace App\Admin\Controllers;
 
-use App\Tool;
 use Encore\Admin\Controllers\ModelForm;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -75,7 +74,10 @@ class CommentController extends Controller
         $comment = Comment::findOrFail($id);
         $comment->blocked = 1;
         $comment->save();
-        return Tool::showSuccess();
+        return response()->json([
+            'status'  => true,
+            'message' => '屏蔽成功',
+        ]);
     }
 
     /**
@@ -151,18 +153,40 @@ $('._block').click(function() {
                     noty({
                         text: "<strong>Succeeded!</strong><br/>"+data.message,
                         type:'success',
-                        timeout: 3000
+                        timeout: 1000,
+                        callback: {
+                            onShow: function() {},
+                            afterShow: function() {},
+                            onClose: function() {},
+                            afterClose: function() {
+                                location.reload();
+                            },
+                            onCloseClick: function() {
+                                location.reload();
+                            },
+                        },
                     });
                 } else {
                     noty({
                         text: "<strong>Failed!</strong><br/>"+data.message,
                         type:'error',
-                        timeout: 3000
+                        timeout: 1000,
+                        callback: {
+                            onShow: function() {},
+                            afterShow: function() {},
+                            onClose: function() {},
+                            afterClose: function() {
+                                location.reload();
+                            },
+                            onCloseClick: function() {
+                                location.reload();
+                            },
+                        },
                     });
                 }
             }
 
-            $.pjax.reload('#pjax-container');
+            //$.pjax.reload('#pjax-container');
         });
     }
 });
