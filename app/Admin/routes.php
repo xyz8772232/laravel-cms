@@ -56,3 +56,7 @@ $router->resource('sort_photos', SortPhotoController::class, ['as' => 'admin']);
 $router->post('app_photos/upload', 'AppPhotoController@upload');
 $router->resource('app_photos', AppPhotoController::class, ['as' => 'admin']);
 $router->resource('app_messages', AppMessageController::class, ['as' => 'admin']);
+
+$router->get('/captcha/{config?}', function(\Mews\Captcha\Captcha $captcha, $config='default') {
+    return $captcha->create($config);
+});

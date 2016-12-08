@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "feca090531002beab4a133e193f58dc8",
-    "content-hash": "6d457cfe039f8c93ff57f8d6797ebcc1",
+    "hash": "94b6f54606fe1e543be475618f362c15",
+    "content-hash": "4eb81d5d9dff04728a4390147356c4c6",
     "packages": [
         {
             "name": "bupt1987/html-parser",
@@ -52,20 +52,20 @@
         },
         {
             "name": "classpreloader/classpreloader",
-            "version": "3.0.0",
+            "version": "3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ClassPreloader/ClassPreloader.git",
-                "reference": "9b10b913c2bdf90c3d2e0d726b454fb7f77c552a"
+                "reference": "bc7206aa892b5a33f4680421b69b191efd32b096"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ClassPreloader/ClassPreloader/zipball/9b10b913c2bdf90c3d2e0d726b454fb7f77c552a",
-                "reference": "9b10b913c2bdf90c3d2e0d726b454fb7f77c552a",
+                "url": "https://packagist.phpcomposer.com/files/ClassPreloader/ClassPreloader/bc7206aa892b5a33f4680421b69b191efd32b096.zip",
+                "reference": "bc7206aa892b5a33f4680421b69b191efd32b096",
                 "shasum": ""
             },
             "require": {
-                "nikic/php-parser": "^1.0|^2.0",
+                "nikic/php-parser": "^1.0|^2.0|^3.0",
                 "php": ">=5.5.9"
             },
             "require-dev": {
@@ -74,7 +74,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.0-dev"
+                    "dev-master": "3.1-dev"
                 }
             },
             "autoload": {
@@ -102,7 +102,7 @@
                 "class",
                 "preload"
             ],
-            "time": "2015-11-09 22:51:51"
+            "time": "2016-09-16 12:50:15"
         },
         {
             "name": "dingo/api",
@@ -459,16 +459,16 @@
         },
         {
             "name": "encore/laravel-admin",
-            "version": "1.3.x-dev",
+            "version": "v1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/z-song/laravel-admin.git",
-                "reference": "03fcf7f85eaa54165fce3a3653a19f622833bf6d"
+                "reference": "be82144f810da84b36d242366d9fef1e3ec47879"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://packagist.phpcomposer.com/files/z-song/laravel-admin/03fcf7f85eaa54165fce3a3653a19f622833bf6d.zip",
-                "reference": "03fcf7f85eaa54165fce3a3653a19f622833bf6d",
+                "url": "https://packagist.phpcomposer.com/files/z-song/laravel-admin/be82144f810da84b36d242366d9fef1e3ec47879.zip",
+                "reference": "be82144f810da84b36d242366d9fef1e3ec47879",
                 "shasum": ""
             },
             "require": {
@@ -511,7 +511,7 @@
                 "grid",
                 "laravel"
             ],
-            "time": "2016-12-02 05:50:55"
+            "time": "2016-12-05 15:49:18"
         },
         {
             "name": "guzzlehttp/psr7",
@@ -1192,6 +1192,63 @@
                 "rest"
             ],
             "time": "2016-07-21 09:56:14"
+        },
+        {
+            "name": "mews/captcha",
+            "version": "v2.1.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mewebstudio/captcha.git",
+                "reference": "ada76309e55fcbd3bb5604f4fd0dd357dec35823"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://packagist.phpcomposer.com/files/mewebstudio/captcha/ada76309e55fcbd3bb5604f4fd0dd357dec35823.zip",
+                "reference": "ada76309e55fcbd3bb5604f4fd0dd357dec35823",
+                "shasum": ""
+            },
+            "require": {
+                "ext-gd": "*",
+                "illuminate/config": "~5.0",
+                "illuminate/filesystem": "~5.0",
+                "illuminate/hashing": "~5.0",
+                "illuminate/support": "~5.0",
+                "intervention/image": "~2.2",
+                "php": ">=5.4"
+            },
+            "require-dev": {
+                "mockery/mockery": "0.9.*",
+                "phpunit/phpunit": "~4.1"
+            },
+            "type": "package",
+            "autoload": {
+                "psr-4": {
+                    "Mews\\Captcha\\": "src/"
+                },
+                "files": [
+                    "src/helpers.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Muharrem ERİN",
+                    "email": "me@mewebstudio.com",
+                    "homepage": "https://github.com/mewebstudio",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Laravel 5 Captcha Package",
+            "homepage": "https://github.com/mewebstudio/captcha",
+            "keywords": [
+                "captcha",
+                "laravel5 Captcha",
+                "laravel5 Security"
+            ],
+            "time": "2016-07-19 09:01:51"
         },
         {
             "name": "monolog/monolog",
@@ -3947,16 +4004,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "5.7.0",
+            "version": "5.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "00d72b8dbd2bb7d6f02a820e6db5cb70df6ac55c"
+                "reference": "336aff0ac52e306c98e7455bc3e8d7b0bf777a5e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://packagist.phpcomposer.com/files/sebastianbergmann/phpunit/00d72b8dbd2bb7d6f02a820e6db5cb70df6ac55c.zip",
-                "reference": "00d72b8dbd2bb7d6f02a820e6db5cb70df6ac55c",
+                "url": "https://packagist.phpcomposer.com/files/sebastianbergmann/phpunit/336aff0ac52e306c98e7455bc3e8d7b0bf777a5e.zip",
+                "reference": "336aff0ac52e306c98e7455bc3e8d7b0bf777a5e",
                 "shasum": ""
             },
             "require": {
@@ -4025,7 +4082,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-12-01 17:04:00"
+            "time": "2016-12-03 08:33:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -4823,7 +4880,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "encore/laravel-admin": 20,
         "dingo/api": 20,
         "iamcal/php-emoji": 20
     },

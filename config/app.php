@@ -174,6 +174,7 @@ return [
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
         Laracasts\Utilities\JavaScript\JavaScriptServiceProvider::class,
         Unicodeveloper\Emoji\EmojiServiceProvider::class,
+        Mews\Captcha\CaptchaServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -238,6 +239,7 @@ return [
         'Html' => Collective\Html\HtmlFacade::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'Emoji' => Unicodeveloper\Emoji\Facades\Emoji::class,
+        'Captcha' => Mews\Captcha\Facades\Captcha::class,
 
         'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
         'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,

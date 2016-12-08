@@ -7,7 +7,7 @@
     "require": {
         "php": ">=7.0.0",
         "laravel/framework": "5.3.*",
-        "encore/laravel-admin": "1.3.x-dev",
+        "encore/laravel-admin": "1.3.0",
         "laravelcollective/html": "5.3.*",
         "predis/predis": "^1.1",
         "intervention/image": "^2.3",
@@ -17,7 +17,8 @@
         "sunra/php-simple-html-dom-parser": "^1.5",
         "laracasts/utilities": "~2.0",
         "unicodeveloper/laravel-emoji": "^1.0",
-        "iamcal/php-emoji": "dev-master"
+        "iamcal/php-emoji": "dev-master",
+        "mews/captcha": "~2.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
