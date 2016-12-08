@@ -387,4 +387,24 @@ $(function () {
       })
     }
   }
+
+  /**
+   * 预览
+   */
+  $('.news-list').on('click', '.e-preview', function () {
+    var url = this.getAttribute('data-href');
+    preview(url);
+  });
+
+  function preview(url) {
+    swal({
+      title: '内容转移',
+      text: '<div class="preview-box"><iframe class="preview-iframe" src="' + url + '"></iframe></div>',
+      html: true,
+      showCancelButton: false,
+      showLoaderOnConfirm: false,
+      allowOutsideClick: true,
+      customClass: 'preview-swal'
+    });
+  }
 });
