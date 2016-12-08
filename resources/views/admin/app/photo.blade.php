@@ -11,7 +11,7 @@
     <div>
       <div class="box col-md-12">
         <!-- form start -->
-        <form action="/admin/watermarks/save" method="post" accept-charset="UTF-8" class="form-horizontal"
+        <form action="/admin/app_photos" method="post" accept-charset="UTF-8" class="form-horizontal"
               enctype="multipart/form-data" pjax-container>
           <div class="box-body">
             <div class="form-group">
@@ -58,16 +58,11 @@
 @section('admin_js')
   <script src="{{ asset("/packages/admin/bootstrap-fileinput/js/fileinput.min.js") }}"></script>
   <script>
-    var INIT_CONFIG = {
-      photos: [
-        {url:'', title: ''}
-      ]
-    };
     $(function () {
-      var photos = INIT_CONFIG.photos || [];
+      var photos = INIT_CONFIG.photos || {};
 
       $('.photo').each(function (index) {
-        var photo = photos[index];
+        var photo = photos[index+1];
         $(this).fileinput({
           overwriteInitial: true,
           showUpload: false,
@@ -76,7 +71,7 @@
           initialCaption: photo && photo.title,
           initialPreview: photo && photo.url && [
             '<img src="' + photo.url + '" class="file-preview-image">'
-            + '<input type="hidden" name="old_photo_1" value="' + photo.url + '">'
+            + '<input type="hidden" name="old_photo_'+(index+1)+'" value="' + photo.url + '">'
           ]
         });
       });
