@@ -17,7 +17,7 @@ class CommentController extends Controller
             return redirect('/');
         }
 
-        $comments = Comment::where('article_id', Input::get('article_id'))->paginate(20);
+        $comments = Comment::with('parent')->where('article_id', Input::get('article_id'))->paginate(20);
 
         return view('wap.article.comment', compact('comments'));
 

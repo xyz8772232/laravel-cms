@@ -9,6 +9,8 @@ class BallotAnswer extends Model
 {
     use SoftDeletes;
 
+    protected $fillable = ['ballot_id', 'choice_id', 'user_id'];
+
     public function ballot()
     {
         return $this->belongsTo('App\Ballot');

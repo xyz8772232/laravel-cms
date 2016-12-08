@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Article;
 use App\Comment;
+use App\Ballot;
 use Illuminate\Http\Request;
 
 class ArticleController extends Controller
@@ -41,7 +42,9 @@ class ArticleController extends Controller
     //普通文章
     private function text(Article $article)
     {
-        $comments = Comment::where('article_id', $article->id)->orderBy('created_at', 'desc')->limit(3)->get();
-        return view('wap.article.text', compact('article', 'comments'));
+        $comments = Comment::with('parent')->where('article_id', $article->id)->orderBy('created_at', 'desc')->limit(3)->get();
+        $ballot = Ballot::with('choices')->where('article_id', $article->id)->first();
+        //dd($ballot);
+        return view('wap.article.text', compact('article', 'comments', 'ballot'));
     }
 }
