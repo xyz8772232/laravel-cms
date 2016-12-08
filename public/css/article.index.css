@@ -144,3 +144,24 @@
 #transferBox {
   height: 50px;
 }
+.preview-swal {
+  padding: 0 !important;
+  width: auto !important;
+  border-radius: 0 !important;
+  background-color: transparent;
+}
+.preview-swal h2,
+.preview-swal .sa-button-container {
+  display: none !important;
+}
+.preview-box {
+  width: 335px;
+  height: 700px;
+  background: url('/img/preview.png') no-repeat;
+}
+.preview-iframe {
+  margin-top: 145px;
+  width: 292px;
+  height: 467px;
+  border: none;
+}
