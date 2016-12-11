@@ -32,25 +32,14 @@
         // 重置字体大小
         var docEl = document.documentElement;
         var resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize';
-        var recalc = function () {
+        var reCalc = function () {
             var clientWidth = docEl.clientWidth;
             if (!clientWidth) return;
             docEl.style.fontSize = 625 * (clientWidth / 750) + '%';
         };
-        window.addEventListener(resizeEvt, recalc, false);
-        recalc();
-
-        // 是否开启兼容模式
-        if (!window.navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)) {
-            window.compatibilityMode = true;
-            document.body.classList.add('compatibility-mode');
-        } else {
-            window.compatibilityMode = false;
-        }
-
-        // 初始化字体大小
-        document.body.classList.add('font-size-' + localStorage.getItem('fontSize') || 1);
-        })();
+        window.addEventListener(resizeEvt, reCalc, false);
+        reCalc();
+    })();
 </script>
 @yield('main')
 @yield('js')

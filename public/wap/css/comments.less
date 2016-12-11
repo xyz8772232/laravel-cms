@@ -1,0 +1,222 @@
+@imgRoot: '/wap/img/';
+@borderColor: #e0e0e0;
+@themeColor: #f97717;
+//@themeColor: #0669bf;
+
+.onePx(@color, @position) when (@position = before) {
+  border: none;
+  &:before {
+    content: '';
+    display: block;
+    height: 1px;
+    background-color: @color;
+    clear: both;
+    -webkit-transform: scale(1, .5);
+    transform: scale(1, .5);
+  }
+}
+
+.onePx(@color, @position) when (@position = after) {
+  border: none;
+  &:after {
+    content: '';
+    display: block;
+    height: 1px;
+    background-color: @color;
+    clear: both;
+    -webkit-transform: scale(1, .5);
+    transform: scale(1, .5);
+  }
+}
+
+.onePx(@color, @position) when (@position = both) {
+  border: none;
+  &:before,
+  &:after {
+    content: '';
+    display: block;
+    height: 1px;
+    background-color: @color;
+    clear: both;
+    -webkit-transform: scale(1, .5);
+    transform: scale(1, .5);
+  }
+}
+
+// 评论列表
+.comment-box {
+  .comment {
+    padding: .3rem .3rem 0;
+    &:last-child {
+      .comment-inner {
+        border: none;
+      }
+    }
+  }
+  .comment-inner {
+    border-bottom: 1px solid @borderColor;
+  }
+  .user {
+    float: left;
+    width: .5rem;
+    height: .5rem;
+    background-color: #f2f2f2;
+    border-radius: 9999px;
+    overflow: hidden;
+  }
+  .user-face {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .comment-main {
+    line-height: 2;
+    margin-left: .8rem;
+    margin-bottom: .15rem;
+  }
+  .nickname {
+    line-height: 2;
+    font-size: 12px;
+    font-style: italic;
+    color: #999999;
+  }
+  .icon-reply {
+    margin: 0 5px;
+    display: inline-block;
+    border: 3px solid transparent;
+    border-top: none;
+    border-bottom: 5px solid #ccc;
+    vertical-align: middle;
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
+  }
+  .content {
+    line-height: 1.5;
+    font-size: 14px;
+    color: #000000;
+    text-align: justify;
+    word-break: break-all;
+    word-wrap: break-word;
+  }
+  .panel {
+    color: #9a9a9a;
+    font-size: 12px;
+    margin-top: .4rem;
+  }
+  .panel-item {
+    display: inline-block;
+    vertical-align: top;
+  }
+  .e-reply {
+    float: right;
+  }
+}
+
+// 撰写评论
+.write-box {
+  padding: .3rem;
+  .write-area {
+    position: relative;
+    padding: 5px;
+    height: 2rem;
+    border: 1px solid @borderColor;
+    border-bottom: none;
+    background-color: #fff;
+    &.reply {
+      .write-to {
+        display: block;
+      }
+    }
+  }
+  .write-ipt {
+    display: block;
+    width: 100%;
+    height: 100%;
+    resize: none;
+    line-height: 20px;
+    font-size: 16px;
+    color: #555;
+    padding: 0;
+    border: none;
+  }
+  .write-to {
+    display: none;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    padding-right: 5px;
+    max-width: 90%;
+    line-height: 20px;
+    font-size: 14px;
+    color: #666;
+    background-color: #fff;
+  }
+  .reply-nick {
+    color: #0669bf;
+  }
+  .write-panel {
+    height: .7rem;
+    line-height: .7rem;
+    background-color: #f7f7f7;
+  }
+  .write-submit {
+    float: right;
+    width: 1.5rem;
+    height: 100%;
+    color: #ffffff;
+    font-size: 14px;
+    background-color: @themeColor;
+    text-align: center;
+    overflow: hidden;
+    .icon-loading {
+      display: inline-block;
+      width: 100%;
+      height: 100%;
+      background: url('@{imgRoot}loading.w.svg') no-repeat center center;
+      background-size: .5rem;
+      color: #ffffff;
+      -webkit-animation: loading 1s linear 0s infinite;
+      animation: loading 1s linear 0s infinite;
+    }
+  }
+  .write-notice {
+    box-sizing: border-box;
+    padding-left: 10px;
+    height: 100%;
+    font-size: 12px;
+    color: #999999;
+    border: 1px solid @borderColor;
+  }
+}
+
+@-webkit-keyframes loading {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@keyframes loading {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+  .comment-box {
+    .comment {
+      &:last-child {
+        .comment-inner:after {
+          height: 0;
+        }
+      }
+    }
+    .comment-inner {
+      .onePx(@borderColor, after);
+    }
+  }
+}
