@@ -266,7 +266,7 @@ body {
       margin: 0 1.1rem;
       height: 100%;
       font-size: 12px;
-      &.show {
+      &.show-res {
         .percent {
           visibility: visible;
         }
@@ -294,8 +294,8 @@ body {
       width: 50%;
       height: 100%;
       background-color: @agreeColor;
-      -webkit-transition: width .2s;
-      transition: width .2s;
+      -webkit-transition: width .5s ease-in-out;
+      transition: width .5s ease-in-out;
     }
     .pk-words {
       position: absolute;
@@ -312,6 +312,82 @@ body {
       font-style: italic;
       font-size: 12px;
       color: #ffffff;
+    }
+  }
+  .vote {
+    margin: .3rem;
+    &.show-res {
+      .vote-item {
+        line-height: .5rem;
+      }
+      .vote-words {
+        font-size: 12px;
+      }
+      .percent {
+        display: block;
+      }
+      .proportion-bar {
+        height: .15rem;
+      }
+      .submit {
+        display: none;
+      }
+    }
+    .vote-item {
+      height: .8rem;
+      line-height: .8rem;
+      &.selected {
+        .icon-vote {
+          background: url('@{imgRoot}check.svg') no-repeat center center;
+          background-size: .3rem;
+        }
+      }
+    }
+    .icon-vote {
+      float: left;
+      box-sizing: border-box;
+      margin-top: .2rem;
+      width: .4rem;
+      height: .4rem;
+      border: 2px solid @themeColor;
+      border-radius: 3px;
+    }
+    .vote-words {
+      margin-left: .2rem;
+      font-size: 14px;
+    }
+    .percent {
+      display: none;
+      float: right;
+      margin-top: .15rem;
+      line-height: 1;
+      font-size: 12px;
+    }
+    .proportion-bar {
+      top: .4rem;
+      margin-left: .6rem;
+      height: 0;
+      background-color: #ddd;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .proportion-agree {
+      width: 0;
+      height: 100%;
+      background-color: @themeColor;
+      -webkit-transition: width .5s ease-in-out;
+      transition: width .5s ease-in-out;
+    }
+    .submit {
+      margin: .1rem auto;
+      width: 1.4rem;
+      height: .6rem;
+      line-height: .6rem;
+      text-align: center;
+      color: #ffffff;
+      font-size: 14px;
+      background-color: #f69f5f;
+      border-radius: 5px;
     }
   }
 }

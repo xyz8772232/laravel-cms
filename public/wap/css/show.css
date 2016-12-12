@@ -160,10 +160,10 @@ body {
   height: 100%;
   font-size: 12px;
 }
-.module-vote .pk .proportion.show .percent {
+.module-vote .pk .proportion.show-res .percent {
   visibility: visible;
 }
-.module-vote .pk .proportion.show .pk-words {
+.module-vote .pk .proportion.show-res .pk-words {
   display: none;
 }
 .module-vote .pk .percent {
@@ -185,8 +185,8 @@ body {
   width: 50%;
   height: 100%;
   background-color: #ef5450;
-  -webkit-transition: width .2s;
-  transition: width .2s;
+  -webkit-transition: width 0.5s ease-in-out;
+  transition: width 0.5s ease-in-out;
 }
 .module-vote .pk .pk-words {
   position: absolute;
@@ -203,6 +203,78 @@ body {
   font-style: italic;
   font-size: 12px;
   color: #ffffff;
+}
+.module-vote .vote {
+  margin: .3rem;
+}
+.module-vote .vote.show-res .vote-item {
+  line-height: .5rem;
+}
+.module-vote .vote.show-res .vote-words {
+  font-size: 12px;
+}
+.module-vote .vote.show-res .percent {
+  display: block;
+}
+.module-vote .vote.show-res .proportion-bar {
+  height: .15rem;
+}
+.module-vote .vote.show-res .submit {
+  display: none;
+}
+.module-vote .vote .vote-item {
+  height: .8rem;
+  line-height: .8rem;
+}
+.module-vote .vote .vote-item.selected .icon-vote {
+  background: url('/wap/img/check.svg') no-repeat center center;
+  background-size: .3rem;
+}
+.module-vote .vote .icon-vote {
+  float: left;
+  box-sizing: border-box;
+  margin-top: .2rem;
+  width: .4rem;
+  height: .4rem;
+  border: 2px solid #f97717;
+  border-radius: 3px;
+}
+.module-vote .vote .vote-words {
+  margin-left: .2rem;
+  font-size: 14px;
+}
+.module-vote .vote .percent {
+  display: none;
+  float: right;
+  margin-top: .15rem;
+  line-height: 1;
+  font-size: 12px;
+}
+.module-vote .vote .proportion-bar {
+  top: .4rem;
+  margin-left: .6rem;
+  height: 0;
+  background-color: #ddd;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.module-vote .vote .proportion-agree {
+  width: 0;
+  height: 100%;
+  background-color: #f97717;
+  -webkit-transition: width 0.5s ease-in-out;
+  transition: width 0.5s ease-in-out;
+}
+.module-vote .vote .submit {
+  margin: .1rem auto;
+  width: 1.4rem;
+  height: .6rem;
+  line-height: .6rem;
+  text-align: center;
+  color: #ffffff;
+  font-size: 14px;
+  background-color: #f69f5f;
+  border-radius: 5px;
 }
 .module-comments .more-comments {
   display: block;

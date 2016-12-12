@@ -83,8 +83,8 @@
   (function () {
     var pkData = PAGE_CONFIG.pk;
     if (!pkData) return false;
-    var $module = $('.module-vote');
-    var $pkItem = $module.find('.pk-item');
+    var $module = $('.module-vote .pk');
+    var $pkItem = $module.children('.pk-item');
 
     if (pkData.vote != undefined) {
       var agreePercent = calcAgreePercent();
@@ -115,10 +115,61 @@
       $module.find('.disagree-percent').text((100 - agreePercent).toFixed(1) + '%');
 
       $el.addClass('selected')
-      .siblings('.proportion').addClass('show')
+      .siblings('.proportion').addClass('show-res')
       .parent().addClass('disable');
 
       $module.find('.proportion-agree').css('width', agreePercent + '%');
+    }
+  })();
+
+  /**
+   * 投票 -- vote
+   */
+  (function () {
+    var voteData = PAGE_CONFIG.vote;
+    if (!voteData) return false;
+    var $module = $('.module-vote .vote');
+    var $pkItem = $module.children('.pk-item');
+
+    if (voteData.vote != undefined) {
+      var agreePercent = calcAgreePercent();
+      //showVoteRes($pkItem.eq(voteData.vote ? 0 : 1), agreePercent);
+    } else {
+      $module.on('click', '.e-vote', function () {
+        $(this).toggleClass('selected');
+      }).on('click', '.e-submit', function () {
+        var $items = $module.children('.vote-item');
+        var agreePercentList = calcAgreePercent($items);
+        showVoteRes($items, agreePercentList);
+        $module.off('click', '.e-vote').off('click', '.e-submit');
+        $(this).remove();
+      });
+    }
+
+    function calcAgreePercent($items) {
+      var agreeCountList = voteData.agree;
+      var agreeTotalCount;
+      if ($items) {
+        $items.each(function (index) {
+          if (this.classList.contains('selected')) {
+            agreeCountList[index] += 1;
+          }
+        });
+      }
+      agreeTotalCount = agreeCountList.reduce(function (per, cur) {
+        return per + cur;
+      }, 0);
+      return agreeCountList.map(function (agreeCount) {
+        return (agreeCount / agreeTotalCount * 100).toFixed(1);
+      });
+    }
+
+    function showVoteRes($items, agreePercentList) {
+      $items.each(function (index) {
+        var strPercent = agreePercentList[index] + '%';
+        $(this).find('.percent').text(strPercent);
+        $(this).find('.proportion-agree').css('width', strPercent);
+      }).parent().addClass('show-res');
     }
   })();
 });
