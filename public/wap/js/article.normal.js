@@ -76,4 +76,49 @@
   $(window).on('reply', function (e, replyId, replyNick) {
     commentWrite.write(replyId, replyNick);
   });
+
+  /**
+   * 投票 -- pk
+   */
+  (function () {
+    var pkData = PAGE_CONFIG.pk;
+    if (!pkData) return false;
+    var $module = $('.module-vote');
+    var $pkItem = $module.find('.pk-item');
+
+    if (pkData.vote != undefined) {
+      var agreePercent = calcAgreePercent();
+      showVoteRes($pkItem.eq(pkData.vote ? 0 : 1), agreePercent);
+    } else {
+      $module.on('click', '.e-pk', function () {
+        var vote = +this.getAttribute('data-vote');
+        var agreePercent = calcAgreePercent(vote);
+        showVoteRes($(this), agreePercent);
+
+        $module.off('click', '.e-pk');
+      });
+    }
+
+    function calcAgreePercent(vote) {
+      var agreeCount = pkData.agree;
+      var disagreeCount = pkData.disagree;
+      if (vote === 1) {
+        agreeCount += 1;
+      } else if (vote === 0) {
+        disagreeCount += 1;
+      }
+      return +(agreeCount / (agreeCount + disagreeCount) * 100).toFixed(1);
+    }
+
+    function showVoteRes($el, agreePercent) {
+      $module.find('.agree-percent').text(agreePercent + '%');
+      $module.find('.disagree-percent').text((100 - agreePercent).toFixed(1) + '%');
+
+      $el.addClass('selected')
+      .siblings('.proportion').addClass('show')
+      .parent().addClass('disable');
+
+      $module.find('.proportion-agree').css('width', agreePercent + '%');
+    }
+  })();
 });
