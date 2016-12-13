@@ -6,17 +6,15 @@ use App\Article;
 use App\ArticleStyle;
 use App\Comment;
 use App\Ballot;
-use Illuminate\Support\Facades\Input;
 use Laracasts\Utilities\JavaScript\JavaScriptFacade;
 
 class ArticleController extends Controller
 {
-//    protected $articleStyle;
-//
-//    public function __construct(ArticleStyle $articleStyle)
-//    {
-//        $this->articleStyle = $articleStyle;
-//    }
+    public function __construct()
+    {
+        $this->middleware('appuser')->only('show');
+    }
+
     public function index()
     {
 
@@ -25,6 +23,7 @@ class ArticleController extends Controller
 
     public function show($id)
     {
+        $this->getAppUser();
         $article =  Article::online()->where('id', $id)->firstOrFail();
         if ($article->type == 1) {
             return $this->photo($article);
@@ -52,8 +51,8 @@ class ArticleController extends Controller
         $article->content = ArticleStyle::articleContent($article->content);
         $comments = Comment::with('parent')->where('article_id', $article->id)->orderBy('created_at', 'desc')->limit(3)->get();
         $ballot = Ballot::with('choices')->where('article_id', $article->id)->first();
-        $userId = Input::get('user_id', 0);
-        $username = Input::get('username', '');
+        $userId = self::$appUser['uid'] ?? 0;
+        $username = self::$appUser['username'] ?? '';
 
         if ($ballot) {
             $ballotResult = $ballot->result($userId);
@@ -68,7 +67,7 @@ class ArticleController extends Controller
         }
 
         $pageConfig = [
-            'userId' => $userId,
+            'userId' => (string)$userId,
             'username' => $username,
             'articleId' => $article->id,
             'ballot' => $ballotConfig ?? null,

@@ -26,7 +26,7 @@ $api->version('v1', function ($api) {
         $api->get('articles/channel/{id}', 'ArticleController@channel');
         $api->get('articles/{id}', 'ArticleController@show');
         //
-        $api->post('ballots/answer/{choice_id}', 'BallotController@answer');
+        $api->post('ballots/answer', 'BallotController@answer');
         $api->get('ballots/result/{ballot_id}', 'BallotController@result');
         $api->get('sort_links', 'SortLinkController@index');
         $api->get('sort_photos', 'SortPhotoController@index');
