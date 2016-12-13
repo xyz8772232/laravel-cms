@@ -41,8 +41,8 @@
         reCalc();
     })();
 </script>
+@include('wap.partials.footer')
 @yield('main')
 @yield('js')
-@include('wap.partials.footer')
 </body>
 </html>

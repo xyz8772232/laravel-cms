@@ -15,4 +15,10 @@ return
         'move' => 5,
     ],
     'sortPhotoMaxNum' => 8,
+
+    'ballotType' => [
+        '单选',
+        '多选',
+        'PK',
+    ],
 ];

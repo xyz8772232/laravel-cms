@@ -687,7 +687,7 @@ class ArticleController extends Controller
                 Tool::handleSortPhoto($article, 'online');
             }
         }
-        return Tool::showSuccess('通过成功');
+        return Tool::showSuccess('审核通过成功');
     }
 
     /**
@@ -708,7 +708,7 @@ class ArticleController extends Controller
                 $article->save();
             }
         }
-        return Tool::showSuccess('上线成功');
+        return Tool::showSuccess('提交审核成功');
     }
 
     /**
