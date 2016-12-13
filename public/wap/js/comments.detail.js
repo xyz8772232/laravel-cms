@@ -100,14 +100,10 @@
   var editLock = false;
   $(window).on('comment', function (e, replyId, replyNick) {
     if (editLock) return false;
-    editLock = true;
     $edit.removeClass('e-edit').addClass('e-cancel');
     $moduleComment.addClass('show');
-    setTimeout(function () {
-      $writeComment.addClass('show');
-      commentWrite.write(replyId, replyNick);
-      editLock = false;
-    }, 25);
+    $writeComment.addClass('show');
+    commentWrite.write(replyId, replyNick);
   }).on('closeComment', function () {
     if (editLock) return false;
     editLock = true;

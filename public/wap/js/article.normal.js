@@ -36,6 +36,9 @@
   var CommentShow = require('Widgets.Comment.Show');
   var CommentWrite = require('Widgets.Comment.Write');
 
+  var userId = PAGE_CONFIG.userId;
+  var userNick = PAGE_CONFIG.username;
+
   /**
    * 评论列表
    */
@@ -51,8 +54,6 @@
   /**
    * 发表评论
    */
-  var userId = '1102';
-  var userNick = 'Dr. Sabryna Lehner';
   var commentWrite = CommentWrite.new({
     root: document.getElementById('writeComment'),
     articleId: PAGE_CONFIG.articleId,
@@ -80,96 +81,136 @@
   /**
    * 投票 -- pk
    */
-  (function () {
-    var pkData = PAGE_CONFIG.pk;
-    if (!pkData) return false;
-    var $module = $('.module-vote .pk');
-    var $pkItem = $module.children('.pk-item');
-
-    if (pkData.vote != undefined) {
-      var agreePercent = calcAgreePercent();
-      showVoteRes($pkItem.eq(pkData.vote ? 0 : 1), agreePercent);
-    } else {
-      $module.on('click', '.e-pk', function () {
-        var vote = +this.getAttribute('data-vote');
-        var agreePercent = calcAgreePercent(vote);
-        showVoteRes($(this), agreePercent);
-
-        $module.off('click', '.e-pk');
-      });
-    }
-
-    function calcAgreePercent(vote) {
-      var agreeCount = pkData.agree;
-      var disagreeCount = pkData.disagree;
-      if (vote === 1) {
-        agreeCount += 1;
-      } else if (vote === 0) {
-        disagreeCount += 1;
-      }
-      return +(agreeCount / (agreeCount + disagreeCount) * 100).toFixed(1);
-    }
-
-    function showVoteRes($el, agreePercent) {
-      $module.find('.agree-percent').text(agreePercent + '%');
-      $module.find('.disagree-percent').text((100 - agreePercent).toFixed(1) + '%');
-
-      $el.addClass('selected')
-      .siblings('.proportion').addClass('show-res')
-      .parent().addClass('disable');
-
-      $module.find('.proportion-agree').css('width', agreePercent + '%');
-    }
-  })();
+  //(function () {
+  //  var voteData = PAGE_CONFIG.ballot;
+  //  if (!voteData || voteData.type !== 2) return false;
+  //  var $module = $('.module-vote .pk');
+  //
+  //  if (voteData.agreed) {
+  //    var voteRes = calcVoteRes();
+  //    showVoteRes($module.children('.pk-item'), voteRes.agreePercentList);
+  //  } else {
+  //    $module.on('click', '.e-pk', function () {
+  //      // 登录用户方可投票
+  //      if (!userId) {
+  //        callLogin();
+  //        return false;
+  //      }
+  //      var $items = $module.children('.pk-item');
+  //      var voteRes = calcVoteRes($items);
+  //      showVoteRes($items, voteRes.agreePercentList);
+  //      // 移除投票事件监听
+  //      $module.off('click', '.e-pk');
+  //      // 提交投票
+  //      $.post('//yun.app/api/ballots/answer', {
+  //        choice_ids: voteRes.agreeIds,
+  //        user_id: userId
+  //      });
+  //    });
+  //  }
+  //
+  //  function calcVoteRes(vote) {
+  //    var agreeCount = voteData.agree;
+  //    var disagreeCount = voteData.disagree;
+  //    if (vote === 1) {
+  //      agreeCount += 1;
+  //    } else if (vote === 0) {
+  //      disagreeCount += 1;
+  //    }
+  //    return +(agreeCount / (agreeCount + disagreeCount) * 100).toFixed(1);
+  //  }
+  //
+  //  function showVoteRes($items, agreePercentList) {
+  //    $items.eq(0).text(agreePercentList[0] + '%');
+  //    $items.eq(1).text(agreePercentList[1] + '%');
+  //    $items.parent().addClass('show-res')
+  //    .find('.proportion-agree').css('width', agreePercentList[0] + '%');
+  //  }
+  //})();
 
   /**
-   * 投票 -- vote
+   * 投票
    */
   (function () {
-    var voteData = PAGE_CONFIG.vote;
+    var voteData = PAGE_CONFIG.ballot;
     if (!voteData) return false;
-    var $module = $('.module-vote .vote');
-    var $pkItem = $module.children('.pk-item');
+    var $module = $('.module-vote .vote-box');
+    var showVoteRes;
 
-    if (voteData.vote != undefined) {
-      var agreePercent = calcAgreePercent();
-      //showVoteRes($pkItem.eq(voteData.vote ? 0 : 1), agreePercent);
+    if (voteData.type === 2) {
+      showVoteRes = showPkVoteRes;
+    } else {
+      showVoteRes = showNormalVoteRes;
+    }
+
+    if (voteData.agreed) {
+      var voteRes = calcVoteRes();
+      showVoteRes($module.children('.vote-item'), voteRes.agreePercentList);
     } else {
       $module.on('click', '.e-vote', function () {
         $(this).toggleClass('selected');
       }).on('click', '.e-submit', function () {
+        // 登录用户方可投票
+        if (!userId) {
+          callLogin();
+          return false;
+        }
         var $items = $module.children('.vote-item');
-        var agreePercentList = calcAgreePercent($items);
-        showVoteRes($items, agreePercentList);
+        var voteRes = calcVoteRes($items);
+        showVoteRes($items, voteRes.agreePercentList);
+        // 移除投票事件监听
         $module.off('click', '.e-vote').off('click', '.e-submit');
-        $(this).remove();
+        // 提交投票
+        $.post('//yun.app/api/ballots/answer', {
+          choice_ids: voteRes.agreeIds,
+          user_id: userId
+        });
       });
     }
 
-    function calcAgreePercent($items) {
+    function calcVoteRes($items) {
       var agreeCountList = voteData.agree;
       var agreeTotalCount;
+      var agreePercentList;
+      var agreeIds = [];
       if ($items) {
         $items.each(function (index) {
           if (this.classList.contains('selected')) {
             agreeCountList[index] += 1;
+            agreeIds.push(this.getAttribute('data-vote'));
           }
         });
       }
       agreeTotalCount = agreeCountList.reduce(function (per, cur) {
         return per + cur;
       }, 0);
-      return agreeCountList.map(function (agreeCount) {
+      agreePercentList = agreeCountList.map(function (agreeCount) {
         return (agreeCount / agreeTotalCount * 100).toFixed(1);
       });
+
+      return {
+        agreePercentList: agreePercentList,
+        agreeIds: agreeIds
+      }
     }
 
-    function showVoteRes($items, agreePercentList) {
+    function showNormalVoteRes($items, agreePercentList) {
       $items.each(function (index) {
         var strPercent = agreePercentList[index] + '%';
         $(this).find('.percent').text(strPercent);
         $(this).find('.proportion-agree').css('width', strPercent);
       }).parent().addClass('show-res');
     }
+
+    function showPkVoteRes($items, agreePercentList) {
+      $items.eq(0).text(agreePercentList[0] + '%');
+      $items.eq(1).text(agreePercentList[1] + '%');
+      $items.parent().addClass('show-res')
+      .find('.proportion-agree').css('width', agreePercentList[0] + '%');
+    }
   })();
+
+  function callLogin() {
+
+  }
 });

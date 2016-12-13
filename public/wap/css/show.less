@@ -114,7 +114,6 @@
 }
 
 body {
-  padding-bottom: .9rem;
   background-color: #fafafa;
 }
 
@@ -231,7 +230,13 @@ body {
     margin: .5rem .3rem .3rem;
     height: 1rem;
     line-height: 1rem;
-    &.disable {
+    &.show-res {
+      .percent {
+        visibility: visible;
+      }
+      .pk-words {
+        display: none;
+      }
       .pk-item {
         background-color: #ddd;
       }
@@ -266,14 +271,6 @@ body {
       margin: 0 1.1rem;
       height: 100%;
       font-size: 12px;
-      &.show-res {
-        .percent {
-          visibility: visible;
-        }
-        .pk-words {
-          display: none;
-        }
-      }
     }
     .percent {
       visibility: hidden;
@@ -283,9 +280,9 @@ body {
     }
     .proportion-bar {
       position: relative;
-      top: .4rem;
+      top: .43rem;
       margin: 0 .8rem;
-      height: .2rem;
+      height: .15rem;
       background-color: @disagreeColor;
       border-radius: 2px;
       overflow: hidden;
@@ -319,6 +316,14 @@ body {
     &.show-res {
       .vote-item {
         line-height: .5rem;
+      }
+      .selected {
+        .icon-vote {
+          border-color: @themeColor;
+        }
+      }
+      .icon-vote {
+        border-color: #ddd;
       }
       .vote-words {
         font-size: 12px;

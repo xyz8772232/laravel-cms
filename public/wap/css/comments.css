@@ -1,3 +1,18 @@
+.comment-box.loading .comment-loading {
+  display: block;
+}
+.comment-box.empty .comment-empty {
+  display: block;
+}
+.comment-box.pending .load-pending {
+  display: block;
+}
+.comment-box.fail .load-fail {
+  display: block;
+}
+.comment-box.end .load-end {
+  display: block;
+}
 .comment-box .comment {
   padding: .3rem .3rem 0;
 }
@@ -60,6 +75,59 @@
 }
 .comment-box .e-reply {
   float: right;
+}
+.comment-box .comment-loading {
+  display: none;
+  margin: .5rem 0 .3rem;
+  text-align: center;
+}
+.comment-box .icon-loading {
+  display: inline-block;
+  width: .5rem;
+  height: .5rem;
+  background: url('/wap/img/loading.svg') no-repeat center center;
+  background-size: 100%;
+  -webkit-animation: loading 1s linear 0s infinite;
+  animation: loading 1s linear 0s infinite;
+}
+.comment-box .comment-empty {
+  display: none;
+  padding: 1rem 0;
+  text-align: center;
+}
+.comment-box .icon-empty {
+  display: inline-block;
+  width: 1.5rem;
+  height: 1rem;
+  background: url('/wap/img/sofa.svg') no-repeat center center;
+  background-size: 100%;
+}
+.comment-box .empty-words {
+  font-size: 12px;
+  color: #aaaaaa;
+  line-height: .8rem;
+}
+.comment-box .comment-footer {
+  text-align: center;
+  color: #ffffff;
+  font-size: 13px;
+}
+.comment-box .load {
+  display: none;
+  margin: .5rem .3rem .3rem;
+  height: .6rem;
+  line-height: .6rem;
+  border-radius: 4px;
+}
+.comment-box .load-pending {
+  background-color: #f97717;
+}
+.comment-box .load-fail {
+  background-color: #ef5450;
+}
+.comment-box .load-end {
+  display: none;
+  color: #aaa;
 }
 .write-box {
   padding: .3rem;

@@ -48,16 +48,15 @@ html, body {
 }
 
 .module-comment {
-  display: none;
   position: fixed;
   z-index: 9;
-  top: 1rem;
+  top: -9999px;
   left: 0;
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, .5);
   &.show {
-    display: block;
+    top: 1rem;
   }
   .write-box {
     -webkit-transition: transform .3s;

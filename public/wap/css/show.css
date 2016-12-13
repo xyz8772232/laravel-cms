@@ -13,7 +13,6 @@
   visibility: hidden;
 }
 body {
-  padding-bottom: .9rem;
   background-color: #fafafa;
 }
 .module-extend {
@@ -125,7 +124,13 @@ body {
   height: 1rem;
   line-height: 1rem;
 }
-.module-vote .pk.disable .pk-item {
+.module-vote .pk.show-res .percent {
+  visibility: visible;
+}
+.module-vote .pk.show-res .pk-words {
+  display: none;
+}
+.module-vote .pk.show-res .pk-item {
   background-color: #ddd;
 }
 .module-vote .pk .pk-item {
@@ -160,12 +165,6 @@ body {
   height: 100%;
   font-size: 12px;
 }
-.module-vote .pk .proportion.show-res .percent {
-  visibility: visible;
-}
-.module-vote .pk .proportion.show-res .pk-words {
-  display: none;
-}
 .module-vote .pk .percent {
   visibility: hidden;
 }
@@ -174,9 +173,9 @@ body {
 }
 .module-vote .pk .proportion-bar {
   position: relative;
-  top: .4rem;
+  top: .43rem;
   margin: 0 .8rem;
-  height: .2rem;
+  height: .15rem;
   background-color: #34b79d;
   border-radius: 2px;
   overflow: hidden;
@@ -209,6 +208,12 @@ body {
 }
 .module-vote .vote.show-res .vote-item {
   line-height: .5rem;
+}
+.module-vote .vote.show-res .selected .icon-vote {
+  border-color: #f97717;
+}
+.module-vote .vote.show-res .icon-vote {
+  border-color: #ddd;
 }
 .module-vote .vote.show-res .vote-words {
   font-size: 12px;
