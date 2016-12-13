@@ -114,7 +114,6 @@
 }
 
 body {
-  padding-bottom: .9rem;
   background-color: #fafafa;
 }
 
@@ -228,26 +227,43 @@ body {
     line-height: 1.2;
   }
   .pk {
-    margin: .5rem .3rem .3rem;
+    margin: .5rem .3rem .7rem;
     height: 1rem;
     line-height: 1rem;
-    &.disable {
-      .pk-item {
+    &.show-res {
+      .percent {
+        visibility: visible;
+      }
+      .vote-sign {
+        display: none;
+      }
+      .vote-item {
         background-color: #ddd;
       }
     }
-    .pk-item {
+    .vote-item {
+      position: relative;
       width: 1rem;
       height: 100%;
       border-radius: 9999px;
       text-align: center;
     }
-    .pk-agree,
-    .pk-agree.selected {
+    .vote-words{
+      position: absolute;
+      bottom: -.6rem;
+      left: 0;
+      width: 100%;
+      height: .6rem;
+      line-height: .6rem;
+      font-size: 12px;
+      color: #999;
+    }
+    .vote-agree,
+    .vote-agree.selected {
       background-color: @agreeColor;
     }
-    .pk-disagree,
-    .pk-disagree.selected {
+    .vote-disagree,
+    .vote-disagree.selected {
       background-color: @disagreeColor;
       .icon-pk {
         -webkit-transform: scaleY(-1);
@@ -266,14 +282,6 @@ body {
       margin: 0 1.1rem;
       height: 100%;
       font-size: 12px;
-      &.show-res {
-        .percent {
-          visibility: visible;
-        }
-        .pk-words {
-          display: none;
-        }
-      }
     }
     .percent {
       visibility: hidden;
@@ -283,9 +291,9 @@ body {
     }
     .proportion-bar {
       position: relative;
-      top: .4rem;
+      top: .43rem;
       margin: 0 .8rem;
-      height: .2rem;
+      height: .15rem;
       background-color: @disagreeColor;
       border-radius: 2px;
       overflow: hidden;
@@ -297,7 +305,7 @@ body {
       -webkit-transition: width .5s ease-in-out;
       transition: width .5s ease-in-out;
     }
-    .pk-words {
+    .vote-sign {
       position: absolute;
       top: .25rem;
       left: 50%;
@@ -319,6 +327,14 @@ body {
     &.show-res {
       .vote-item {
         line-height: .5rem;
+      }
+      .selected {
+        .icon-vote {
+          border-color: @themeColor;
+        }
+      }
+      .icon-vote {
+        border-color: #ddd;
       }
       .vote-words {
         font-size: 12px;

@@ -51,7 +51,7 @@
     this.articleId = opt.articleId;
     this.replyCallback = opt.replyCallback;
     this._pageSize = opt.pageSize;
-    this._page = 0;
+    this._page = 1;
     this._buildDom(opt.root, opt.infinite);
     this._queryEl(opt.root);
     this._bindEvents(opt.root);
@@ -62,14 +62,14 @@
     constructor: Show,
     _buildDom: function (root, infinite) {
       var strHTML = '<div class="comment-list"></div>'
-        + '<i class="comment-loading"></i>'
-        + '<i class="comment-empty"></i>';
+        + '<div class="comment-loading"><i class="icon-loading"></i></div>'
+        + '<div class="comment-empty"><i class="icon-empty"></i><p class="empty-words">暂无评论，快来抢沙发！</p></div>';
 
       if (infinite) {
         strHTML += '<div class="comment-footer">'
-          + '<span class="load e-load">点击加载更多<span>'
-          + '<span class="error e-load">加载失败,点击重试</span>'
-          + '<span class="end">没有更多了</span>'
+          + '<div class="load load-pending e-load">点击加载更多</div>'
+          + '<div class="load load-fail e-load">加载失败,点击重试</div>'
+          + '<div class="load load-end">没有更多了</div>'
           + '</div>';
       }
 
@@ -114,7 +114,7 @@
           self._switchStatus('pending');
           self._page++;
         } else {
-          self._switchStatus(self._page === 1 ? 'empty' : 'no-more');
+          self._switchStatus(self._page === 1 ? 'empty' : 'end');
         }
       }
 

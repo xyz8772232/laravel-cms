@@ -45,6 +45,31 @@
 
 // 评论列表
 .comment-box {
+  &.loading {
+    .comment-loading {
+      display: block;
+    }
+  }
+  &.empty {
+    .comment-empty {
+      display: block;
+    }
+  }
+  &.pending {
+    .load-pending {
+      display: block;
+    }
+  }
+  &.fail {
+    .load-fail {
+      display: block;
+    }
+  }
+  &.end {
+    .load-end {
+      display: block;
+    }
+  }
   .comment {
     padding: .3rem .3rem 0;
     &:last-child {
@@ -109,6 +134,59 @@
   }
   .e-reply {
     float: right;
+  }
+  .comment-loading {
+    display: none;
+    margin: .5rem 0 .3rem;
+    text-align: center;
+  }
+  .icon-loading {
+    display: inline-block;
+    width: .5rem;
+    height: .5rem;
+    background: url('@{imgRoot}loading.svg') no-repeat center center;
+    background-size: 100%;
+    -webkit-animation: loading 1s linear 0s infinite;
+    animation: loading 1s linear 0s infinite;
+  }
+  .comment-empty {
+    display: none;
+    padding: 1rem 0;
+    text-align: center;
+  }
+  .icon-empty {
+    display: inline-block;
+    width: 1.5rem;
+    height: 1rem;
+    background: url('@{imgRoot}sofa.svg') no-repeat center center;
+    background-size: 100%;
+  }
+  .empty-words {
+    font-size: 12px;
+    color: #aaaaaa;
+    line-height: .8rem;
+  }
+  .comment-footer {
+    text-align: center;
+    color: #ffffff;
+    font-size: 13px;
+  }
+  .load {
+    display: none;
+    margin: .5rem .3rem .3rem;
+    height: .6rem;
+    line-height: .6rem;
+    border-radius: 4px;
+  }
+  .load-pending {
+    background-color: @themeColor;
+  }
+  .load-fail {
+    background-color: #ef5450;
+  }
+  .load-end {
+    display: none;
+    color: #aaa;
   }
 }
 
@@ -197,6 +275,7 @@
     -webkit-transform: rotate(360deg);
   }
 }
+
 @keyframes loading {
   from {
     transform: rotate(0deg);

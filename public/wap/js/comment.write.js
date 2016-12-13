@@ -79,6 +79,13 @@
         self._submit();
         return false;
       });
+      $(this._els.ipt).on('keydown', function (e) {
+        if (!this.value && e.keyCode === 8 && self.replyId) {
+          self.resetWrite(true);
+        }
+      }).on('focus', function(){
+        self._resetNotice();
+      });
     },
     _submit: function () {
       if (this._submitting) return false;
@@ -136,7 +143,7 @@
       }
       this._els.ipt.focus();
     },
-    resetWrite: function () {
+    resetWrite: function (notBlur) {
       if (this.replyId) {
         this._els.replyNick.innerText = '';
         this._els.area.classList.remove('reply');
@@ -144,7 +151,7 @@
         this.replyId = undefined;
         this.replyNick = undefined;
       }
-      this._els.ipt.blur();
+      notBlur || this._els.ipt.blur();
       this._els.ipt.value = '';
       this._resetNotice();
     }

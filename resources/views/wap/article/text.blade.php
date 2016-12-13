@@ -38,21 +38,21 @@
     @if ($ballot->type == 2)
       <section class="module-extend module-vote">
         <h1 class="title">{{ $ballot->title }}</h1>
-        <div class="pk">
-          <div class="pk-item fl e-pk pk-agree" data-vote="{{ $ballot->choices->first()->id }}"><span>{{ $ballot->choices->first()->content }}</span><i class="icon-pk"></i></div>
-          <div class="pk-item fr e-pk pk-disagree" data-vote="{{ $ballot->choices->last()->id }}"><span>{{ $ballot->choices->last()->content }}</span><i class="icon-pk"></i></div>
+        <div class="vote-box pk">
+          <div class="vote-item fl vote-agree e-vote e-submit" data-vote="{{ $ballot->choices->first()->id }}"><span class="vote-words">{{ $ballot->choices->first()->content }}</span><i class="icon-pk"></i></div>
+          <div class="vote-item fr vote-disagree e-vote e-submit" data-vote="{{ $ballot->choices->last()->id }}"><span class="vote-words">{{ $ballot->choices->last()->content }}</span><i class="icon-pk"></i></div>
           <div class="proportion">
             <span class="percent agree-percent fl"></span>
             <span class="percent disagree-percent fr"></span>
             <div class="proportion-bar"><div class="proportion-agree"></div></div>
-            <span class="pk-words">PK</span>
+            <span class="vote-sign">PK</span>
           </div>
         </div>
       </section>
     @else
       <section class="module-extend module-vote">
         <h1 class="title">{{ $ballot->title }}</h1>
-        <div class="vote">
+        <div class="vote-box vote">
           @foreach($ballot->choices as $choice)
           <div class="vote-item e-vote" data-vote="{{ $choice->id }}">
             <i class="icon-vote"></i>
