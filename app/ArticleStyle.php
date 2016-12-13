@@ -72,12 +72,13 @@ class ArticleStyle
             //如果该标签内的内容有效，则处理这段 内容
             if(self::validate($innertext) || $elementObject->tag == "img" || $elementObject->tag == "iframe" || $elementObject->tag == "video"){
                 //链接白名单，内部链接和合作方链接不会被过滤，sinaimg.cn是一个下载文档的链接
-                $whiteUrl = array("sina.cn","sina.com.cn","m.yizhibo.com","sinaimg.cn","http://form.mikecrm.com/24f0Cx");
+                //$whiteUrl = array("sina.cn","sina.com.cn","m.yizhibo.com","sinaimg.cn","http://form.mikecrm.com/24f0Cx");
                 if($elementObject->tag =="img"){
                     if (strpos($elementObject->src, '.x-empty') === false) {
                         self::$rs .= '<'.$elementObject->tag.' src="'.$elementObject->src.'">';
                     }
-                }elseif($elementObject->tag =="a" && (self::strposa($elementObject->href, $whiteUrl) ===false || (strpos($elementObject->href, "/person_menu/view/") != false && strpos($_SERVER['HTTP_HOST'], 'sina.com.cn') != false))) {
+                //}elseif($elementObject->tag =="a" && (self::strposa($elementObject->href, $whiteUrl) ===false)) {
+                }elseif($elementObject->tag =="a") {
                     //去掉外站的a标签  去掉pc端的关键词标签
                     $endTag = '</' . $elementObject->tag . '>';
                     self::$rs .= self::filterContent($elementObject);
