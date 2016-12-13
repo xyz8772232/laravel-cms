@@ -145,7 +145,7 @@
 
     if (voteData.agreed) {
       var voteRes = calcVoteRes();
-      showVoteRes($module.children('.vote-item'), voteRes.agreePercentList);
+      showVoteRes($module, $module.children('.vote-item'), voteRes.agreePercentList);
     } else {
       $module.on('click', '.e-vote', function () {
         $(this).toggleClass('selected');
@@ -157,7 +157,7 @@
         }
         var $items = $module.children('.vote-item');
         var voteRes = calcVoteRes($items);
-        showVoteRes($items, voteRes.agreePercentList);
+        showVoteRes($module, $items, voteRes.agreePercentList);
         // 移除投票事件监听
         $module.off('click', '.e-vote').off('click', '.e-submit');
         // 提交投票
@@ -194,18 +194,19 @@
       }
     }
 
-    function showNormalVoteRes($items, agreePercentList) {
+    function showNormalVoteRes($module, $items, agreePercentList) {
       $items.each(function (index) {
         var strPercent = agreePercentList[index] + '%';
         $(this).find('.percent').text(strPercent);
         $(this).find('.proportion-agree').css('width', strPercent);
-      }).parent().addClass('show-res');
+      });
+      $module.addClass('show-res');
     }
 
-    function showPkVoteRes($items, agreePercentList) {
-      $items.eq(0).text(agreePercentList[0] + '%');
-      $items.eq(1).text(agreePercentList[1] + '%');
-      $items.parent().addClass('show-res')
+    function showPkVoteRes($module, $items, agreePercentList) {
+      $module.find('.agree-percent').text(agreePercentList[0] + '%');
+      $module.find('.disagree-percent').text(agreePercentList[1] + '%');
+      $module.addClass('show-res')
       .find('.proportion-agree').css('width', agreePercentList[0] + '%');
     }
   })();
