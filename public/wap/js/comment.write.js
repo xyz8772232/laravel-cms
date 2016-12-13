@@ -68,7 +68,7 @@
         area: root.getElementsByClassName('write-area')[0],
         ipt: root.getElementsByClassName('write-ipt')[0],
         writeTo: root.getElementsByClassName('write-to')[0],
-        replyNick: root.getElementsByClassName('reply-nick')[0],
+        replyUserNick: root.getElementsByClassName('reply-nick')[0],
         submit: root.getElementsByClassName('write-submit')[0],
         notice: root.getElementsByClassName('write-notice')[0]
       };
@@ -114,7 +114,8 @@
             userId: self.userId,
             userNick: self.userNick,
             replyId: self.replyId,
-            replyNick: self.replyNick,
+            replyUserId: self.replyUserId,
+            replyUserNick: self.replyUserNick,
             content: val
           });
         }).fail(function () {
@@ -133,11 +134,12 @@
     _resetNotice: function () {
       this._els.notice.innerText = '';
     },
-    write: function (replyId, replyNick) {
+    write: function (replyId, replyUserId, replyUserNick) {
       this.replyId = replyId;
-      this.replyNick = replyNick;
-      if (replyId) {
-        this._els.replyNick.innerText = replyNick;
+      this.replyUserId = replyUserId;
+      this.replyUserNick = replyUserNick;
+      if (replyUserId) {
+        this._els.replyUserNick.innerText = replyUserNick;
         this._els.area.classList.add('reply');
         this._els.ipt.style.textIndent = this._els.writeTo.offsetWidth + 'px';
       }
@@ -145,14 +147,13 @@
     },
     resetWrite: function (notBlur) {
       if (this.replyId) {
-        this._els.replyNick.innerText = '';
+        this._els.replyUserNick.innerText = '';
         this._els.area.classList.remove('reply');
         this._els.ipt.style.textIndent = 0;
-        this.replyId = undefined;
-        this.replyNick = undefined;
+        this.replyId = this.replyUserId = this.replyUserNick = undefined;
       }
-      notBlur || this._els.ipt.blur();
       this._els.ipt.value = '';
+      notBlur || this._els.ipt.blur();
       this._resetNotice();
     }
   }

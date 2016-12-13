@@ -46,8 +46,8 @@
     root: document.getElementById('comments'),
     articleId: PAGE_CONFIG.articleId,
     pageSize: 3,
-    replyCallback: function (replyId, replyNick) {
-      $(window).trigger('reply', [replyId, replyNick]);
+    replyCallback: function (replyId, replyUserId, replyUserNick) {
+      $(window).trigger('comment', [replyId, replyUserId, replyUserNick]);
     }
   });
 
@@ -65,8 +65,9 @@
           user_id: submitData.userId,
           user_nick: submitData.userNick,
           parent: submitData.replyId && {
-            user_id: submitData.replyId,
-            user_nick: submitData.replyNick
+            id: submitData.replyId,
+            user_id: submitData.replyUserId,
+            user_nick: submitData.replyUserNick
           },
           content: submitData.content
         });
@@ -74,59 +75,9 @@
       }
     }
   });
-  $(window).on('reply', function (e, replyId, replyNick) {
-    commentWrite.write(replyId, replyNick);
+  $(window).on('comment', function (e, replyId, replyUserId, replyUserNick) {
+    commentWrite.write(replyId, replyUserId, replyUserNick);
   });
-
-  /**
-   * 投票 -- pk
-   */
-  //(function () {
-  //  var voteData = PAGE_CONFIG.ballot;
-  //  if (!voteData || voteData.type !== 2) return false;
-  //  var $module = $('.module-vote .pk');
-  //
-  //  if (voteData.agreed) {
-  //    var voteRes = calcVoteRes();
-  //    showVoteRes($module.children('.pk-item'), voteRes.agreePercentList);
-  //  } else {
-  //    $module.on('click', '.e-pk', function () {
-  //      // 登录用户方可投票
-  //      if (!userId) {
-  //        callLogin();
-  //        return false;
-  //      }
-  //      var $items = $module.children('.pk-item');
-  //      var voteRes = calcVoteRes($items);
-  //      showVoteRes($items, voteRes.agreePercentList);
-  //      // 移除投票事件监听
-  //      $module.off('click', '.e-pk');
-  //      // 提交投票
-  //      $.post('//yun.app/api/ballots/answer', {
-  //        choice_ids: voteRes.agreeIds,
-  //        user_id: userId
-  //      });
-  //    });
-  //  }
-  //
-  //  function calcVoteRes(vote) {
-  //    var agreeCount = voteData.agree;
-  //    var disagreeCount = voteData.disagree;
-  //    if (vote === 1) {
-  //      agreeCount += 1;
-  //    } else if (vote === 0) {
-  //      disagreeCount += 1;
-  //    }
-  //    return +(agreeCount / (agreeCount + disagreeCount) * 100).toFixed(1);
-  //  }
-  //
-  //  function showVoteRes($items, agreePercentList) {
-  //    $items.eq(0).text(agreePercentList[0] + '%');
-  //    $items.eq(1).text(agreePercentList[1] + '%');
-  //    $items.parent().addClass('show-res')
-  //    .find('.proportion-agree').css('width', agreePercentList[0] + '%');
-  //  }
-  //})();
 
   /**
    * 投票

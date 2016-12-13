@@ -6,12 +6,12 @@ var TPL_COMMENT = '\
     </div>\
     <div class="comment-main">\
       <div class="nickname">\
-        {{=it.userNick}}{{?it.replyId}}<i class="icon-reply"></i>{{=it.replyNick}}{{?}}\
+        {{=it.userNick}}{{?it.replyUserId}}<i class="icon-reply"></i>{{=it.replyUserNick}}{{?}}\
       </div>\
       <p class="content">{{=it.content}}</p>\
       <div class="panel">\
         <span class="panel-item">{{=it.time}}</span>\
-        <span class="panel-item e-reply" data-userid="{{=it.userId}}" data-usernick="{{=it.userNick}}">回复</span>\
+        {{?it.id && !it.isSelf}}<span class="panel-item e-reply" data-id="{{=it.id}}" data-userid="{{=it.userId}}" data-usernick="{{=it.userNick}}">回复</span>{{?}}\
       </div>\
     </div>\
   </div>\

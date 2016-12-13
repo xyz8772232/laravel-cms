@@ -37,6 +37,9 @@
   var CommentWrite = require('Widgets.Comment.Write');
   var transitionEnd = detectTransitionEvents();
 
+  var userId = PAGE_CONFIG.userId;
+  var userNick = PAGE_CONFIG.username;
+
   function detectTransitionEvents() {
     var t;
     var el = document.createElement('fakeelement');
@@ -55,21 +58,23 @@
   /**
    * 评论列表
    */
+  var $commentsCount = $('.header .title');
   var commentShow = CommentShow.new({
     root: document.getElementById('comments'),
     articleId: PAGE_CONFIG.articleId,
     pageSize: 10,
     infinite: true,
-    replyCallback: function (replyId, replyNick) {
-      $(window).trigger('comment', [replyId, replyNick]);
+    replyCallback: function (replyId, replyUserId, replyUserNick) {
+      $(window).trigger('comment', [replyId, replyUserId, replyUserNick]);
+    },
+    commentsCountUpdateCallback: function (count) {
+      $commentsCount.text(count + '条评论');
     }
   });
 
   /**
    * 发表评论
    */
-  var userId = '1102';
-  var userNick = 'Dr. Sabryna Lehner';
   var commentWrite = CommentWrite.new({
     root: document.getElementById('writeComment'),
     articleId: PAGE_CONFIG.articleId,
@@ -81,8 +86,9 @@
           user_id: submitData.userId,
           user_nick: submitData.userNick,
           parent: submitData.replyId && {
-            user_id: submitData.replyId,
-            user_nick: submitData.replyNick
+            id: submitData.replyId,
+            user_id: submitData.replyUserId,
+            user_nick: submitData.replyUserNick
           },
           content: submitData.content
         });
@@ -98,12 +104,12 @@
   var $writeComment = $('#writeComment');
   var $edit = $('#edit');
   var editLock = false;
-  $(window).on('comment', function (e, replyId, replyNick) {
+  $(window).on('comment', function (e, replyId, replyUserId, replyUserNick) {
     if (editLock) return false;
     $edit.removeClass('e-edit').addClass('e-cancel');
     $moduleComment.addClass('show');
     $writeComment.addClass('show');
-    commentWrite.write(replyId, replyNick);
+    commentWrite.write(replyId, replyUserId, replyUserNick);
   }).on('closeComment', function () {
     if (editLock) return false;
     editLock = true;

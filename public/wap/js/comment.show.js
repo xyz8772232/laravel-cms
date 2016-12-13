@@ -38,6 +38,7 @@
   var DEFAULT_FACE = '/wap/img/user.svg';
   var commentTplFn = doT.template(TPL_COMMENT);
   var commentsTplFn = doT.template(TPL_COMMENTS);
+  var userId = +PAGE_CONFIG.userId;
 
   exports.new = function (opt) {
     return new Show(opt);
@@ -50,6 +51,7 @@
   function Show(opt) {
     this.articleId = opt.articleId;
     this.replyCallback = opt.replyCallback;
+    this.commentsCountUpdateCallback = opt.commentsCountUpdateCallback;
     this._pageSize = opt.pageSize;
     this._page = 1;
     this._buildDom(opt.root, opt.infinite);
@@ -86,9 +88,10 @@
       var self = this;
       $(this._els.list).on('click', '.e-reply', function () {
         if (self.replyCallback) {
+          var id = this.getAttribute('data-id');
           var userId = this.getAttribute('data-userid');
           var userNick = this.getAttribute('data-usernick');
-          self.replyCallback(userId, userNick);
+          self.replyCallback(id, userId, userNick);
         }
         return false;
       });
@@ -112,6 +115,7 @@
           var strHTML = commentsTplFn(batchAdapter(res.data));
           self._render(strHTML);
           self._switchStatus('pending');
+          self._updateCommentsCount(res.meta.pagination.total);
           self._page++;
         } else {
           self._switchStatus(self._page === 1 ? 'empty' : 'end');
@@ -130,10 +134,15 @@
       $(this._els.box).removeClass(this._curStatus).addClass(status);
       this._curStatus = status;
     },
+    _updateCommentsCount: function (count) {
+      this.commentCount = count;
+      this.commentsCountUpdateCallback && this.commentsCountUpdateCallback(count);
+    },
     add: function (data) {
       data.created_at = formatTime();
       var strHTML = commentTplFn(adapter(data));
       this._render(strHTML, true);
+      this._updateCommentsCount(this.commentCount + 1);
     }
   };
 
@@ -148,10 +157,12 @@
       face: comment.face || DEFAULT_FACE,
       userId: comment.user_id,
       userNick: comment.user_nick,
-      replyId: replyComment && replyComment.user_id,
-      replyNick: replyComment && replyComment.user_nick,
+      id: comment.id,
+      replyUserId: replyComment && replyComment.user_id,
+      replyUserNick: replyComment && replyComment.user_nick,
       content: comment.content,
-      time: comment.created_at
+      time: comment.created_at,
+      isSelf: comment.user_id === userId
     };
   }
 
