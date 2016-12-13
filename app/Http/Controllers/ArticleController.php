@@ -41,7 +41,8 @@ class ArticleController extends Controller
                 'title' => $value['title'],
             ];
         })->all();
-        return view('wap.article.photo', compact('article', 'contentPics'));
+        $commentNum = Comment::where('article_id', $article->id)->count();
+        return view('wap.article.photo', compact('article', 'contentPics', 'commentNum'));
 
     }
 
@@ -54,15 +55,16 @@ class ArticleController extends Controller
         $userId = self::$appUser['uid'] ?? 0;
         $username = self::$appUser['username'] ?? '';
 
+        $userBallot = [];
         if ($ballot) {
             $ballotResult = $ballot->result($userId);
-            $userBallot = array_keys($ballotResult->pluck('approved')->all(), true);
+            $userBallot = array_keys($ballotResult->pluck('approved', 'id')->all(), true);
 
             $ballotConfig = [
                 'type' => $ballot->type,
                 'max' => $ballot->max_num,
                 'agree' => $ballotResult->pluck('approve_num')->all(),
-                'agreed' => $userBallot ?: null,
+                'agreed' => (bool)$userBallot,
             ];
         }
 
@@ -77,7 +79,7 @@ class ArticleController extends Controller
         JavaScriptFacade::put([
             'PAGE_CONFIG' => $pageConfig,
         ]);
-        //dd($ballot);
-        return view('wap.article.text', compact('article', 'comments', 'ballot'));
+
+        return view('wap.article.text', compact('article', 'comments', 'ballot', 'userBallot'));
     }
 }

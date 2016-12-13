@@ -54,7 +54,7 @@
         <h1 class="title">{{ $ballot->title }}</h1>
         <div class="vote-box vote">
           @foreach($ballot->choices as $choice)
-          <div class="vote-item e-vote" data-vote="{{ $choice->id }}">
+          <div class="vote-item e-vote @if (in_array($choice->id, $userBallot)) selected @endif" data-vote="{{ $choice->id }}">
             <i class="icon-vote"></i>
             <span class="vote-words">{{ $choice->content }}</span>
             <span class="percent"></span>

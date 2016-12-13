@@ -10,14 +10,12 @@ trait AppUser
 
     protected function getAppUser()
     {
-        if (!empty(Request::cookie('uid')) && !empty(Request::cookie('username'))) {
+        if (Input::get('from', '') == 'app') {
+            static::$appUser['uid'] = Input::get('uid', 0);
+            static::$appUser['username'] = Input::get('username', '');
+        } elseif (!empty(Request::cookie('uid')) && !empty(Request::cookie('username'))) {
             static::$appUser['uid'] = Request::cookie('uid');
             static::$appUser['username'] = Request::cookie('username');
-        } else {
-            if (Input::get('from', '') == 'app') {
-                static::$appUser['uid'] = Input::get('uid', 0);
-                static::$appUser['username'] = Input::get('username', '');
-            }
         }
     }
 }

@@ -44,7 +44,7 @@ class CommentController extends BaseController
         $content = Input::get('content');
         $user_id = Input::get('user_id');
         $user_nick = Input::get('user_nick');
-        $reply_to_id = Input::get('reply_to_id', 0);
+        $reply_to_id = (int)Input::get('reply_to_id', 0);
 
         $result = Comment::create([
             'article_id' => $article_id,
@@ -54,7 +54,6 @@ class CommentController extends BaseController
             'user_nick' => $user_nick,
             'reply_to_id' => $reply_to_id,
         ]);
-
         if ($result) {
             return $this->response->created();
         } else {

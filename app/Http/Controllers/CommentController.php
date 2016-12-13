@@ -6,20 +6,36 @@ use App\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
+use Laracasts\Utilities\JavaScript\JavaScriptFacade;
 
 class CommentController extends Controller
 {
     public function index()
     {
+        $this->getAppUser();
         $rules = ['article_id' => 'required|integer|exists:articles,id,state,2,deleted_at,NULL'];
-        $validator = Validator::make(Input::all(), $rules);
+        $article_id = Input::get('article_id', 0);
+        $validator = Validator::make(['article_id' => $article_id], $rules);
         if ($validator->fails()) {
-            return redirect('/');
+            return back();
         }
 
-        $comments = Comment::with('parent')->where('article_id', Input::get('article_id'))->paginate(20);
+        $comments = Comment::with('parent')->where('article_id', $article_id)->paginate(20);
 
-        return view('wap.article.comment', compact('comments'));
+        $userId = self::$appUser['uid'] ?? 0;
+        $username = self::$appUser['username'] ?? '';
+
+        $pageConfig = [
+            'userId' => (string)$userId,
+            'username' => $username,
+            'articleId' => $article_id,
+        ];
+
+        JavaScriptFacade::put([
+            'PAGE_CONFIG' => $pageConfig,
+        ]);
+
+        return view('wap.article.comment', compact('comments', 'article_id'));
 
 
     }
