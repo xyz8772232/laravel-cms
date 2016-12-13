@@ -6,17 +6,15 @@ use App\Article;
 use App\ArticleStyle;
 use App\Comment;
 use App\Ballot;
-use Illuminate\Support\Facades\Input;
 use Laracasts\Utilities\JavaScript\JavaScriptFacade;
 
 class ArticleController extends Controller
 {
-//    protected $articleStyle;
-//
-//    public function __construct(ArticleStyle $articleStyle)
-//    {
-//        $this->articleStyle = $articleStyle;
-//    }
+    public function __construct()
+    {
+        $this->middleware('appuser')->only('show');
+    }
+
     public function index()
     {
 
@@ -25,6 +23,7 @@ class ArticleController extends Controller
 
     public function show($id)
     {
+        $this->getAppUser();
         $article =  Article::online()->where('id', $id)->firstOrFail();
         if ($article->type == 1) {
             return $this->photo($article);
@@ -42,7 +41,8 @@ class ArticleController extends Controller
                 'title' => $value['title'],
             ];
         })->all();
-        return view('wap.article.photo', compact('article', 'contentPics'));
+        $commentNum = Comment::where('article_id', $article->id)->count();
+        return view('wap.article.photo', compact('article', 'contentPics', 'commentNum'));
 
     }
 
@@ -52,23 +52,24 @@ class ArticleController extends Controller
         $article->content = ArticleStyle::articleContent($article->content);
         $comments = Comment::with('parent')->where('article_id', $article->id)->orderBy('created_at', 'desc')->limit(3)->get();
         $ballot = Ballot::with('choices')->where('article_id', $article->id)->first();
-        $userId = Input::get('user_id', 0);
-        $username = Input::get('username', '');
+        $userId = self::$appUser['uid'] ?? 0;
+        $username = self::$appUser['username'] ?? '';
 
+        $userBallot = [];
         if ($ballot) {
             $ballotResult = $ballot->result($userId);
-            $userBallot = array_keys($ballotResult->pluck('approved')->all(), true);
+            $userBallot = array_keys($ballotResult->pluck('approved', 'id')->all(), true);
 
             $ballotConfig = [
                 'type' => $ballot->type,
                 'max' => $ballot->max_num,
                 'agree' => $ballotResult->pluck('approve_num')->all(),
-                'agreed' => $userBallot ?: null,
+                'agreed' => (bool)$userBallot,
             ];
         }
 
         $pageConfig = [
-            'userId' => $userId,
+            'userId' => (string)$userId,
             'username' => $username,
             'articleId' => $article->id,
             'ballot' => $ballotConfig ?? null,
@@ -78,7 +79,7 @@ class ArticleController extends Controller
         JavaScriptFacade::put([
             'PAGE_CONFIG' => $pageConfig,
         ]);
-        //dd($ballot);
-        return view('wap.article.text', compact('article', 'comments', 'ballot'));
+
+        return view('wap.article.text', compact('article', 'comments', 'ballot', 'userBallot'));
     }
 }

@@ -28,25 +28,38 @@ class BallotController extends BaseController
 
     }
 
-    public function answer($choice_id)
+    public function answer()
     {
         $rules = [
-            'choice_id' => 'required|integer|exists:ballot_choices,id',
-            'user_id' => 'required|integer',
+            'choice_ids.*' => 'required|integer|exists:ballot_choices,id',
+            'user_id' => 'required|integer|not_in:0',
         ];
-        $validator = Validator::make(['choice_id' => $choice_id, 'user_id' => Input::get('user_id')], $rules);
+        $choice_ids = Input::get('choice_ids', []);
+        $user_id = Input::get('user_id', 0);
+        $validator = Validator::make(['choice_ids' => $choice_ids, 'user_id' => $user_id], $rules);
         if ($validator->fails()) {
-            return $this->response->errorBadRequest();
+            return $this->response->errorBadRequest('参数错误');
         }
-        $user_id = Input::get('user_id');
 
-        $ballot_id = BallotChoice::find($choice_id)->ballot_id;
+        $ballot_id = BallotChoice::find($choice_ids[0])->ballot_id;
 
-        $result = BallotAnswer::create([
-            'ballot_id' => $ballot_id,
-            'choice_id' => $choice_id,
-            'user_id' => $user_id,
-        ]);
+        if (!$ballot_id) {
+            return $this->response->errorBadRequest('投票不存在或已过期');
+        }
+
+        $answered = BallotAnswer::where('ballot_id', $ballot_id)->where('user_id', $user_id)->first();
+
+        if ($answered) {
+            return $this->response->errorBadRequest('已投过票');
+        }
+
+        foreach ($choice_ids as $choice_id) {
+            $result = BallotAnswer::create([
+                'ballot_id' => $ballot_id,
+                'choice_id' => $choice_id,
+                'user_id' => $user_id,
+            ]);
+        }
 
         if ($result) {
             return $this->response->created();

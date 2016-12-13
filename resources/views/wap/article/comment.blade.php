@@ -15,11 +15,6 @@
 @endsection
 
 @section('js')
-  <script>
-    var PAGE_CONFIG = {
-      articleId: 4
-    };
-  </script>
   <script src="{{ asset ("/packages/admin/AdminLTE/plugins/jQuery/jQuery-2.1.4.min.js") }}"></script>
   <script src="{{ asset ("/packages/wap/doT.min.js") }}"></script>
   <script src="{{ asset ("/wap/tpl/comments.js") }}"></script>
@@ -30,8 +25,8 @@
 
 @section('main')
   <header class="header">
-    <a class="back" href=""></a>
-    <span class="title">评论1233</span>
+    <a class="back" href="{{ route('articles.show', ['id' => $article_id]) }}"></a>
+    <span class="title">0条评论</span>
     <span class="edit e-edit" id="edit"></span>
   </header>
   <section class="module-comment">
