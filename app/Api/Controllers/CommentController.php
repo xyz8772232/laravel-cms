@@ -16,13 +16,14 @@ class CommentController extends BaseController
 {
     public function index()
     {
+        $pageSize = Input::get('pageSize', 20);
         $rules = ['article_id' => 'required|integer|exists:articles,id,state,2,deleted_at,NULL'];
         $validator = Validator::make(Input::all(), $rules);
         if ($validator->fails()) {
             return $this->errorNotFound();
         }
 
-        $comments = Comment::with('parent')->where('article_id', Input::get('article_id'))->paginate(20);
+        $comments = Comment::with('parent')->where('article_id', Input::get('article_id'))->orderBy('created_at', 'desc')->paginate($pageSize);
         return $this->paginator($comments, new CommentTransformer());
 
     }

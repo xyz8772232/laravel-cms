@@ -3,13 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Article;
+use App\ArticleStyle;
 use App\Comment;
 use App\Ballot;
-use Illuminate\Http\Request;
 
 class ArticleController extends Controller
 {
-
+//    protected $articleStyle;
+//
+//    public function __construct(ArticleStyle $articleStyle)
+//    {
+//        $this->articleStyle = $articleStyle;
+//    }
     public function index()
     {
 
@@ -42,6 +47,7 @@ class ArticleController extends Controller
     //普通文章
     private function text(Article $article)
     {
+        $article->content = ArticleStyle::articleContent($article->content);
         $comments = Comment::with('parent')->where('article_id', $article->id)->orderBy('created_at', 'desc')->limit(3)->get();
         $ballot = Ballot::with('choices')->where('article_id', $article->id)->first();
         //dd($ballot);
