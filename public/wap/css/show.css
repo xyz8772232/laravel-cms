@@ -119,6 +119,11 @@ body {
   font-size: 16px;
   line-height: 1.2;
 }
+.module-vote .vote-max {
+  margin-left: 10px;
+  font-size: 13px;
+  color: #999;
+}
 .module-vote .pk {
   margin: .5rem .3rem .7rem;
   height: 1rem;
