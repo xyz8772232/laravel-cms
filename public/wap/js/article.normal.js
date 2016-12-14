@@ -87,6 +87,8 @@
     if (!voteData) return false;
     var $module = $('.module-vote .vote-box');
     var showVoteRes;
+    var selectedCount = 0;
+    var voteMax = voteData.max;
 
     if (voteData.type === 2) {
       showVoteRes = showPkVoteRes;
@@ -99,11 +101,26 @@
       showVoteRes($module, $module.children('.vote-item'), voteRes.agreePercentList);
     } else {
       $module.on('click', '.e-vote', function () {
-        $(this).toggleClass('selected');
+        if (this.classList.contains('selected')) {
+          this.classList.remove('selected');
+          selectedCount--;
+        } else {
+          if (selectedCount < voteMax) {
+            this.classList.add('selected');
+            selectedCount++;
+          } else {
+            alert('最多只能投' + voteMax + '票');
+          }
+        }
       }).on('click', '.e-submit', function () {
         // 登录用户方可投票
         if (!userId) {
           callLogin();
+          return false;
+        }
+        // 未投票不能提交
+        if (!selectedCount) {
+          alert('请先投票');
           return false;
         }
         var $items = $module.children('.vote-item');
@@ -163,6 +180,6 @@
   })();
 
   function callLogin() {
-
+    alert('请先登录');
   }
 });

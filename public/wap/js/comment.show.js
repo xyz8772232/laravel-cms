@@ -38,14 +38,10 @@
   var DEFAULT_FACE = '/wap/img/user.svg';
   var commentTplFn = doT.template(TPL_COMMENT);
   var commentsTplFn = doT.template(TPL_COMMENTS);
-  var userId = +PAGE_CONFIG.userId;
+  var userId = PAGE_CONFIG.userId;
 
   exports.new = function (opt) {
     return new Show(opt);
-  };
-
-  exports.parseHTML = function () {
-    return commentTplFn(adapter(res.data));
   };
 
   function Show(opt) {
