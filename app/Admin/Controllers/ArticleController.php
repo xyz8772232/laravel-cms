@@ -292,7 +292,6 @@ class ArticleController extends Controller
     {
         $comments = [];
         $ballot = [];
-        //dd($ballot);
         return view('wap.article.text', compact('article', 'comments', 'ballot'));
     }
 
