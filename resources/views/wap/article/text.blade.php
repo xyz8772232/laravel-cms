@@ -39,8 +39,8 @@
       <section class="module-extend module-vote">
         <h1 class="title">{{ $ballot->title }}</h1>
         <div class="vote-box pk">
-          <div class="vote-item fl vote-agree e-vote e-submit" data-vote="{{ $ballot->choices->first()->id }}"><span class="vote-words">{{ $ballot->choices->first()->content }}</span><i class="icon-pk"></i></div>
-          <div class="vote-item fr vote-disagree e-vote e-submit" data-vote="{{ $ballot->choices->last()->id }}"><span class="vote-words">{{ $ballot->choices->last()->content }}</span><i class="icon-pk"></i></div>
+          <div class="vote-item fl vote-agree e-vote e-submit @if ($ballotResult->first()['approved']) selected @endif" data-vote="{{ $ballotResult->first()['id'] }}"><span class="vote-words">{{ $ballotResult->first()['content'] }}</span><i class="icon-pk"></i></div>
+          <div class="vote-item fr vote-disagree e-vote e-submit @if ($ballotResult->last()['approved']) selected @endif" data-vote="{{ $ballotResult->last()['id'] }}"><span class="vote-words">{{ $ballotResult->last()['content'] }}</span><i class="icon-pk"></i></div>
           <div class="proportion">
             <span class="percent agree-percent fl"></span>
             <span class="percent disagree-percent fr"></span>
@@ -53,10 +53,10 @@
       <section class="module-extend module-vote">
         <h1 class="title">{{ $ballot->title }}</h1>
         <div class="vote-box vote">
-          @foreach($ballot->choices as $choice)
-          <div class="vote-item e-vote @if (in_array($choice->id, $userBallot)) selected @endif" data-vote="{{ $choice->id }}">
+          @foreach($ballotResult as $choice)
+          <div class="vote-item e-vote @if ($choice['approved']) selected @endif" data-vote="{{ $choice['id'] }}">
             <i class="icon-vote"></i>
-            <span class="vote-words">{{ $choice->content }}</span>
+            <span class="vote-words">{{ $choice['content'] }}</span>
             <span class="percent"></span>
             <div class="proportion-bar"><div class="proportion-agree"></div></div>
           </div>
@@ -69,7 +69,7 @@
   <section class="module-extend module-comments">
     <div id="writeComment"></div>
     <div id="comments"></div>
-    <a class="more-comments" href="/comments?article_id={{ $article->id }}">查看全部评论 >></a>
+    <a class="more-comments" href="{{ route('comments.index', ['article_id' => $article->id]) }}">查看全部评论 >></a>
   </section>
 @endsection
 

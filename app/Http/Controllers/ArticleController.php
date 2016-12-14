@@ -55,16 +55,15 @@ class ArticleController extends Controller
         $userId = self::$appUser['uid'] ?? 0;
         $username = self::$appUser['username'] ?? '';
 
-        $userBallot = [];
+        $ballotResult = [];
         if ($ballot) {
-            $ballotResult = $ballot->result($userId);
-            $userBallot = array_keys($ballotResult->pluck('approved', 'id')->all(), true);
 
+            $ballotResult = $ballot->result($userId);
             $ballotConfig = [
                 'type' => $ballot->type,
                 'max' => $ballot->max_num,
                 'agree' => $ballotResult->pluck('approve_num')->all(),
-                'agreed' => (bool)$userBallot,
+                'agreed' => (bool)array_keys($ballotResult->pluck('approved', 'id')->all(), true),
             ];
         }
 
@@ -80,6 +79,6 @@ class ArticleController extends Controller
             'PAGE_CONFIG' => $pageConfig,
         ]);
 
-        return view('wap.article.text', compact('article', 'comments', 'ballot', 'userBallot'));
+        return view('wap.article.text', compact('article', 'comments', 'ballot', 'ballotResult'));
     }
 }
