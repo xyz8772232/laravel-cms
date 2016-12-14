@@ -68,7 +68,7 @@ class ArticleController extends Controller
         }
 
         $pageConfig = [
-            'userId' => (string)$userId,
+            'userId' => (int)$userId,
             'username' => $username,
             'articleId' => $article->id,
             'ballot' => $ballotConfig ?? null,

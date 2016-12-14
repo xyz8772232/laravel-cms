@@ -14,7 +14,7 @@ class CommentController extends Controller
     {
         $this->getAppUser();
         $rules = ['article_id' => 'required|integer|exists:articles,id,state,2,deleted_at,NULL'];
-        $article_id = Input::get('article_id', 0);
+        $article_id = (int)Input::get('article_id', 0);
         $validator = Validator::make(['article_id' => $article_id], $rules);
         if ($validator->fails()) {
             return back();
@@ -26,7 +26,7 @@ class CommentController extends Controller
         $username = self::$appUser['username'] ?? '';
 
         $pageConfig = [
-            'userId' => (string)$userId,
+            'userId' => (int)$userId,
             'username' => $username,
             'articleId' => $article_id,
         ];

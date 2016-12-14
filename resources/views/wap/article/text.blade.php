@@ -51,7 +51,7 @@
       </section>
     @else
       <section class="module-extend module-vote">
-        <h1 class="title">{{ $ballot->title }}<span class="vote-max">( 最多只能投2票 )</span></h1>
+        <h1 class="title">{{ $ballot->title }}<span class="vote-max">( 最多只能投{{ $ballot->max_num }}票 )</span></h1>
         <div class="vote-box vote">
           @foreach($ballotResult as $choice)
           <div class="vote-item e-vote @if ($choice['approved']) selected @endif" data-vote="{{ $choice['id'] }}">
