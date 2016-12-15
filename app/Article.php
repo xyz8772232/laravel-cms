@@ -17,6 +17,10 @@ class Article extends Model
         'is_headline' => 'boolean',
     ];
 
+    protected $dates = [
+        'published_at',
+    ];
+
     protected $appends = ['view_num', 'comment_num'];
 
     protected $hidden = ['view_num', 'comment_num'];

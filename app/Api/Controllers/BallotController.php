@@ -32,7 +32,7 @@ class BallotController extends BaseController
     {
         $rules = [
             'choice_ids.*' => 'required|integer|exists:ballot_choices,id',
-            'user_id' => 'required|integer|not_in:0',
+            //'user_id' => 'required|integer|not_in:0',
         ];
         $choice_ids = Input::get('choice_ids', []);
         $user_id = Input::get('user_id', 0);
@@ -47,11 +47,11 @@ class BallotController extends BaseController
             return $this->response->errorBadRequest('投票不存在或已过期');
         }
 
-        $answered = BallotAnswer::where('ballot_id', $ballot_id)->where('user_id', $user_id)->first();
-
-        if ($answered) {
-            return $this->response->errorBadRequest('已投过票');
-        }
+//        $answered = BallotAnswer::where('ballot_id', $ballot_id)->where('user_id', $user_id)->first();
+//
+//        if ($answered) {
+//            return $this->response->errorBadRequest('已投过票');
+//        }
 
         foreach ($choice_ids as $choice_id) {
             $result = BallotAnswer::create([

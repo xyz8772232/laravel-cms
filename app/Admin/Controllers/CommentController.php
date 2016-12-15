@@ -107,8 +107,14 @@ class CommentController extends Controller
                 });
             });
 
+            $grid->filter(function($filter) {
+                $filter->is('article_id', '文章id');
+                $filter->between('created_at', trans('admin::lang.created_at'))->datetime();
+            });
+
             $grid->disableCreation();
             $grid->disableExport();
+            $grid->disablePerPageSelector();
 
         });
     }

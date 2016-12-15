@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Comment;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use Laracasts\Utilities\JavaScript\JavaScriptFacade;
@@ -12,7 +11,7 @@ class CommentController extends Controller
 {
     public function index()
     {
-        $this->getAppUser();
+        //$this->getAppUser();
         $rules = ['article_id' => 'required|integer|exists:articles,id,state,2,deleted_at,NULL'];
         $article_id = (int)Input::get('article_id', 0);
         $validator = Validator::make(['article_id' => $article_id], $rules);

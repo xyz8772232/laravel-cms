@@ -27,7 +27,7 @@
   <section class="module-article">
     <h1 class="title">{{ $article->title }}</h1>
     <div class="extra">
-    <div class="extra-info">{{ $article->published_at }} {{$article->source}}</div>
+    <div class="extra-info">{{ $article->published_at->toDateString() }} {{ $article->source }}</div>
     </div>
     <article class="main-body">
       {!! $article->content !!}
@@ -67,9 +67,7 @@
     @endif
   @endif
   <section class="module-extend module-comments">
-    <div id="writeComment"></div>
     <div id="comments"></div>
-    <a class="more-comments" href="{{ route('comments.index', ['article_id' => $article->id]) }}">查看全部评论 >></a>
   </section>
 @endsection
 
