@@ -10,10 +10,10 @@ use Laracasts\Utilities\JavaScript\JavaScriptFacade;
 
 class ArticleController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('appuser')->only('show');
-    }
+//    public function __construct()
+//    {
+//        $this->middleware('appuser')->only('show');
+//    }
 
     public function index()
     {
@@ -23,7 +23,7 @@ class ArticleController extends Controller
 
     public function show($id)
     {
-        $this->getAppUser();
+        //$this->getAppUser();
         $article =  Article::online()->where('id', $id)->firstOrFail();
         if ($article->type == 1) {
             return $this->photo($article);
@@ -52,13 +52,13 @@ class ArticleController extends Controller
         $article->content = ArticleStyle::articleContent($article->content);
         $comments = Comment::with('parent')->where('article_id', $article->id)->orderBy('created_at', 'desc')->limit(3)->get();
         $ballot = Ballot::with('choices')->where('article_id', $article->id)->first();
-        $userId = self::$appUser['uid'] ?? 0;
-        $username = self::$appUser['username'] ?? '';
+//        $userId = self::$appUser['uid'] ?? 0;
+//        $username = self::$appUser['username'] ?? '';
 
         $ballotResult = [];
         if ($ballot) {
 
-            $ballotResult = $ballot->result($userId);
+            $ballotResult = $ballot->result();
             $ballotConfig = [
                 'type' => $ballot->type,
                 'max' => $ballot->max_num,
@@ -68,8 +68,8 @@ class ArticleController extends Controller
         }
 
         $pageConfig = [
-            'userId' => (int)$userId,
-            'username' => $username,
+//            'userId' => (int)$userId,
+//            'username' => $username,
             'articleId' => $article->id,
             'ballot' => $ballotConfig ?? null,
 

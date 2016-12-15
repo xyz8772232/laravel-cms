@@ -35,6 +35,7 @@ class CommentController extends BaseController
             'content' => 'required',
             'user_id' => 'required|integer',
             'user_nick' => 'required',
+            'user_avatar' => 'required',
         ];
         $validator = Validator::make(Input::all(), $rules);
         if ($validator->fails()) {
@@ -44,6 +45,7 @@ class CommentController extends BaseController
         $content = Input::get('content');
         $user_id = Input::get('user_id');
         $user_nick = Input::get('user_nick');
+        $user_avatar = Input::get('user_avatar', '');
         $reply_to_id = (int)Input::get('reply_to_id', 0);
 
         $result = Comment::create([
@@ -52,6 +54,7 @@ class CommentController extends BaseController
             'ip' => Request::ip(),
             'user_id' => $user_id,
             'user_nick' => $user_nick,
+            'user_avatar' => $user_avatar,
             'reply_to_id' => $reply_to_id,
         ]);
         if ($result) {
