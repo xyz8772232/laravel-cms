@@ -11,6 +11,12 @@ html, body {
 .module-photo-article {
   height: 100%;
   position: relative;
+  &.hide-summary {
+    .header {
+      -webkit-transform: translateY(-50px);
+      transform: translateY(-50px);
+    }
+  }
 }
 
 .header {
@@ -26,16 +32,18 @@ html, body {
   background: rgba(0, 0, 0, 0.7);
   font-size: 12px;
   color: #fff;
+  -webkit-transition: transform .35s;
+  transition: transform .35s;
   .icon {
     display: inline-block;
   }
-  .comments{
+  .comments {
     float: right;
     height: 100%;
 
     color: #ffffff;
   }
-  .icon-comments{
+  .icon-comments {
     width: 22px;
     height: 22px;
     vertical-align: middle;
@@ -71,6 +79,8 @@ html, body {
   background: rgba(0, 0, 0, 0.7);
   font-size: 14px;
   color: #888;
+  -webkit-transition: transform .35s;
+  transition: transform .35s;
   .title {
     margin-bottom: 5px;
     line-height: 24px;
