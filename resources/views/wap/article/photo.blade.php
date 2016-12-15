@@ -16,7 +16,7 @@
 
 @section('js')
   <script src="{{ asset ("/packages/wap/swiper/js/swiper.min.js") }}"></script>
-  <script src="{{ asset ("/wap/js/article.photo.js") }}"></script>
+  <script src="{{ asset_with_version("/wap/js/article.photo.js") }}"></script>
 @endsection
 
 @section('main')
