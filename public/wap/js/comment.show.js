@@ -41,7 +41,9 @@
   var userId = PAGE_CONFIG.userId;
 
   exports.new = function (opt) {
-    return new Show(opt);
+    if (opt && opt.root) {
+      return new Show(opt);
+    }
   };
 
   function Show(opt) {
