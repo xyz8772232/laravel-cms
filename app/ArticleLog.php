@@ -15,6 +15,11 @@ class ArticleLog extends Model
 
     protected $dates = ['deleted_at'];
 
+    public function administrator()
+    {
+        return $this->belongsTo('Encore\Admin\Auth\Database\Administrator', 'admin_user_id');
+    }
+
 
 
     public static function boot()

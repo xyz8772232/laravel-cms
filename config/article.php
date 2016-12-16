@@ -11,8 +11,13 @@ return
         'create' => 1,
         'update' => 2,
         'delete' => 3,
-        'audit' => 4,
-        'move' => 5,
+        'audit' => 4, //提交审核
+        'move' => 5, //转移频道
+        'pass' => 6, //审核通过
+        'outline' => 7, //下线
+    ],
+    'state' => [
+
     ],
     'sortPhotoMaxNum' => 8,
 

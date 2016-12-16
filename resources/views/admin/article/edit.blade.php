@@ -207,6 +207,38 @@
       </div>
     </div>
   </section>
+  <section class="content">
+    <div class="row">
+      <h2 class="col-md-2 col-md-offset-5">操作日志</h2>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="box box-info box-solid">
+          <div class="box-body" style="display: block;">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>时间</th>
+                  <th>操作人</th>
+                  <th>操作行为</th>
+                </tr>
+              </thead>
+              <tbody>
+              @foreach($articleLogs as $articleLog)
+                <tr>
+                  <td>{{ $articleLog->created_at }}</td>
+                  <td>{{ $articleLog->administrator->name }}</td>
+                  @define($operation = array_flip(config('article.operation'))[$articleLog->operation])
+                  <td>{{trans("lang.$operation") }}</td>
+                </tr>
+                @endforeach
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 @endsection
 
 @section('css')

@@ -90,12 +90,14 @@ class CommentController extends Controller
         return Admin::grid(Comment::class, function (Grid $grid) {
 
             $grid->id('ID')->sortable();
-            $grid->article_id('文章ID')->sortable();
+            $grid->article_id('文章ID');
             $grid->content('内容');
             $grid->created_at(trans('admin::lang.created_at'));
             $grid->ip('评论者IP');
             $grid->user_id('评论者ID');
             $grid->user_nick('评论者昵称');
+
+            $grid->model()->orderBy('id', 'desc');
 
             $grid->rows(function($row) {
                 $row->actions('delete')->add(function($row) {
@@ -109,13 +111,13 @@ class CommentController extends Controller
 
             $grid->filter(function($filter) {
                 $filter->is('article_id', '文章id');
+                $filter->like('content', '内容');
                 $filter->between('created_at', trans('admin::lang.created_at'))->datetime();
             });
 
             $grid->disableCreation();
             $grid->disableExport();
             $grid->disablePerPageSelector();
-
         });
     }
 

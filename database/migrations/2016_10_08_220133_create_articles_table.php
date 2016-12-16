@@ -17,7 +17,7 @@ class CreateArticlesTable extends Migration
         Schema::create('articles', function(Blueprint $table)
         {
             $table->increments('id');
-            $table->tinyInteger('state')->default(0)->comment('状态');
+            $table->tinyInteger('state')->default(0)->comment('状态 0发布 1提交审核 2上线');
             $table->unsignedInteger('link_id')->default(0)->comment('0为正常文章,>0是文字链接对应的文章id');
             $table->tinyInteger('type')->default(0)->comment('0:普通1:图片');
             $table->string('title', 255);

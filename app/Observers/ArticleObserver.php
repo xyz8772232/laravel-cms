@@ -65,19 +65,21 @@ class ArticleObserver
     {
         $admin_user_id = Admin::user()->id;
         if ($article->state == 1 && $article->getOriginal('state') == 0) {
-            ArticleLog::create([
-                'operation' => config('article.operation.audit'),
-                'article_id' => $article->id,
-                'admin_user_id' => $admin_user_id,
-            ]);
+            $operation = config('article.operation.audit');
+        } elseif ($article->state == 2 && $article->getOriginal('state') != 2) {
+            $operation = config('article.operation.pass');
+        } elseif ($article->getOriginal('state') == 2 && $article->state != 2) {
+            $operation = config('article.operation.outline');
         }
-
-        if ($article->channel_id != $article->getOriginal('channel_id')) {
-            ArticleLog::create([
-                'operation' => config('article.operation.move'),
-                'article_id' => $article->id,
-                'admin_user_id' => $admin_user_id,
-            ]);
+        elseif ($article->channel_id != $article->getOriginal('channel_id')){
+            $operation = config('article.operation.move');
+        } else {
+            $operation = config('article.operation.update');
         }
+        ArticleLog::create([
+            'operation' => $operation,
+            'article_id' => $article->id,
+            'admin_user_id' => $admin_user_id,
+        ]);
     }
 }

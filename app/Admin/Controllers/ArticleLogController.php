@@ -83,11 +83,13 @@ class ArticleLogController extends Controller
                 }
                 return $articleId;
             });
-            $grid->admin_user_id('操作者')->value(function($userId) {
-                return Administrator::find($userId)->name;
-            });
+//            $grid->admin_user_id('操作者')->value(function($userId) {
+//                return Administrator::find($userId)->name;
+//            });
+            $grid->administrator()->name('操作者');
             $grid->operation('操作')->value(function($id) {
-                    return array_flip(config('article.operation'))[$id];
+                    $operation = array_flip(config('article.operation'))[$id];
+                    return trans("lang.$operation");
                 });
 
             $grid->created_at('时间')->value(function($date) {
@@ -132,8 +134,13 @@ class ArticleLogController extends Controller
 
                 // sql: ... WHERE `user.name` LIKE "%$name%";
                 $filter->is('article_id', '文章id');
+                $filter->where(function($query) {
+                    $input = $this->input;
+                    $query->whereHas('administrator', function ($query) use ($input) {
+                        $query->where('name', 'like', "%{$input}%");
+                    });
+                }, '操作者');
                 $filter->between('created_at', trans('时间'))->datetime();
-
             });
 
         });

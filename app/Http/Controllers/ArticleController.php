@@ -41,8 +41,7 @@ class ArticleController extends Controller
                 'title' => $value['title'],
             ];
         })->all();
-        $commentNum = Comment::where('article_id', $article->id)->count();
-        return view('wap.article.photo', compact('article', 'contentPics', 'commentNum'));
+        return view('wap.article.photo', compact('article', 'contentPics'));
 
     }
 

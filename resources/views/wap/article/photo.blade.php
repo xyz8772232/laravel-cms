@@ -22,7 +22,6 @@
 @section('main')
   <section class="module-photo-article">
     <header class="header">
-      <a class="comments" href="{{ route('comments.index', ['article_id' => $article->id]) }}"><i class="icon icon-comments"></i>{{ $commentNum ?? 0 }}</a>
     </header>
     <div class="photo-box swiper-container">
       <div class="swiper-wrapper">

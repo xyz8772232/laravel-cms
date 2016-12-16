@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Article;
 use App\ArticleInfo;
+use App\ArticleLog;
 use App\Ballot;
 use App\BallotChoice;
 use App\Channel;
@@ -520,7 +521,7 @@ class ArticleController extends Controller
             'is_important' => 'in:0,1',
             'published_at' => 'date',
             'original_url' => 'url',
-            'state' => 'in:0,1',
+            'state' => 'in:0,1,2',
         ];
 
 
@@ -597,6 +598,8 @@ class ArticleController extends Controller
             //上线状态处理
             if ($request->online) {
                 $article->state = 2;
+            } else {
+                $article->state = 1;
             }
         }
 
@@ -900,6 +903,9 @@ class ArticleController extends Controller
             ];
         }
 
+        //文章日志
+        $articleLogs = ArticleLog::with('administrator')->where('article_id', $id)->orderBy('id', 'desc')->get();
+
         $initConfig = [
             'status' => 1,
             'coverPic' => $coverPic ?? null,
@@ -914,6 +920,7 @@ class ArticleController extends Controller
             'header' => $header,
             'description' => $description,
             'article' => $article,
+            'articleLogs' => $articleLogs,
             'keywords' => $keywords,
             'channels' => $channels,
             'ballot' => $ballot,
