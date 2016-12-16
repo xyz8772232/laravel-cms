@@ -35,7 +35,9 @@
   var $ = require('jQuery');
 
   exports.new = function (opt) {
-    return new Write(opt);
+    if (opt && opt.root) {
+      return new Write(opt);
+    }
   };
 
   function Write(opt) {

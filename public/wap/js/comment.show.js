@@ -41,7 +41,9 @@
   var userId = PAGE_CONFIG.userId;
 
   exports.new = function (opt) {
-    return new Show(opt);
+    if (opt && opt.root) {
+      return new Show(opt);
+    }
   };
 
   function Show(opt) {
@@ -150,7 +152,7 @@
   function adapter(comment) {
     var replyComment = comment.parent;
     return {
-      face: comment.face || DEFAULT_FACE,
+      face: comment.user_avatar || DEFAULT_FACE,
       userId: comment.user_id,
       userNick: comment.user_nick,
       id: comment.id,

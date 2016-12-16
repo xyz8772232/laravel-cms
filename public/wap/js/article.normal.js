@@ -114,10 +114,10 @@
         }
       }).on('click', '.e-submit', function () {
         // 登录用户方可投票
-        if (!userId) {
-          callLogin();
-          return false;
-        }
+        //if (!userId) {
+        //  callLogin();
+        //  return false;
+        //}
         // 未投票不能提交
         if (!selectedCount) {
           alert('请先投票');

@@ -11,11 +11,12 @@ var TPL_COMMENT = '\
       <p class="content">{{=it.content}}</p>\
       <div class="panel">\
         <span class="panel-item">{{=it.time}}</span>\
-        {{?it.id && !it.isSelf}}<span class="panel-item e-reply" data-id="{{=it.id}}" data-userid="{{=it.userId}}" data-usernick="{{=it.userNick}}">回复</span>{{?}}\
       </div>\
     </div>\
   </div>\
 </div>';
+
+// {{?it.id && !it.isSelf}}<span class="panel-item e-reply" data-id="{{=it.id}}" data-userid="{{=it.userId}}" data-usernick="{{=it.userNick}}">回复</span>{{?}}\
 
 var TPL_COMMENTS = '{{~it:it}}'
   + TPL_COMMENT
