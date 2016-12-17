@@ -30,8 +30,8 @@ class ChannelController extends Controller
      */
     public function index()
     {
-        $header = '频道';
-        $description = 'description';
+        $header = trans('lang.system');
+        $description = trans('lang.channel');
         $channels = Channel::toTree([], 0, true);
 
         return view('admin.channel.index',

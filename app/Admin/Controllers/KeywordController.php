@@ -110,9 +110,7 @@ class KeywordController extends Controller
             $grid->disableExport();
 
 
-            $grid->created_at(trans('admin::lang.created_at'))->value(function ($date) {
-                    return Carbon::parse($date)->diffForHumans();
-                });
+            $grid->created_at(trans('admin::lang.created_at'));
             $grid->filter(function($filter){
                 //$filter->useModal();
 

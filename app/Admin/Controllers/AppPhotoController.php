@@ -37,7 +37,7 @@ class AppPhotoController extends Controller
 
     public function store()
     {
-        foreach (range(1, 3) as $val) {
+        foreach (range(1, 8) as $val) {
             if ($photo = Input::file('photo'.$val)) {
                 AppPhoto::upload($photo, $val);
             } else {

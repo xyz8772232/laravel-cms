@@ -24,8 +24,8 @@ class CommentController extends Controller
         Admin::script($this->script());
         return Admin::content(function (Content $content) {
 
-            $content->header('header');
-            $content->description('description');
+            $content->header(trans('lang.system'));
+            $content->description(trans('lang.comment'));
 
             $content->body($this->grid());
         });

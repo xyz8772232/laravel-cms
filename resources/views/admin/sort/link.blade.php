@@ -15,7 +15,7 @@
         <div class="sort-box" id="sortBox">
           @foreach($links as $link)
             @if ($link->article)
-            <div class="sort-news" data-id="{{$link->id}}"><i class="fa fa-arrows-alt text-default e-drag"></i>{{$link->article->title}}</div>
+            <div class="sort-news" data-id="{{$link->id}}"><i class="fa fa-arrows-alt text-default e-drag"></i>{{$link->article->title}}<span>{{$link->article->title_color}}</span><span class="">{{$link->article->title_bold}}</span></div>
             @endif
           @endforeach
         </div>

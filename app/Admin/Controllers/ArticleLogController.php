@@ -32,40 +32,6 @@ class ArticleLogController extends Controller
             $content->body($this->grid());
         });
     }
-
-    /**
-     * Edit interface.
-     *
-     * @param $id
-     * @return Content
-     */
-    public function edit($id)
-    {
-        return Admin::content(function (Content $content) use ($id) {
-
-            $content->header('header');
-            $content->description('description');
-
-            $content->body($this->form()->edit($id));
-        });
-    }
-
-    /**
-     * Create interface.
-     *
-     * @return Content
-     */
-    public function create()
-    {
-        return Admin::content(function (Content $content) {
-
-            $content->header('header');
-            $content->description('description');
-
-            $content->body($this->form());
-        });
-    }
-
     /**
      * Make a grid builder.
      *
@@ -75,7 +41,7 @@ class ArticleLogController extends Controller
     {
         return Admin::grid(ArticleLog::class, function (Grid $grid) {
 
-            $grid->id('ID')->sortable();
+            //$grid->id('ID')->sortable();
             $grid->article_id('文章id')->value(function ($articleId) {
                 if (Article::find($articleId)) {
                     $editUrl = route('admin.articles.edit', $articleId);
@@ -92,12 +58,13 @@ class ArticleLogController extends Controller
                     return trans("lang.$operation");
                 });
 
-            $grid->created_at('时间')->value(function($date) {
-                if (Carbon::now() < Carbon::parse($date)->addDays(1)) {
-                    return  Carbon::parse($date)->toDateTimeString();
-                }
-                return Carbon::parse($date)->diffForHumans();
-            });
+            $grid->created_at('时间');
+//            $grid->created_at('时间')->value(function($date) {
+//                if (Carbon::now() < Carbon::parse($date)->addDays(1)) {
+//                    return  Carbon::parse($date)->toDateTimeString();
+//                }
+//                return Carbon::parse($date)->diffForHumans();
+//            });
             //$grid->paginate(2);
 
 //            $grid->rows(function($row){
@@ -132,6 +99,7 @@ class ArticleLogController extends Controller
 
             $grid->filter(function($filter){
 
+                $filter->disableIdFilter();
                 // sql: ... WHERE `user.name` LIKE "%$name%";
                 $filter->is('article_id', '文章id');
                 $filter->where(function($query) {
@@ -143,21 +111,6 @@ class ArticleLogController extends Controller
                 $filter->between('created_at', trans('时间'))->datetime();
             });
 
-        });
-    }
-
-    /**
-     * Make a form builder.
-     *
-     * @return Form
-     */
-    protected function form()
-    {
-        return Admin::form(ArticleLog::class, function (Form $form) {
-
-            $form->display('id', 'ID');
-
-            $form->display('created_at', 'Created At');
         });
     }
 }

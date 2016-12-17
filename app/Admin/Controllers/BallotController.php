@@ -23,8 +23,8 @@ class BallotController extends Controller
     {
         return Admin::content(function (Content $content) {
 
-            $content->header('header');
-            $content->description('description');
+            $content->header('系统');
+            $content->description('投票');
 
             $content->body($this->grid());
         });
@@ -77,7 +77,7 @@ class BallotController extends Controller
     {
         return Admin::grid(Ballot::class, function (Grid $grid) {
 
-            $grid->id('ID')->sortable();
+            //$grid->id('ID')->sortable();
             $grid->article_id('文章id');
             $grid->type('种类')->value(function($id) {
                 $names = ['投票-单选','投票-多选', 'PK'];
@@ -91,10 +91,12 @@ class BallotController extends Controller
 
             $grid->start_at('开始时间');
             $grid->end_at('结束时间');
+            $grid->result('结果');
 
             $grid->created_at(trans('admin::lang.created_at'));
 
             $grid->filter(function($filter) {
+                $filter->disableIdFilter();
                 $filter->is('article_id', '文章id');
             });
 
