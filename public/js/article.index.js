@@ -109,7 +109,10 @@ $(function () {
   $("#perPage").select2({
     minimumResultsForSearch: -1,
     allowClear: false
+  }).on("select2:select", function() {
+    location.href = this.value;
   });
+
 
   /**
    * 频道选择

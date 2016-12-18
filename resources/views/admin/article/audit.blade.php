@@ -15,17 +15,6 @@
           <form>
             <div class="form-inline" style="margin-top:10px;">
               <div class="input-group input-group-sm">
-                <span class="input-group-addon"><small>显示</small></span>
-                <select class="form-control input-xs per-page" name="per-page" id="perPage" style="width:80px;">
-                  <option value="http://yun.app/admin/keywords?per_page=10" >10</option>
-                  <option value="http://yun.app/admin/keywords?per_page=20" selected>20</option>
-                  <option value="http://yun.app/admin/keywords?per_page=30" >30</option>
-                  <option value="http://yun.app/admin/keywords?per_page=50" >50</option>
-                  <option value="http://yun.app/admin/keywords?per_page=100" >100</option>
-                </select>
-                <span class="input-group-addon"><small>条</small></span>
-              </div>
-              <div class="input-group input-group-sm">
                 <span class="input-group-addon"><strong>频道</strong></span>
                 <select class="select-line" data-placeholder="选择关键字" name="channel_id" id="channelId">
                   @foreach( $options as $key => $option)
@@ -93,9 +82,17 @@
             <div class="actions" id="batchActions">
               <span class="btn btn-sm btn-danger e-delete">删除</span>
               <span class="btn btn-sm btn-success e-audit">审核通过</span>
-              <span class="pull-right">
-                共<span class="text-primary">{{ $articles->total() }}</span>篇文章
-              </span>
+              <div class="page-info pull-right">
+                共 <span class="text-primary">{{ $articles->total() }}</span> 篇文章,每页显示
+                <select id="perPage">
+                  <option value="http://yun.app/admin/keywords?per_page=10" selected>10</option>
+                  <option value="http://yun.app/admin/keywords?per_page=15">15</option>
+                  <option value="http://yun.app/admin/keywords?per_page=20">20</option>
+                  <option value="http://yun.app/admin/keywords?per_page=25">25</option>
+                  <option value="http://yun.app/admin/keywords?per_page=30">30</option>
+                </select>
+                篇
+              </div>
             </div>
               {{ $articles->links('admin::pagination') }}
           </div>
