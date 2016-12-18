@@ -12,6 +12,8 @@ class Article extends Model
 
     use FormAccessible;
 
+    protected $fillable = ['link_id', 'title', 'channel_id', 'author_id', ];
+
     protected $casts = [
         'is_slide' => 'boolean',
         'is_headline' => 'boolean',
@@ -60,8 +62,14 @@ class Article extends Model
      * 获取文章作者
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function author() {
+    public function author()
+    {
         return $this->belongsTo('Encore\Admin\Auth\Database\Administrator');
+    }
+
+    public function link()
+    {
+        return $this->belongsTo($this);
     }
 
     /**
@@ -114,8 +122,25 @@ class Article extends Model
         return 0;
     }
 
+    public function getCoverPicAttribute()
+    {
+        if ($this->link) {
+            return $this->link->cover_pic;
+        } else {
+            return $this->attributes['cover_pic'];
+        }
+    }
+
+    public function setCoverPicAttribute($cover_pic)
+    {
+        if ($this->link) {
+            $this->link->cover_pic = $cover_pic;
+        } else {
+            $this->attributes['cover_pic'] = $cover_pic;
+        }
+    }
+
     public function getCommentNumAttribute() {
-        return rand(0, 1000);
         if ($this->articleInfo) {
             return $this->articleInfo->comment_num;
         }

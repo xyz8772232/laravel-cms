@@ -24,13 +24,30 @@ class ArticleController extends Controller
     public function show($id)
     {
         //$this->getAppUser();
-        $article =  Article::online()->where('id', $id)->firstOrFail();
+        $article = Article::online()->where('id', $id)->firstOrFail();
+        if ($article->link_id) {
+            return $this->link($article);
+        }
         if ($article->type == 1) {
             return $this->photo($article);
         } else {
             return $this->text($article);
         }
     }
+
+    //文字链接
+    private function link(Article $article)
+    {
+        $link_article = Article::find($article->link_id);
+        $link_article->title = $article->title;
+        $link_article->channel_id = $article->channel_id;
+        if ($link_article->type == 1) {
+            return $this->photo($link_article);
+        } else {
+            return $this->text($link_article);
+        }
+    }
+
 
     //图片文章
     private function photo(Article $article)

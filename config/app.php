@@ -175,6 +175,7 @@ return [
         Laracasts\Utilities\JavaScript\JavaScriptServiceProvider::class,
         Unicodeveloper\Emoji\EmojiServiceProvider::class,
         Mews\Captcha\CaptchaServiceProvider::class,
+        Barryvdh\Cors\ServiceProvider::class,
 
         /*
          * Application Service Providers...
