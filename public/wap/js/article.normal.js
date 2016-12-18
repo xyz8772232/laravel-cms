@@ -129,7 +129,7 @@
         // 移除投票事件监听
         $module.off('click', '.e-vote').off('click', '.e-submit');
         // 提交投票
-        $.post('//yun.app/api/ballots/answer', {
+        $.post('/api/ballots/answer', {
           choice_ids: voteRes.agreeIds,
           user_id: userId
         });
