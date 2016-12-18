@@ -40,6 +40,13 @@ class Model
      */
     protected $data = [];
 
+    /**
+     * Per-page options.
+     *
+     * @var array
+     */
+    protected $perPages = [10, 20, 30, 50, 100];
+
     /*
      * 20 items per page as default.
      *
@@ -396,6 +403,41 @@ class Model
         if (array_key_exists($key, $data)) {
             return $data[$key];
         }
+    }
+
+    /**
+     * Set per-page options.
+     *
+     * @param array $perPages
+     */
+    public function perPages(array $perPages)
+    {
+        $this->perPages = $perPages;
+    }
+
+    /**
+     * Generate per-page options.
+     *
+     * @return string
+     */
+    public function perPageOptions()
+    {
+        $perPage = (int) app('request')->input(
+            $this->getPerPageName(),
+            $this->perPage
+        );
+
+        return collect($this->perPages)
+            ->push($this->perPage)
+            ->push($perPage)
+            ->unique()
+            ->sort()
+            ->map(function ($option) use ($perPage) {
+                $selected = ($option == $perPage) ? 'selected' : '';
+                $url = app('request')->fullUrlWithQuery([$this->getPerPageName() => $option]);
+
+                return "<option value=\"$url\" $selected>$option</option>";
+            })->implode("\r\n");
     }
 
 }

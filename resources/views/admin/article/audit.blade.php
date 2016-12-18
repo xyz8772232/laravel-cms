@@ -85,11 +85,7 @@
               <div class="page-info pull-right">
                 共 <span class="text-primary">{{ $articles->total() }}</span> 篇文章,每页显示
                 <select id="perPage">
-                  <option value="http://yun.app/admin/keywords?per_page=10" selected>10</option>
-                  <option value="http://yun.app/admin/keywords?per_page=15">15</option>
-                  <option value="http://yun.app/admin/keywords?per_page=20">20</option>
-                  <option value="http://yun.app/admin/keywords?per_page=25">25</option>
-                  <option value="http://yun.app/admin/keywords?per_page=30">30</option>
+                  {!! $perPageOptions !!}
                 </select>
                 篇
               </div>

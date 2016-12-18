@@ -56,6 +56,8 @@ class ArticleController extends Controller
         $articles = $filter->execute();
         $query = Input::all();
         $articles->appends($query);
+        $perPageOptions = $model->perPageOptions();
+
         //dd($articles->last());
         //dd($filter->conditions(), $filter->execute());
 
@@ -93,7 +95,7 @@ class ArticleController extends Controller
             ],
         ];
         return view('admin.article.audit',
-            compact('header', 'description', 'articles', 'options', 'filterValues', 'tableHeaders'));
+            compact('header', 'description', 'articles', 'options', 'filterValues', 'tableHeaders', 'perPageOptions'));
     }
     /**
      *
@@ -207,6 +209,8 @@ class ArticleController extends Controller
         $articles = $filter->execute();
         $query = Input::all();
         $articles->appends($query);
+
+        $perPageOptions = $model->perPageOptions();
         //dd($articles);
         //dd($articles->last());
 
@@ -257,7 +261,7 @@ class ArticleController extends Controller
             ],
         ];
         return view('admin.article.index',
-            compact('header', 'description', 'channels','articles', 'options', 'filterValues', 'tableHeaders'));
+            compact('header', 'description', 'channels','articles', 'options', 'filterValues', 'tableHeaders', 'perPageOptions'));
     }
 
     public function preview($id)
