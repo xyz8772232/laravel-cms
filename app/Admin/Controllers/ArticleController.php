@@ -99,7 +99,7 @@ class ArticleController extends Controller
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function channel()
+    /*public function channel()
     {
         $header = '待审核文章';
         $description = '列表';
@@ -182,11 +182,10 @@ class ArticleController extends Controller
         ];
         return view('admin.article.index',
             compact('header', 'description', 'articles', 'options', 'filterValues', 'tableHeaders', 'channels'));
-    }
+    }*/
 
     public function index()
     {
-
         $header = '新闻';
         $channel_id = (int)Input::get('channel_id', 1);
         $channel_name = Channel::find($channel_id)->name;
@@ -200,9 +199,7 @@ class ArticleController extends Controller
         $conditions[] = ['whereIn' => ['channel_id', $channelIds]];
         $model->addConditions($conditions);
         $model->with('articleInfo','author');
-        if (!Input::get('_sort')) {
-            $model->orderBy('created_at', 'desc');
-        }
+        $model->orderBy('created_at', 'desc');
         //过滤条件
         $filter = new Filter($model);
         $filter->like('title', '标题');
@@ -212,7 +209,6 @@ class ArticleController extends Controller
         $articles->appends($query);
         //dd($articles);
         //dd($articles->last());
-        //dd($filter->conditions(), $filter->execute());
 
         $filterValues = array_filter(Input::only('id', 'title', 'created_at'), function($item) {
             return !is_null($item);
