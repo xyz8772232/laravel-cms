@@ -105,7 +105,7 @@
       this._els.ipt.readOnly = true;
       // 延迟提交,使提交状态可被用户感知
       setTimeout(function () {
-        $.post('//yun.app/api/comments', {
+        $.post('/api/comments', {
           article_id: self.articleId,
           content: val,
           user_id: self.userId,

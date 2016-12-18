@@ -12,26 +12,16 @@
       <div class="box col-md-12">
         <!-- form start -->
         <form action="/admin/app_photos" method="post" accept-charset="UTF-8" class="form-horizontal"
-              enctype="multipart/form-data" pjax-container>
+              enctype="multipart/form-data">
           <div class="box-body">
+          @for ($i = 1; $i < 9; $i++)
             <div class="form-group">
-              <label for="path" class="col-sm-2 control-label">幻灯片1</label>
+              <label for="path" class="col-sm-2 control-label">幻灯片{{ $i }}</label>
               <div class="col-sm-6">
-                <input type="file" class="photo" name="photo1"/>
+                <input type="file" class="photo" name="photo{{ $i }}"/>
               </div>
             </div>
-            <div class="form-group">
-              <label for="path" class="col-sm-2 control-label">幻灯片2</label>
-              <div class="col-sm-6">
-                <input type="file" class="photo" name="photo2"/>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="path" class="col-sm-2 control-label">幻灯片3</label>
-              <div class="col-sm-6">
-                <input type="file" class="photo" name="photo3"/>
-              </div>
-            </div>
+          @endfor
           </div>
           <!-- /.box-body -->
           <div class="box-footer">

@@ -14,7 +14,18 @@
           <div class="box-header">
           <form>
             <a href="{{ route('admin.articles.create', ['channel_id' => $filterValues['channel_id']]) }}" class="btn btn-sm btn-primary link-create-news">发布新闻</a>
-            <div class="form-inline pull-right">
+            <div class="form-inline" style="margin-top:10px;">
+              <div class="input-group input-group-sm">
+                <span class="input-group-addon"><small>显示</small></span>
+                <select class="form-control input-xs per-page" name="per-page" id="perPage" style="width:80px;">
+                  <option value="http://yun.app/admin/keywords?per_page=10" >10</option>
+                  <option value="http://yun.app/admin/keywords?per_page=20" selected>20</option>
+                  <option value="http://yun.app/admin/keywords?per_page=30" >30</option>
+                  <option value="http://yun.app/admin/keywords?per_page=50" >50</option>
+                  <option value="http://yun.app/admin/keywords?per_page=100" >100</option>
+                </select>
+                <span class="input-group-addon"><small>条</small></span>
+              </div>
               <div class="input-group input-group-sm">
                 <span class="input-group-addon"><strong>频道</strong></span>
                 <select class="select-line" data-placeholder="选择关键字" name="channel_id" id="channelId">
@@ -25,7 +36,7 @@
               </div>
               <div class="input-group input-group-sm">
                 <span class="input-group-addon"><strong>Id</strong></span>
-                <input type="text" class="form-control" name="id" value="{{ $filterValues['id'] ?? null }}">
+                <input type="text" class="form-control" name="id" value="{{ $filterValues['id'] ?? null }}" style="width:60px;">
               </div>
               <div class="input-group input-group-sm">
                 <span class="input-group-addon"><strong>标题</strong></span>

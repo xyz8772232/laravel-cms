@@ -104,6 +104,14 @@ $(function () {
 
 
   /**
+   * 页数选择
+   */
+  $("#perPage").select2({
+    minimumResultsForSearch: -1,
+    allowClear: false
+  });
+
+  /**
    * 频道选择
    */
   $("#channelId").select2({

@@ -41,8 +41,12 @@
   var userId = PAGE_CONFIG.userId;
 
   exports.new = function (opt) {
-    if (opt && opt.root) {
-      return new Show(opt);
+    try {
+      if (opt && opt.root) {
+        return new Show(opt);
+      }
+    } catch (e) {
+      alert(e);
     }
   };
 
@@ -101,7 +105,7 @@
     _fetchCommentList: function () {
       var self = this;
       this._switchStatus('loading');
-      $.get('//yun.app/api/comments', {
+      $.get('/api/comments', {
         article_id: self.articleId,
         page: self._page,
         pageSize: self._pageSize
