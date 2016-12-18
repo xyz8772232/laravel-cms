@@ -56,6 +56,23 @@
   width: 50px !important;
   margin: 0 5px;
 }
+.box-footer .page-info .select2-selection--single {
+  padding: 0;
+  height: 25px;
+}
+.box-footer .page-info .select2-selection--single .select2-selection__rendered {
+  margin-top: 0;
+  height: 100%;
+  line-height: 25px;
+}
+.box-footer .page-info .select2-selection--single .select2-selection__arrow {
+  top: 0;
+  right: 0;
+  height: 100%;
+}
+.box-footer #perPage {
+  width: 60px;
+}
 .channel-box .control-label {
   float: left;
   width: 45px;
