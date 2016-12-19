@@ -1,4 +1,39 @@
 $(function () {
+  /**
+   * 添加
+   */
+  $('.box-header').on('click', '.e-add', addKeyWord);
+
+  function addKeyWord() {
+    swal({
+      title: '添加关键词',
+      type: 'input',
+      confirmButtonText: '确认',
+      cancelButtonText: '取消',
+      showCancelButton: true,
+      closeOnConfirm: false,
+      animation: 'slide-from-top'
+    }, function (inputValue) {
+      if (inputValue === false) return false;
+
+      if (inputValue === '') {
+        swal.showInputError('不能为空');
+        return false
+      }
+
+      commonPost('添加', '/admin/keywords/', {
+        name: inputValue
+      })(function (isSuccess) {
+        if (isSuccess) {
+          location.reload();
+        }
+      });
+    });
+  }
+
+  /**
+   * 修改 & 删除
+   */
   $('#keywordBox')
   .on('click', '.e-edit', editKeyword)
   .on('click', '.e-delete', deleteKeyword);
