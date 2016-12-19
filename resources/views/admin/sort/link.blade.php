@@ -87,7 +87,7 @@
       vertical-align: top;
       margin-top: 15px;
       padding: 0 5px;
-      width: 60px;
+      width: 65px;
       line-height: 20px;
       border: none;
       border-bottom: 1px solid #aaa;
