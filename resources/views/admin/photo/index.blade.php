@@ -13,6 +13,7 @@
         <input type="checkbox" class="img-select-all"> 全选
         <a class="e-delete btn btn-sm btn-danger">删除</a>
         <a class="e-upload btn btn-sm btn-success">上传新图片</a>
+        <span class="instructions">支持类似windows资源管理器的操作方式，单选：鼠标左键、多选：ctrl+鼠标左键、连选：shift+鼠标左键</span>
       </div>
       <div class="box-body">
         <div class="photo-box" id="photoBox">
