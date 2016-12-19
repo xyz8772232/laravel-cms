@@ -15,7 +15,7 @@
         <div class="sort-box" id="sortBox">
           @foreach($links as $link)
             @if ($link->article)
-            <div class="sort-news" data-id="{{$link->id}}">
+            <div class="sort-news" data-id="{{$link->id}}" data-article_id="{{$link->article->id}}">
               <i class="fa fa-arrows-alt text-default e-drag"></i>
               <div class="color">
                 颜色:#
@@ -23,9 +23,9 @@
               </div>
               <div class="bold">
                 粗体:
-                <input class="e-bold" type="checkbox" {{$link->article->title_bold === 1 ? 'checked' : ''}}/>
+                <input class="e-bold" type="checkbox" {{$link->article->title_bold ? 'checked' : ''}}/>
               </div>
-              <span class="title" style="color:{{$link->article->title_color}};{{$link->article->title_bold === 1 ? 'font-weight:bold;' : ''}}">{{$link->article->title}}</span>
+              <span class="title" style="color:{{$link->article->title_color}};{{$link->article->title_bold ? 'font-weight:bold;' : ''}}">{{$link->article->title}}</span>
             </div>
             @endif
           @endforeach

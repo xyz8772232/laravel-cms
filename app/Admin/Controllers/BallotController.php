@@ -85,13 +85,21 @@ class BallotController extends Controller
             });
 
             $grid->status('状态')->value(function($id) {
-                $names = ['未开始', '进行中', '已结束'];
+                $names = ['进行中', '未开始', '已结束'];
                 return $names[$id];
             });
 
             $grid->start_at('开始时间');
             $grid->end_at('结束时间');
-            $grid->result('结果');
+            $grid->result('结果')->value(function() {
+                $ballot_id = $this->id;
+                $ballot = Ballot::find($ballot_id);
+                $choiceStr = $ballot->result()->map(function($choice) {
+                    return '<div><span class="vote-percent btn btn-xs btn-info" style="width:50px; margin-right: 5px;">'.$choice['approve_num'].'</span><span class="vote-num btn btn-xs btn-danger" style="width:35px">'.$choice['approve_percent'].'</span>
+            <span class="vote-words btn btn-xs">'.$choice['content'].'</span></div>';
+                })->all();
+                return implode('', $choiceStr);
+            });
 
             $grid->created_at(trans('admin::lang.created_at'));
 
@@ -102,6 +110,7 @@ class BallotController extends Controller
 
             $grid->disableExport();
             $grid->disableBatchDeletion();
+            $grid->disableActions();
             $grid->disableCreation();
         });
     }

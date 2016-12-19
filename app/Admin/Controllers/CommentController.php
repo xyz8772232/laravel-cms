@@ -92,7 +92,12 @@ class CommentController extends Controller
 
             $grid->id('ID')->sortable();
             $grid->article_id('文章ID');
-            $grid->content('内容');
+            $grid->reply_to_id('被评论的ID')->value(function($id) {
+                return $id ? $id : '';
+            });
+            $grid->content('内容')->display(function($text) {
+                return '<p style="width: 300px">'.$text.'</p>';
+            });
             $grid->created_at(trans('admin::lang.created_at'));
             $grid->ip('评论者IP');
             $grid->user_id('评论者ID');
@@ -103,9 +108,9 @@ class CommentController extends Controller
             $grid->rows(function($row) {
                 $row->actions('delete')->add(function($row) {
                     if (!$row->blocked) {
-                        return "<a href=\"javascript:void(0);\" data-id=\"$row->id\" class=\"_block\"><i class='fa fa-chain'></i></a>";
+                        return "<a href=\"javascript:void(0);\" data-id=\"$row->id\" class=\"_block\"><span class='btn btn-xs btn-danger'>屏蔽</span></a>";
                     } else {
-                        return "<i class='fa fa-chain blocked'></i>";
+                        return "<span class='btn btn-xs btn-success'>已屏蔽</span>";
                     }
                 });
             });

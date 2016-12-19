@@ -19,8 +19,16 @@ class KeywordController extends Controller
     {
         $header = trans('lang.system');
         $description = trans('lang.keyword');
-        $keywords = Keyword::all();
-        return view('admin.keyword.index', compact('header', 'description', 'keywords'));
+        $keyword = trim(Input::get('keyword', ''));
+        $filterValues = [];
+        if ($keyword !== '') {
+            $keywords = Keyword::where('name', 'like', "%$keyword%")->get();
+            $filterValues['keyword'] = $keyword;
+        } else {
+            $keywords = Keyword::all();
+        }
+
+        return view('admin.keyword.index', compact('header', 'description', 'keywords', 'filterValues'));
     }
 
     public function store()
