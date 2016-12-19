@@ -119,7 +119,7 @@
   <link rel="stylesheet" href="{{ asset("/packages/admin/sweetalert/sweetalert.css") }}">
   <link rel="stylesheet" href="{{ asset("/packages/admin/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css") }}">
   <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/plugins/select2/select2.min.css") }}">
-  <link rel="stylesheet" href="{{ asset("/css/article.index.css") }}">
+  <link rel="stylesheet" href="{{ asset_with_version("/css/article.index.css") }}">
 @endsection
 
 @section('admin_js')
