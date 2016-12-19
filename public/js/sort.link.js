@@ -18,7 +18,7 @@ $(function () {
     var val = this.value;
     if (this.orgVal !== val) {
       commonAlert('确认修改', commonPost('修改', '/admin/articles/change/', {
-        article_id: this.parentNode.parentNode.getAttribute('data-id'),
+        article_id: this.parentNode.parentNode.getAttribute('data-article_id'),
         title_color: '#' + val.toUpperCase()
       }), function (isSuccess) {
         if (isSuccess) {
@@ -31,7 +31,7 @@ $(function () {
   }).on('change', '.e-bold', function(){
     var self = this;
     commonAlert('确认修改', commonPost('修改', '/admin/articles/change/', {
-      article_id: this.parentNode.parentNode.getAttribute('data-id'),
+      article_id: this.parentNode.parentNode.getAttribute('data-article_id'),
       title_bold: this.checked ? '1' : '0'
     }), function (isSuccess) {
       if (isSuccess) {
