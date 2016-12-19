@@ -19,7 +19,7 @@ $(function () {
     if (this.orgVal !== val) {
       commonAlert('确认修改', commonPost('修改', '/admin/articles/change/', {
         article_id: this.parentNode.parentNode.getAttribute('data-article_id'),
-        title_color: '#' + val.toUpperCase()
+        title_color: '#' + val.toLowerCase()
       }), function (isSuccess) {
         if (isSuccess) {
           location.reload();
