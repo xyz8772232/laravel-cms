@@ -10,6 +10,7 @@ use Encore\Admin\Grid;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use Illuminate\Support\Facades\Input;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class KeywordController extends Controller
 {
@@ -24,114 +25,75 @@ class KeywordController extends Controller
         $description = trans('lang.keyword');
         $keywords = Keyword::all();
         return view('admin.keyword.index', compact('header', 'description', 'keywords'));
-//        return Admin::content(function(Content $content) {
-//            $content->header('系统');
-//            $content->description('关键词');
-//            $content->body($this->grid());
-//        });
-    }
-
-    /**
-     * Edit interface.
-     *
-     * @param $id
-     * @return Content
-     */
-    public function edit($id)
-    {
-        return Admin::content(function (Content $content) use ($id) {
-
-            $content->header('header');
-            $content->description('description');
-
-            $content->body($this->form()->edit($id));
-        });
-    }
-
-    /**
-     * Create interface.
-     *
-     * @return Content
-     */
-    public function create()
-    {
-        return Admin::content(function (Content $content) {
-
-            $content->header('header');
-            $content->description('description');
-
-            $content->body(Admin::form(Keyword::class, function (Form $form) {
-                $form->text('name', '关键词');
-            }));
-        });
-    }
-
-    public function update($id)
-    {
-        return $this->form()->update($id);
     }
 
     public function store()
     {
-        if (empty(Input::get('administrate_id'))) {
-            Input::merge(['admin_user_id' => (string)Admin::user()->id]);
+        $admin_user_id = Admin::user()->id;
+        $name = Input::get('name', '');
+        if (empty($name)) {
+            return Tool::showError('参数错误');
         }
-        $keyword = Keyword::onlyTrashed()->where('name', Input::get('name', ''))->first();
+        $keyword = Keyword::where('name', $name)->first();
+        if ($keyword) {
+            return Tool::showError('已存在');
+        }
+        $keyword = Keyword::onlyTrashed()->where('name', $name)->first();
         if ($keyword) {
             $result = $keyword->restore();
-            if ($result) {
-                return redirect(route('admin.keywords.index'))->withSuccess('添加成功');
-            } else {
-                return back()->withErrors('添加失败');
-            }
+        } else {
+            $result = Keyword::create(['admin_user_id' => $admin_user_id, 'name' => $name]);
         }
-        return $this->form()->store();
+        if ($result) {
+            return Tool::showSuccess('添加成功');
+        } else {
+            return Tool::showError('添加失败');
+        }
     }
 
     /**
-     * Make a grid builder.
+     * 修改
+     * @param $id
      *
-     * @return Grid
+     * @return mixed
      */
-//    protected function grid()
-//    {
-//        return Admin::grid(Keyword::class, function (Grid $grid) {
-//
-//            $grid->id('ID')->sortable();
-//
-//            $grid->name('关键词')->value(function ($name) {
-//                return "<span class='label label-success'>{$name}</span>";
-//            });
-//
-//
-//            $grid->model()->orderBy('id', 'desc');
-//            $grid->disableExport();
-//
-//
-//            $grid->created_at(trans('admin::lang.created_at'));
-//            $grid->filter(function($filter){
-//                $filter->disableIdFilter();
-//                //$filter->useModal();
-//
-//                // sql: ... WHERE `user.name` LIKE "%$name%";
-//                $filter->like('name', '关键词');
-//
-//                // sql: ... WHERE `user.created_at` BETWEEN $start AND $end;
-//            });
-//        });
-//    }
+    public function update($id)
+    {
+        $admin_user_id = Admin::user()->id;
+        $name = Input::get('name', '');
+        if (empty($name)) {
+            return Tool::showError('参数错误');
+        }
+        $keyword = Keyword::find($id);
+        if (!$keyword || $keyword->name == $name) {
+            return Tool::showError('参数错误');
+        }
+        $keyword = Keyword::where('name', $name)->first();
+        if ($keyword) {
+            return Tool::showError('名称已存在');
+        }
+        $keyword->name = $name;
+        $keyword->admin_user_id = $admin_user_id;
+        $result = $keyword->save();
+        if ($result) {
+            return Tool::showSuccess('修改成功');
+        } else {
+            return Tool::showError('修改失败');
+        }
+    }
+
 
     /**
-     * Make a form builder.
-     *
-     * @return Form
+     * 删除
+     * @param $id keyword id
+     * @return JsonResponse
      */
-    protected function form()
+    public function destroy($id)
     {
-        return Admin::form(Keyword::class, function (Form $form) {
-            $form->display('id', 'ID');
-            $form->text('name', 'name')->rules('required|unique:keywords');
-            $form->hidden('admin_user_id');
-        });
+        $rs = Keyword::destory($id);
+        if ($rs) {
+            return Tool::showSuccess();
+        }
+        return Tool::showError();
     }
 }

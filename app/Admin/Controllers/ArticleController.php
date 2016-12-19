@@ -145,9 +145,13 @@ class ArticleController extends Controller
         $attribute = Input::get('attribute', '');
         if ($attribute !== '') {
             if ($attribute == 0) {
-                $conditions[] = ['has' => ['sortLink']];
+                $conditions[] = ['whereHas' => ['sortLink', function($query) {
+                    $query->withTrashed();
+                }]];
             } else {
-                $conditions[] = ['has' => ['sortPhoto']];
+                $conditions[] = ['whereHas' => ['sortPhoto', function($query) {
+                    $query->withTrashed();
+                }]];
             }
         }
         //作者

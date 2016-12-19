@@ -16,15 +16,15 @@
       </div>
       <div class="box-body">
         <div class="keyword-box" id="keywordBox">
-        @for ($i = 1; $i < 9; $i++)
-          <div class="keyword" data-id="{{ $i }}">
-            <input class="ipt" value="关键词{{ $i }}" readonly>
+        @foreach ($keywords as $keyword)
+          <div class="keyword" data-id="{{ $keyword->id }}">
+            <input class="ipt" value="{{ $keyword->name }}" readonly>
             <div class="footer">
               <i class="fa fa-pencil e-edit"></i>
               <i class="fa fa-trash-o e-delete"></i>
             </div>
           </div>
-        @endfor
+        @endforeach
         </div>
       </div>
     </div>

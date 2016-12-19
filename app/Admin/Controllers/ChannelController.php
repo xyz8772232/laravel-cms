@@ -11,9 +11,6 @@ namespace app\Admin\Controllers;
 
 use App\Channel;
 use App\Tool;
-use Encore\Admin\Controllers\ModelForm;
-use Encore\Admin\Form;
-use Encore\Admin\Grid;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
@@ -22,8 +19,6 @@ use Illuminate\Support\Facades\Validator;
 
 class ChannelController extends Controller
 {
-    use ModelForm;
-
     /**
      * Index interface.
      * @return Content
@@ -57,41 +52,14 @@ class ChannelController extends Controller
         return Tool::showError('参数错误');
     }
 
-    /**
-     * Edit interface.
-     *
-     * @param $id
-     * @return Content
-     */
-    public function edit($id)
-    {
-        return Admin::content(function (Content $content) use ($id) {
-
-            $content->header('header');
-            $content->description('description');
-
-            $content->body($this->form()->edit($id));
-        });
-    }
-
 
 
 
     /**
      * Create interface.
-     *
+     * @param $id
      * @return Content
      */
-    public function create()
-    {
-        return Admin::content(function (Content $content) {
-
-            $content->header('header');
-            $content->description('description');
-
-            $content->body($this->form());
-        });
-    }
 
     public function update($id)
     {
@@ -165,58 +133,4 @@ class ChannelController extends Controller
         }
         return Tool::showError();
     }
-
-    /**
-     * Make a grid builder.
-     *
-     * @return Grid
-     */
-    protected function grid()
-    {
-        return Admin::grid(Channel::class, function (Grid $grid) {
-
-            $grid->id('ID')->sortable();
-            $grid->grade('等级')->sortable();
-
-            $grid->name('频道名');
-            $grid->parent_id('父频道')->value(function($channelId) {
-                if ($channelId == 0) {
-                    return '无';
-                }
-                return Channel::find($channelId)->name;
-            });
-
-            $grid->created_at(trans('admin::lang.created_at'));
-            //$grid->updated_at(trans('admin::lang.updated_at'));
-//            $grid->filter(function($filter){
-//
-//                // sql: ... WHERE `user.name` LIKE "%$name%";
-//                $filter->like('name', '频道名');
-//
-//                // sql: ... WHERE `user.email` = $email;
-//                $filter->is('parent_id', '父频道');
-//
-//                // sql: ... WHERE `user.created_at` BETWEEN $start AND $end;
-//                $filter->between('created_at', trans('admin::lang.created_at'))->datetime();
-//            });
-        });
-    }
-
-    /**
-     * Make a form builder.
-     *
-     * @return Form
-     */
-    protected function form()
-    {
-        return Admin::form(Channel::class, function (Form $form) {
-
-            $form->display('id', 'ID');
-            $form->text('name', '频道名');
-            $form->select('parent_id', '父频道')->options(Channel::pluck('name', 'id')->prepend('无'));
-            $form->hidden('grade');
-            $form->hidden('admin_user_id');
-        });
-    }
-
 }
