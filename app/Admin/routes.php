@@ -11,7 +11,7 @@ $router->resource('channels', ChannelController::class, ['as' => 'admin']);
 
 //文章管理相关
 $router->get('articles/audit_list', 'ArticleController@auditList');
-$router->get('articles/channel', ['uses' => 'ArticleController@channel', 'as' => 'admin.articles.channel']);
+//$router->get('articles/channel', ['uses' => 'ArticleController@channel', 'as' => 'admin.articles.channel']);
 $router->post('articles/change', 'ArticleController@change');
 $router->post('articles/online/{id}', 'ArticleController@online');
 $router->post('articles/audit/{id}', 'ArticleController@audit');

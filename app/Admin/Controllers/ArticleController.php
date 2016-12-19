@@ -15,6 +15,7 @@ use App\SortLink;
 use App\Tool;
 use App\Permission;
 use Carbon\Carbon;
+use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Http\Request;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Grid;
@@ -31,24 +32,41 @@ class ArticleController extends Controller
         $header = '待审核文章';
         $description = '列表';
         $channel_id = (int)Input::get('channel_id', 0);
-        $options = [0 => '全部'] + Channel::buildSelectOptions([], 0, str_repeat('&nbsp;', 2));
 
         //查询条件处理
         $model = new Model(Admin::getModel(Article::class));
         $model->audit();
+
+        //头条,幻灯片
+        $attribute = Input::get('attribute', '');
+        if ($attribute !== '') {
+            if ($attribute == 0) {
+                $conditions[] = ['has' => ['sortLink']];
+            } else {
+                $conditions[] = ['has' => ['sortPhoto']];
+            }
+        }
+        //作者
+        $author = Input::get('author', '');
+        if ($author !== '') {
+            $authorResult = Administrator::where('name', $author)->first();
+            $author_id = $authorResult ? $authorResult->id : 0;
+            $conditions[] = ['where' => ['author_id', $author_id]];
+        }
 
         if ($channel_id) {
             $channelIds = array_merge(Channel::branchIds([], $channel_id), [$channel_id]);
             $conditions[] = ['whereIn' => ['channel_id', $channelIds]];
             $model->addConditions($conditions);
         }
+
         $model->with('articleInfo', 'author');
-        if (!Input::get('_order')) {
-            $model->orderBy('created_at', 'desc');
-        }
+        $model->orderBy('created_at', 'desc');
         //过滤条件
         $filter = new Filter($model);
+        $filter->disableIdFilter();
         $filter->like('title', '标题');
+        $filter->is('is_important', '重要');
         $filter->between('created_at', trans('admin::lang.created_at'))->datetime();
 
 
@@ -63,8 +81,9 @@ class ArticleController extends Controller
 
         //$query = Input::all();
         //$articles = Article::with('articleInfo', 'author')->where('state', 0)->orderBy('id', 'desc')->paginate()->appends($query);
-        $filterValues = array_filter(Input::only('id', 'title', 'created_at'), function($item) {
-            return !is_null($item);
+
+        $filterValues = array_filter(Input::only('title', 'created_at', 'author', 'is_important', 'attribute'), function($item) {
+            return $item !== '';
         });
         $filterValues['channel_id'] = $channel_id;
         $tableHeaders = [
@@ -94,97 +113,19 @@ class ArticleController extends Controller
                 'sortable' => true,
             ],
         ];
+
+        $channelOptions = [1 => '新闻'] + Channel::buildSelectOptions([], 1, str_repeat('&nbsp;', 1));
+        $isImportantOptions = [0 =>'不重要', 1 => '重要'];
+        $attributeOptions = [0 => '头条', 1 => '幻灯片'];
+
+        $options = [
+            'channel' => $channelOptions,
+            'is_important' => $isImportantOptions,
+            'attribute' => $attributeOptions,
+        ];
         return view('admin.article.audit',
             compact('header', 'description', 'articles', 'options', 'filterValues', 'tableHeaders', 'perPageOptions'));
     }
-    /**
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    /*public function channel()
-    {
-        $header = '待审核文章';
-        $description = '列表';
-        $channel_id = (int)Input::get('channel_id', 0);
-        $channels = Channel::toTree([], 0);
-        $options = [0 => '全部'] + Channel::buildSelectOptions([], 0, str_repeat('&nbsp;', 2));
-
-        //查询条件处理
-        $model = new Model(Admin::getModel(Article::class));
-        $model->audit();
-
-        if ($channel_id) {
-            $channelIds = array_merge(Channel::branchIds([], $channel_id), [$channel_id]);
-            $conditions[] = ['whereIn' => ['channel_id', $channelIds]];
-            $model->addConditions($conditions);
-        }
-        $model->with('articleInfo', 'author');
-        if (!Input::get('_sort')) {
-            $model->orderBy('created_at', 'desc');
-        }
-        //过滤条件
-        $filter = new Filter($model);
-        $filter->like('title', '标题');
-        $filter->between('created_at', trans('admin::lang.created_at'))->datetime();
-
-
-        //dd($filterValues);
-        $articles = $filter->execute();
-        $query = Input::all();
-        $articles->appends($query);
-        //dd($articles->last());
-        //dd($filter->conditions(), $filter->execute());
-
-        //$query = Input::all();
-        //$articles = Article::with('articleInfo', 'author')->where('state', 0)->orderBy('id', 'desc')->paginate()->appends($query);
-        $filterValues = array_filter(Input::only('id', 'title', 'create_at[start]', 'create_at[end]', 'channel_id'), function($item) {
-            return !is_null($item);
-        });
-        $tableHeaders = [
-            [
-                'name' => 'is_important',
-                'label' => '重要',
-                'sortable' => true,
-            ],
-            [
-                'name' => 'id',
-                'label' => 'ID',
-                'sortable' => true,
-            ],
-            [
-                'name' => 'state',
-                'label' => '上线',
-                'sortable' => true,
-            ],
-            [
-                'name' => 'title',
-                'label' => '标题',
-                'sortable' => false,
-            ],
-            [
-                'name' => 'author',
-                'label' => '发布者',
-                'sortable' => false,
-            ],
-            [
-                'name' => 'published_at',
-                'label' => '发布时间',
-                'sortable' => true,
-            ],
-            [
-                'name' => 'articleInfo.view_num',
-                'label' => '点击量',
-                'sortable' => true,
-            ],
-            [
-                'name' => 'articleInfo.comment_num',
-                'label' => '评论数',
-                'sortable' => true,
-            ],
-        ];
-        return view('admin.article.index',
-            compact('header', 'description', 'articles', 'options', 'filterValues', 'tableHeaders', 'channels'));
-    }*/
 
     public function index()
     {
@@ -193,18 +134,40 @@ class ArticleController extends Controller
         $channel_name = Channel::find($channel_id)->name;
         $description = $channel_name;
         $channels = Channel::toTree([], 0);
-        $options = [1 => '新闻'] + Channel::buildSelectOptions([], 1, str_repeat('&nbsp;', 1));
 
         //查询条件处理
         $model = new Model(Admin::getModel(Article::class));
+        //频道
         $channelIds = array_merge(Channel::branchIds([], $channel_id), [$channel_id]);
+
         $conditions[] = ['whereIn' => ['channel_id', $channelIds]];
+        //头条,幻灯片
+        $attribute = Input::get('attribute', '');
+        if ($attribute !== '') {
+            if ($attribute == 0) {
+                $conditions[] = ['has' => ['sortLink']];
+            } else {
+                $conditions[] = ['has' => ['sortPhoto']];
+            }
+        }
+        //作者
+        $author = Input::get('author', '');
+        if ($author !== '') {
+            $authorResult = Administrator::where('name', $author)->first();
+            $author_id = $authorResult ? $authorResult->id : 0;
+            $conditions[] = ['where' => ['author_id', $author_id]];
+        }
+        //dd($conditions);
         $model->addConditions($conditions);
         $model->with('articleInfo','author');
         $model->orderBy('created_at', 'desc');
+        $model->perPages([20, 50, 100, 200]);
         //过滤条件
         $filter = new Filter($model);
+        $filter->disableIdFilter();
         $filter->like('title', '标题');
+        $filter->is('is_important', '是否重要');
+        $filter->is('state', '状态');
         $filter->between('created_at', trans('admin::lang.created_at'))->datetime();
         $articles = $filter->execute();
         $query = Input::all();
@@ -214,10 +177,12 @@ class ArticleController extends Controller
         //dd($articles);
         //dd($articles->last());
 
-        $filterValues = array_filter(Input::only('id', 'title', 'created_at'), function($item) {
-            return !is_null($item);
+        $filterValues = array_filter(Input::only('id', 'title', 'created_at', 'author', 'is_important', 'state', 'attribute'), function($item) {
+            return $item !== '';
         });
+        //dd($filterValues);
         $filterValues['channel_id'] = $channel_id;
+
         $tableHeaders = [
             [
                 'name' => 'is_important',
@@ -260,6 +225,20 @@ class ArticleController extends Controller
                 'sortable' => true,
             ],
         ];
+
+        $channelOptions = [1 => '新闻'] + Channel::buildSelectOptions([], 1, str_repeat('&nbsp;', 1));
+        $isImportantOptions = [0 =>'不重要', 1 => '重要'];
+        $stateOptions = [0 => '未提交', 1 => '待审核', 2 => '上线'];
+        $attributeOptions = [0 => '头条', 1 => '幻灯片'];
+        //$channelOptions = [0 => '全部'] + Channel::buildSelectOptions([], 0, str_repeat('&nbsp;', 2));
+
+        $options = [
+            'channel' => $channelOptions,
+            'is_important' => $isImportantOptions,
+            'state' => $stateOptions,
+            'attribute' => $attributeOptions,
+        ];
+
         return view('admin.article.index',
             compact('header', 'description', 'channels','articles', 'options', 'filterValues', 'tableHeaders', 'perPageOptions'));
     }
