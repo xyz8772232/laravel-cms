@@ -18,8 +18,8 @@ class SortPhotoController extends Controller
     {
         $header = '首页';
         $description = '幻灯片排序';
-        $photos = SortPhoto::with('article')->orderByRaw('`order` = 0,`order`')->orderBy('created_at')->get();
-        return view('admin.sort.photo', ['header' => $header, 'description' => $description, 'photos' => $photos]);
+        $photos = SortPhoto::online()->get();
+        return view('admin.sort.photo', compact('header', 'description', 'photos'));
     }
 
     /**

@@ -14,7 +14,7 @@ class SortPhotoController extends BaseController
 
     public function index()
     {
-        $photos =  SortPhoto::with('article')->orderByRaw('`order` = 0,`order`')->orderBy('created_at')->get();
+        $photos = SortPhoto::online()->get();
         return $this->collection($photos, new SortPhotoTransformer());
     }
 

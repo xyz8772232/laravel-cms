@@ -4,17 +4,12 @@ namespace App\Admin\Controllers;
 
 use App\SortLink;
 use App\Tool;
-use Encore\Admin\Controllers\ModelForm;
-use Encore\Admin\Form;
-use Encore\Admin\Grid;
-use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
 
 class SortLinkController extends Controller
 {
-    use ModelForm;
 
     /**
      * Index interface.
@@ -25,14 +20,7 @@ class SortLinkController extends Controller
     {
         $header = '首页';
         $description = '新闻排序';
-        $links = SortLink::with('article')->orderByRaw('`order` = 0,`order`')->orderBy('created_at')->get();
-//        foreach ($links as $link) {
-//            if (empty($link->article)) {
-//                dump($link->id);
-//            }
-//        }
-//        exit;
-        //dd($links);
+        $links = SortLink::online()->get();
         return view('admin.sort.link', ['header' => $header, 'description' => $description, 'links' => $links]);
     }
 

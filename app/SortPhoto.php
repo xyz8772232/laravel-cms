@@ -3,19 +3,23 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SortPhoto extends Model
 {
-    use SoftDeletes;
 
-    protected $fillable = ['article_id', 'deleted_at'];
+    protected $fillable = ['article_id'];
 
     protected static $branchOrder = [];
 
     public function article()
     {
         return $this->belongsTo('\App\Article');
+    }
+
+    public static function online()
+    {
+        $photos =  SortPhoto::WhereHas('article', function($q) {$q->online();})->with('article')->orderByRaw('`order` = 0,`order`')->orderBy('created_at');
+        return $photos;
     }
 
     protected static function setBranchOrder(array $order)

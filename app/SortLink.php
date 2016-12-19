@@ -3,19 +3,26 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SortLink extends Model
 {
-    use SoftDeletes;
 
-    protected $fillable = ['article_id', 'deleted_at'];
+    protected $fillable = ['article_id'];
 
     protected static $branchOrder = [];
 
     public function article()
     {
         return $this->belongsTo('\App\Article');
+    }
+
+    /**
+     * @return $this
+     */
+    public static function online()
+    {
+        $links = static::whereHas('article', function($query) {$query->where('state', 2);})->with('article')->orderByRaw('`order` = 0,`order`')->orderBy('created_at');
+        return $links;
     }
 
     protected static function setBranchOrder(array $order)

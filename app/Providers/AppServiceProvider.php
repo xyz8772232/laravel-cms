@@ -6,12 +6,16 @@ use App\Admin;
 use App\Article;
 use App\BallotAnswer;
 use App\Comment;
+use App\SortLink;
+use App\SortPhoto;
 use View;
 use Blade;
 use App\FileUpload;
 use App\Observers\ArticleObserver;
 use App\Observers\BallotAnswerObserver;
 use App\Observers\CommentObserver;
+use App\Observers\SortLinkObserver;
+use App\Observers\SortPhotoObserver;
 use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
 
@@ -28,6 +32,8 @@ class AppServiceProvider extends ServiceProvider
         Article::observe(ArticleObserver::class);
         BallotAnswer::observe(BallotAnswerObserver::class);
         Comment::observe(CommentObserver::class);
+        SortLink::observe(SortLinkObserver::class);
+        SortPhoto::observe(SortPhotoObserver::class);
         Blade::directive('define', function($expression) {
             return "<?php $expression; ?>";
         });

@@ -17,4 +17,8 @@ return [
     'update' => '修改',
     'move' => '移动',
     'outline' => '下线',
+    'addSortLink' => '设为头条',
+    'delSortLink' => '取消头条',
+    'addSortPhoto' => '设为幻灯片',
+    'delSortPhoto' => '取消幻灯片',
 ];

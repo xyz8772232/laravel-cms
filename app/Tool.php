@@ -108,33 +108,22 @@ class Tool extends Model
     public static function handleSortLink(Article $article, $action = 'add')
     {
         switch ($action) {
-            //添加但不显示在热点区域
             case 'add':
                 if ($article->is_headline) {
                     return false;
                 }
-                return $article->sortLink()->create(['deleted_at' => Carbon::now()]);
+                $existedNum = SortLink::count();
+                if ($existedNum >= config('article.sortPhotoMaxNum')) {
+                    $oldestLink = SortLink::orderBy('created_at')->first();
+                    $oldestLink->delete();
+                }
+                return $article->sortLink()->create([]);
                 break;
             case 'delete':
                 if (!$article->is_headline) {
                     return false;
                 }
-                return $article->sortLink()->forceDelete();
-                break;
-            case 'online':
-                if ($article->is_headline_online) {
-                    return false;
-                }
-                if ($article->is_headline) {
-                    return $article->sortLink()->restore();
-                }
-                return $article->sortLink()->save(new SortLink());
-                break;
-            case 'offline':
-                if (!$article->is_headline_online) {
-                    return false;
-                }
-                return $article->sortLink()->delete();
+                return $article->sortLink()->first()->delete();
                 break;
             default:
                 return false;
@@ -145,21 +134,8 @@ class Tool extends Model
     public static function handleSortPhoto(Article $article, $action = 'add')
     {
         switch ($action) {
-            //添加但不显示在热点区域
             case 'add':
                 if ($article->is_slide) {
-                    return false;
-                }
-                return $article->sortPhoto()->create(['deleted_at' => Carbon::now()]);
-                break;
-            case 'delete':
-                if (!$article->is_slide) {
-                    return false;
-                }
-                return $article->sortPhoto()->forceDelete();
-                break;
-            case 'online':
-                if ($article->is_slide_online) {
                     return false;
                 }
                 $existedNum = SortPhoto::count();
@@ -167,16 +143,13 @@ class Tool extends Model
                     $oldestSlide = SortPhoto::orderBy('created_at')->first();
                     $oldestSlide->delete();
                 }
-                if ($article->is_slide) {
-                    return $article->sortPhoto()->restore();
-                }
-                return $article->sortPhoto()->save(new SortPhoto());
+                return $article->sortPhoto()->create([]);
                 break;
-            case 'offline':
-                if (!$article->is_slide_online) {
+            case 'delete':
+                if (!$article->is_slide) {
                     return false;
                 }
-                return $article->sortPhoto()->delete();
+                return $article->sortPhoto()->first()->delete();
                 break;
             default:
                 return false;

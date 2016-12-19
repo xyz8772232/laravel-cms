@@ -124,7 +124,7 @@ class Article extends Model
 
     public function getCoverPicAttribute()
     {
-        if ($this->link) {
+        if ($this->attributes['link_id']) {
             return $this->link->cover_pic;
         } else {
             return $this->attributes['cover_pic'];
@@ -154,23 +154,10 @@ class Article extends Model
 
     public function getIsHeadlineAttribute()
     {
-        return $this->sortLink()->withTrashed()->first();
-
+        return $this->sortLink()->first();
     }
 
     public function getIsSlideAttribute()
-    {
-        return $this->sortPhoto()->withTrashed()->first();
-
-    }
-
-    public function getIsHeadlineOnlineAttribute()
-    {
-        return $this->sortLink()->first();
-
-    }
-
-    public function getIsSlideOnlineAttribute()
     {
         return $this->sortPhoto()->first();
     }
