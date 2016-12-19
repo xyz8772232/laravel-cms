@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class ArticleInfo extends Model
 {
+    protected $primaryKey = 'article_id';
+    public $incrementing = false;
     public $timestamps = false;
 
     protected $fillable = ['article_id'];

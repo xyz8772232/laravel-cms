@@ -2,7 +2,6 @@
 
 namespace App;
 
-use Encore\Admin\Facades\Admin;
 use Encore\Admin\Grid\Filter\AbstractFilter;
 use Illuminate\Support\Facades\Input;
 use ReflectionClass;
@@ -38,6 +37,13 @@ class Filter
     protected $useModal = false;
 
     /**
+     * If use id filter.
+     *
+     * @var bool
+     */
+    protected $useIdFilter = true;
+
+    /**
      * Create a new filter instance.
      *
      * @param Model $model
@@ -56,6 +62,14 @@ class Filter
     public function useModal()
     {
         $this->useModal = true;
+    }
+
+    /**
+     * Disable Id filter.
+     */
+    public function disableIdFilter()
+    {
+        $this->useIdFilter = false;
     }
 
     /**

@@ -15,7 +15,7 @@ class ArticleTransformer extends TransformerAbstract
     {
         $article->cover_pic = $article->cover_pic ? cms_local_to_web($article->cover_pic) : null;
         $article->url = route('articles.show', ['id' => $article->id]);
-        return $article->toArray();
+        return $article->makeVisible('comment_num')->toArray();
     }
 
 }

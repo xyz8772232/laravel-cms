@@ -9,7 +9,7 @@ class Exposure extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['title', 'desc', 'link', 'uname', 'contact', 'pics'];
+    protected $fillable = ['title', 'desc', 'link', 'uname', 'contact', 'pics', 'wechat'];
 
     public static function boot()
     {

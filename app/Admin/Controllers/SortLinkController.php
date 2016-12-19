@@ -23,8 +23,8 @@ class SortLinkController extends Controller
      */
     public function index()
     {
-        $header = '热推文章排序';
-        $description = '';
+        $header = '首页';
+        $description = '新闻排序';
         $links = SortLink::with('article')->orderByRaw('`order` = 0,`order`')->orderBy('created_at')->get();
 //        foreach ($links as $link) {
 //            if (empty($link->article)) {

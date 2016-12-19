@@ -58,7 +58,8 @@ class CommentController extends BaseController
             'reply_to_id' => $reply_to_id,
         ]);
         if ($result) {
-            return $this->response->created();
+		return $result;
+            //return $this->response->created(null, $result);
         } else {
             return $this->response->errorInternal();
         }

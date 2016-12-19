@@ -92,11 +92,7 @@
               <div class="page-info pull-right">
                 共 <span class="text-primary">{{ $articles->total() }}</span> 篇文章,每页显示
                 <select id="perPage">
-                  <option value="http://yun.app/admin/keywords?per_page=10" selected>10</option>
-                  <option value="http://yun.app/admin/keywords?per_page=15">15</option>
-                  <option value="http://yun.app/admin/keywords?per_page=20">20</option>
-                  <option value="http://yun.app/admin/keywords?per_page=25">25</option>
-                  <option value="http://yun.app/admin/keywords?per_page=30">30</option>
+                  {!! $perPageOptions !!}
                 </select>
                 篇
               </div>
@@ -114,7 +110,7 @@
   <link rel="stylesheet" href="{{ asset("/packages/admin/sweetalert/sweetalert.css") }}">
   <link rel="stylesheet" href="{{ asset("/packages/admin/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css") }}">
   <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/plugins/select2/select2.min.css") }}">
-  <link rel="stylesheet" href="{{ asset("/css/article.index.css") }}">
+  <link rel="stylesheet" href="{{ asset_with_version("/css/article.index.css") }}">
 @endsection
 
 @section('admin_js')

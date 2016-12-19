@@ -9,6 +9,7 @@
 namespace App\Observers;
 
 use App\Article;
+use App\ArticleInfo;
 use App\ArticleLog;
 use App\Tool;
 use Encore\Admin\Facades\Admin;
@@ -22,6 +23,9 @@ class ArticleObserver
      */
     public function created(Article $article)
     {
+        ArticleInfo::create([
+            'article_id' => $article->id,
+        ]);
         ArticleLog::create([
             'operation' => config('article.operation.create'),
             'article_id' => $article->id,

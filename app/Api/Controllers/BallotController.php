@@ -9,7 +9,7 @@ use App\BallotChoice;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 /**
- * Class CommentController
+ * Class BallotController
  *
  * @package \App\Api\Controllers
  */

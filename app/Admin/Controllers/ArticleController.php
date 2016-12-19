@@ -3,7 +3,6 @@
 namespace App\Admin\Controllers;
 
 use App\Article;
-use App\ArticleInfo;
 use App\ArticleLog;
 use App\Ballot;
 use App\BallotChoice;
@@ -57,6 +56,8 @@ class ArticleController extends Controller
         $articles = $filter->execute();
         $query = Input::all();
         $articles->appends($query);
+        $perPageOptions = $model->perPageOptions();
+
         //dd($articles->last());
         //dd($filter->conditions(), $filter->execute());
 
@@ -94,13 +95,13 @@ class ArticleController extends Controller
             ],
         ];
         return view('admin.article.audit',
-            compact('header', 'description', 'articles', 'options', 'filterValues', 'tableHeaders'));
+            compact('header', 'description', 'articles', 'options', 'filterValues', 'tableHeaders', 'perPageOptions'));
     }
     /**
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function channel()
+    /*public function channel()
     {
         $header = '待审核文章';
         $description = '列表';
@@ -183,11 +184,10 @@ class ArticleController extends Controller
         ];
         return view('admin.article.index',
             compact('header', 'description', 'articles', 'options', 'filterValues', 'tableHeaders', 'channels'));
-    }
+    }*/
 
     public function index()
     {
-
         $header = '新闻';
         $channel_id = (int)Input::get('channel_id', 1);
         $channel_name = Channel::find($channel_id)->name;
@@ -201,9 +201,7 @@ class ArticleController extends Controller
         $conditions[] = ['whereIn' => ['channel_id', $channelIds]];
         $model->addConditions($conditions);
         $model->with('articleInfo','author');
-        if (!Input::get('_sort')) {
-            $model->orderBy('created_at', 'desc');
-        }
+        $model->orderBy('created_at', 'desc');
         //过滤条件
         $filter = new Filter($model);
         $filter->like('title', '标题');
@@ -211,9 +209,10 @@ class ArticleController extends Controller
         $articles = $filter->execute();
         $query = Input::all();
         $articles->appends($query);
+
+        $perPageOptions = $model->perPageOptions();
         //dd($articles);
         //dd($articles->last());
-        //dd($filter->conditions(), $filter->execute());
 
         $filterValues = array_filter(Input::only('id', 'title', 'created_at'), function($item) {
             return !is_null($item);
@@ -262,21 +261,37 @@ class ArticleController extends Controller
             ],
         ];
         return view('admin.article.index',
-            compact('header', 'description', 'channels','articles', 'options', 'filterValues', 'tableHeaders'));
+            compact('header', 'description', 'channels','articles', 'options', 'filterValues', 'tableHeaders', 'perPageOptions'));
     }
 
     public function preview($id)
     {
         $article =  Article::where('id', $id)->firstOrFail();
+        if ($article->link_id) {
+            return $this->linkPreview($article);
+        }
         if ($article->type == 1) {
-            return $this->photo($article);
+            return $this->photoPreview($article);
         } else {
-            return $this->text($article);
+            return $this->textPreview($article);
+        }
+    }
+
+    //文字链接
+    private function linkPreview(Article $article)
+    {
+        $link_article = Article::find($article->link_id);
+        $link_article->title = $article->title;
+        $link_article->channel_id = $article->channel_id;
+        if ($link_article->type == 1) {
+            return $this->photoPreview($link_article);
+        } else {
+            return $this->textPreview($link_article);
         }
     }
 
     //图片文章
-    private function photo(Article $article)
+    private function photoPreview(Article $article)
     {
         $contentPics = collect(json_decode($article->content, true))->map(function($value) {
             return [
@@ -289,7 +304,7 @@ class ArticleController extends Controller
     }
 
     //普通文章
-    private function text(Article $article)
+    private function textPreview(Article $article)
     {
         $comments = [];
         $ballot = [];
@@ -432,7 +447,6 @@ class ArticleController extends Controller
                 $article->save();
                 $article->keywords()->sync($keywords);
                 $article->content()->save(new Content(['content' => $content]));
-                $article->articleInfo()->save(new ArticleInfo());
                 if ($ballot) {
                     $article->ballot()->save(new Ballot($ballot));
                     foreach ($ballotChoices as $val) {
@@ -615,24 +629,31 @@ class ArticleController extends Controller
     /**
      * 修改文章属性
      *
-     * @param                          $id
-     * @param \Illuminate\Http\Request $request
-     *
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function change($id, Request $request)
+    public function change()
     {
-        Permission::allow(['administrator', 'responsible_editor']);
-        $this->validate($request, [
-            'id' => 'required|exists:articles,id',
-        ]);
-        $article = Article::find($id);
+        //Permission::allow(['administrator', 'responsible_editor']);
+        $rules = [
+            'article_id' => 'required|exists:articles,id',
+            'title_bold' => 'in:0,1',
+        ];
+
+        $validator = Validator::make(Input::all(), $rules);
+        if ($validator->fails()) {
+            return Tool::showError('参数错误');
+        }
+        $article_id = Input::get('article_id', 0);
+
+        $article = Article::find($article_id);
 
         $changeableField = [
             'is_soft',
             'is_political',
             'is_international',
             'is_important',
+            'title_bold',
+            'title_color',
         ];
 
         collect(Input::only($changeableField))->filter(function ($value) {
@@ -642,14 +663,10 @@ class ArticleController extends Controller
         });
 
         $result = $article->save();
-        if ($request->ajax()) {
-            if ($result) {
-                return Tool::showSuccess();
-            }
-            return Tool::showError();
-        } else {
-            return redirect(Tool::resource());
+        if ($result) {
+            return Tool::showSuccess();
         }
+        return Tool::showError();
     }
 
     /**输出
@@ -806,11 +823,8 @@ class ArticleController extends Controller
                 $link['channel_id'] = Tool::getChannelId($link['channels']);
                 unset($link['channels']);
                 $link['author_id'] = $article->author_id;
-                $link['created_at'] = $link['updated_at'] = Carbon::now();
-                $link['state'] = $article->state;
+                $result = Article::create($link);
             }
-
-            $result = Article::insert($tree);
             if ($result) {
                 return Tool::showSuccess('创建链接成功');
             }

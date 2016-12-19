@@ -11,7 +11,7 @@ class Comment extends Model
 
     //protected $appends = ['reply_to_user_nick'];
 
-    protected $fillable = ['content', 'reply_to_id', 'article_id', 'user_id', 'user_nick'];
+    protected $fillable = ['content', 'reply_to_id', 'article_id', 'user_id', 'user_nick', 'user_avatar'];
 
     //protected $hidden = ['reply_to_user_nick'];
 

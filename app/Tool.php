@@ -66,8 +66,13 @@ class Tool extends Model
     }
 
     public static function tableHeader($header) {
+        if ($header['name'] == 'title') {
+            $columnStyle = 'style="width:400px;"';
+        } else {
+            $columnStyle = '';
+        }
         if (!$header['sortable']) {
-            return "<th>{$header['label']}</th>";
+            return "<th $columnStyle>{$header['label']}</th>";
         }
         $icon = 'fa-sort';
         $type = 'desc';
@@ -79,7 +84,7 @@ class Tool extends Model
         $query = app('request')->all();
         $query = array_merge($query, ['_sort' => ['column' => $header['name'], 'type' => $type]]);
         $url = Url::current().'?'.http_build_query($query);
-        return "<th>{$header['label']}<a class=\"fa fa-fw $icon\" href=\"$url\"></a></th>";
+        return "<th $columnStyle>{$header['label']}<a class=\"fa fa-fw $icon\" href=\"$url\"></a></th>";
     }
 
     public static function isSorted($name)

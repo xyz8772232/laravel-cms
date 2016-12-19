@@ -9,6 +9,7 @@ use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
 use App\Comment;
+use Illuminate\Http\JsonResponse;
 
 class CommentController extends Controller
 {
@@ -66,8 +67,8 @@ class CommentController extends Controller
 
     /**
      * 屏蔽
-     * @param                          $id
-     * @param \Illuminate\Http\Request $request
+     * @param  $id
+     * @return JsonResponse
      */
     public function block($id)
     {

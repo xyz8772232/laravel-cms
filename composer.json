@@ -13,12 +13,10 @@
         "intervention/image": "^2.3",
         "dingo/api": "1.0.*@dev",
         "tymon/jwt-auth": "0.5.*",
-        "bupt1987/html-parser": "^3.0",
         "sunra/php-simple-html-dom-parser": "^1.5",
         "laracasts/utilities": "~2.0",
-        "unicodeveloper/laravel-emoji": "^1.0",
-        "iamcal/php-emoji": "dev-master",
-        "mews/captcha": "~2.0"
+        "mews/captcha": "~2.0",
+        "barryvdh/laravel-cors": "^0.8.2"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
