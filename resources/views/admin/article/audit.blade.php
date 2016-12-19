@@ -17,15 +17,33 @@
               <div class="input-group input-group-sm">
                 <span class="input-group-addon"><strong>频道</strong></span>
                 <select class="select-line" data-placeholder="选择关键字" name="channel_id" id="channelId">
-                  @foreach( $options as $key => $option)
+                  @foreach( $options['channel'] as $key => $option)
                   <option value="{{ $key }}" @if($filterValues['channel_id'] == $key) selected @endif>{{ $option }}</option>
                   @endforeach
                 </select>
               </div>
+              {{--<div class="input-group input-group-sm">--}}
+                {{--<span class="input-group-addon"><strong>Id</strong></span>--}}
+                {{--<input type="text" class="form-control" name="id" value="{{ $filterValues['id'] ?? null }}" style="width:60px;">--}}
+              {{--</div>--}}
+              <select class="form-control" name="is_important">
+                <option value="">是否重要</option>
+                @foreach( $options['is_important'] as $key => $option)
+                  <option value="{{ $key }}" @if(isset($filterValues['is_important']) && $filterValues['is_important'] == $key) selected @endif>{{ $option }}</option>
+                @endforeach
+              </select>
+              <select class="form-control" name="attribute">
+                <option value="">属性</option>
+                @foreach( $options['attribute'] as $key => $option)
+                  <option value="{{ $key }}" @if(isset($filterValues['attribute']) && $filterValues['attribute'] == $key) selected @endif>{{ $option }}</option>
+                @endforeach
+              </select>
               <div class="input-group input-group-sm">
-                <span class="input-group-addon"><strong>Id</strong></span>
-                <input type="text" class="form-control" name="id" value="{{ $filterValues['id'] ?? null }}" style="width:60px;">
+                <span class="input-group-addon"><strong>发布者</strong></span>
+                <input type="text" class="form-control" name="author" value="{{ $filterValues['author'] ?? null }}">
               </div>
+
+
               <div class="input-group input-group-sm">
                 <span class="input-group-addon"><strong>标题</strong></span>
                 <input type="text" class="form-control" name="title" value="{{ $filterValues['title'] ?? null }}">
@@ -81,7 +99,7 @@
           <div class="box-footer clearfix">
             <div class="actions" id="batchActions">
               <span class="btn btn-sm btn-danger e-delete">删除</span>
-              <span class="btn btn-sm btn-success e-audit">审核通过</span>
+              <span class="btn btn-sm btn-success e-audit">上线</span>
               <div class="page-info pull-right">
                 共 <span class="text-primary">{{ $articles->total() }}</span> 篇文章,每页显示
                 <select id="perPage">

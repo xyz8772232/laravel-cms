@@ -2,7 +2,6 @@
 
 namespace App\Admin\Controllers;
 
-use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 use App\Keyword;
 use Encore\Admin\Controllers\ModelForm;
@@ -15,23 +14,21 @@ use Illuminate\Support\Facades\Input;
 class KeywordController extends Controller
 {
     use ModelForm;
-
-//    public function __construct()
-//    {
-//        $this->middleware('sidebar', ['only' => 'index']);
-//    }
     /**
      * Index interface.
      * @return Content
      */
     public function index()
     {
-        return view('admin.keyword.index', []);
-        return Admin::content(function(Content $content) {
-            $content->header('系统');
-            $content->description('关键词');
-            $content->body($this->grid());
-        });
+        $header = trans('lang.system');
+        $description = trans('lang.keyword');
+        $keywords = Keyword::all();
+        return view('admin.keyword.index', compact('header', 'description', 'keywords'));
+//        return Admin::content(function(Content $content) {
+//            $content->header('系统');
+//            $content->description('关键词');
+//            $content->body($this->grid());
+//        });
     }
 
     /**
@@ -96,33 +93,33 @@ class KeywordController extends Controller
      *
      * @return Grid
      */
-    protected function grid()
-    {
-        return Admin::grid(Keyword::class, function (Grid $grid) {
-
-            $grid->id('ID')->sortable();
-
-            $grid->name('关键词')->value(function ($name) {
-                return "<span class='label label-success'>{$name}</span>";
-            });
-
-
-            $grid->model()->orderBy('id', 'desc');
-            $grid->disableExport();
-
-
-            $grid->created_at(trans('admin::lang.created_at'));
-            $grid->filter(function($filter){
-                //$filter->useModal();
-
-                // sql: ... WHERE `user.name` LIKE "%$name%";
-                $filter->like('name', '关键词');
-
-                // sql: ... WHERE `user.created_at` BETWEEN $start AND $end;
-                $filter->between('created_at', trans('admin::lang.created_at'))->datetime();
-            });
-        });
-    }
+//    protected function grid()
+//    {
+//        return Admin::grid(Keyword::class, function (Grid $grid) {
+//
+//            $grid->id('ID')->sortable();
+//
+//            $grid->name('关键词')->value(function ($name) {
+//                return "<span class='label label-success'>{$name}</span>";
+//            });
+//
+//
+//            $grid->model()->orderBy('id', 'desc');
+//            $grid->disableExport();
+//
+//
+//            $grid->created_at(trans('admin::lang.created_at'));
+//            $grid->filter(function($filter){
+//                $filter->disableIdFilter();
+//                //$filter->useModal();
+//
+//                // sql: ... WHERE `user.name` LIKE "%$name%";
+//                $filter->like('name', '关键词');
+//
+//                // sql: ... WHERE `user.created_at` BETWEEN $start AND $end;
+//            });
+//        });
+//    }
 
     /**
      * Make a form builder.
