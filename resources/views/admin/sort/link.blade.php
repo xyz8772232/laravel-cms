@@ -18,8 +18,8 @@
             <div class="sort-news" data-id="{{$link->id}}">
               <i class="fa fa-arrows-alt text-default e-drag"></i>
               <div class="color">
-                <span class="input-group-addon color-picker"><i></i></span>
-                <input class="form-control color-ipt" type="text" value="{{$link->article->title_color}}"/>
+                颜色:#
+                <input class="e-color" type="text" value="{{ltrim($link->article->title_color, '#')}}" maxLength="6"/>
               </div>
               <div class="bold">
                 粗体:
@@ -33,7 +33,6 @@
       </div>
       <div class="box-footer clearfix">
         <button type="button" class="btn btn-primary pull-right e-sort">排序</button>
-        <button type="button" class="btn btn-primary pull-right e-change">修改标题</button>
         <button type="button" class="btn btn-success pull-right e-submit">确定</button>
         <button type="button" class="btn btn-danger pull-right e-cancel">取消</button>
       </div>
@@ -78,27 +77,22 @@
       vertical-align: top;
       margin-top: 17px;
       font-size: 16px;
+      outline: none;
     }
     .sort-news .color {
       float: right;
     }
-    .sort-news .color-picker {
+    .sort-news .e-color {
       display: inline-block;
       vertical-align: top;
-      margin-top: 17px;
-      padding: 0;
-      width: auto;
-      border: none;
-      background-color: transparent;
-    }
-    .sort-news .color-ipt {
-      display: inline-block;
-      vertical-align: top;
-      margin-top: 8px;
-      padding: 0;
+      margin-top: 15px;
+      padding: 0 5px;
       width: 60px;
-      line-height: 34px;
+      line-height: 20px;
       border: none;
+      border-bottom: 1px solid #aaa;
+      background-color: transparent;
+      outline: none;
     }
     .e-drag {
       float: right;
@@ -137,94 +131,5 @@
   <script src="{{ asset ("/packages/admin/AdminLTE/plugins/colorpicker/bootstrap-colorpicker.min.js") }}"></script>
   <script src="{{ asset("/packages/admin/sweetalert/sweetalert.min.js") }}"></script>
   <script src="{{ asset("/packages/admin/dragula/dragula.min.js") }}"></script>
-  <script>
-    $(function () {
-      var $sortBox = $('#sortBox');
-
-      /**
-       * 颜色
-       */
-      $sortBox.find('.color').each(function() {
-        $(this).colorpicker()
-        .on('changeColor', function(e) {
-          $(this).siblings('.title').css('color', e.color.toHex());
-        });
-      });
-
-      /**
-       * 粗体
-       */
-      $sortBox.on('change', '.e-bold', function(){
-        $(this).parent().siblings('.title').css('font-weight', this.checked ? 'bold' : 'normal');
-      });
-
-      /**
-       * 绑定拖拽事件
-       */
-      dragula([$sortBox[0]], {
-        moves: function (el, container, handle) {
-          return handle.classList.contains('e-drag');
-        }
-      });
-
-      /**
-       * 绑定排序事件
-       */
-      var orgElList = Array.prototype.slice.call($sortBox.children(), 0);
-      $('.box-footer').on('click', '.e-sort', function (e) {
-        $sortBox.addClass('active');
-        e.delegateTarget.classList.add('action-sort');
-      }).on('click', '.e-submit', function (e) {
-        swal({
-          title: '',
-          text: '<i class="icon-submit-loading">',
-          customClass: 'submit-loading',
-          showConfirmButton: false,
-          html: true
-        });
-        setTimeout(function () {
-          submitSort();
-        }, 250);
-      }).on('click', '.e-cancel', function (e) {
-        $sortBox.removeClass('active');
-        e.delegateTarget.classList.remove('action-sort');
-        $sortBox.append(orgElList);
-      });
-
-      function submitSort(){
-        var tree = [];
-
-        $sortBox.children().each(function () {
-          tree.push(this.getAttribute('data-id'));
-        });
-        setTimeout(function() {})
-        $.post('/admin/sort_links/save', {
-          _tree: JSON.stringify(tree)
-        })
-        .done(function (res) {
-          if (res && res.result.status.code === 0) {
-            swal({
-              title: '修改成功',
-              type: 'success'
-            }, function () {
-              location.reload();
-            });
-          } else {
-            submitFail(res && res.result.status.msg);
-          }
-        })
-        .fail(function (){
-          submitFail();
-        });
-      }
-
-      function submitFail(failMsg) {
-        swal({
-          title: '修改失败',
-          type: 'error',
-          text: failMsg || ''
-        });
-      }
-    });
-  </script>
+  <script src="{{ asset ("/js/sort.link.js") }}"></script>
 @endsection
