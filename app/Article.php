@@ -154,12 +154,18 @@ class Article extends Model
 
     public function getIsHeadlineAttribute()
     {
-        return $this->sortLink()->first();
+        if ($this->sortLink) {
+            return true;
+        }
+        return false;
     }
 
     public function getIsSlideAttribute()
     {
-        return $this->sortPhoto()->first();
+        if ($this->sortPhoto) {
+            return true;
+        }
+        return false;
     }
 
     public function getOnlineAttribute()

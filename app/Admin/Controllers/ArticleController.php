@@ -60,7 +60,7 @@ class ArticleController extends Controller
             $model->addConditions($conditions);
         }
 
-        $model->with('articleInfo', 'author');
+        $model->with('articleInfo','author', 'sortLink', 'sortPhoto');
         $model->orderBy('created_at', 'desc');
         //过滤条件
         $filter = new Filter($model);
@@ -159,7 +159,7 @@ class ArticleController extends Controller
         }
         //dd($conditions);
         $model->addConditions($conditions);
-        $model->with('articleInfo','author');
+        $model->with('articleInfo','author', 'sortLink', 'sortPhoto');
         $model->orderBy('created_at', 'desc');
         $model->perPages([20, 50, 100, 200]);
         //过滤条件
