@@ -40,7 +40,7 @@
     .sort-pic {
       position: relative;
       float: left;
-      margin: 15px 20px;
+      margin: 15px 10px;
       width: 243px;
       height: 220px;
       background-color: #1fa67a;

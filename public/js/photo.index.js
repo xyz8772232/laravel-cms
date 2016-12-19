@@ -3,9 +3,7 @@ $(function () {
    * 选择
    */
   var $selectAll = $('.img-select-all');
-  var $selectList = $('.e-select');
-  var keyControlIsActive = false;
-  var keyShiftIsActive = false;
+  var $selectList = $('#photoBox .e-select');
   var selectInterval = [0, 0];
 
   // 全选
@@ -19,12 +17,12 @@ $(function () {
   });
 
   // 选中(支持ctrl + shift)
-  $('#photoBox').on('click', '.e-select', function () {
+  $('#photoBox').on('click', '.e-select', function (e) {
     var $this = $(this);
-    if (keyControlIsActive) {
+    if (e.ctrlKey || e.metaKey) {
       $this.toggleClass('selected');
       selectInterval[0] = +$this.attr('data-index');
-    } else if (keyShiftIsActive) {
+    } else if (e.shiftKey) {
       var selectIntervalBySort;
       $selectList.removeClass('selected');
       selectInterval[1] = +$this.attr('data-index');
@@ -38,22 +36,6 @@ $(function () {
       selectInterval[0] = +$this.attr('data-index');
     }
     $selectAll.prop('checked', false);
-  });
-
-  $(document).on('keydown', function (e) {
-    var keyCode = e.keyCode;
-    if (keyCode === 17 || (91 <= keyCode && keyCode <= 93)) {
-      keyControlIsActive = true;
-    } else if (keyCode === 16) {
-      keyShiftIsActive = true;
-    }
-  }).on('keyup', function (e) {
-    var keyCode = e.keyCode;
-    if (keyCode === 17 || (91 <= keyCode && keyCode <= 93)) {
-      keyControlIsActive = false;
-    } else if (keyCode === 16) {
-      keyShiftIsActive = false;
-    }
   });
 
   /**

@@ -1,13 +1,16 @@
-.e-delete {
-  margin-left: 20px;
-}
-.e-upload {
+.box-header .btn {
   margin-left: 5px;
+}
+.box-header .instructions {
+  margin-left: 30px;
+  color: #444;
+  font-size: 13px;
+  font-style: italic;
 }
 .photo {
   position: relative;
   float: left;
-  margin: 15px 20px;
+  margin: 15px 10px;
   width: 243px;
   height: 220px;
   background-color: #1fa67a;

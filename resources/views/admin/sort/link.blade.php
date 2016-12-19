@@ -15,13 +15,25 @@
         <div class="sort-box" id="sortBox">
           @foreach($links as $link)
             @if ($link->article)
-            <div class="sort-news" data-id="{{$link->id}}"><i class="fa fa-arrows-alt text-default e-drag"></i>{{$link->article->title}}<span>{{$link->article->title_color}}</span><span class="">{{$link->article->title_bold}}</span></div>
+            <div class="sort-news" data-id="{{$link->id}}">
+              <i class="fa fa-arrows-alt text-default e-drag"></i>
+              <div class="color">
+                <span class="input-group-addon color-picker"><i></i></span>
+                <input class="form-control color-ipt" type="text" value="{{$link->article->title_color}}"/>
+              </div>
+              <div class="bold">
+                粗体:
+                <input class="e-bold" type="checkbox" {{$link->article->title_bold === 1 ? 'checked' : ''}}/>
+              </div>
+              <span class="title" style="color:{{$link->article->title_color}};{{$link->article->title_bold === 1 ? 'font-weight:bold;' : ''}}">{{$link->article->title}}</span>
+            </div>
             @endif
           @endforeach
         </div>
       </div>
       <div class="box-footer clearfix">
         <button type="button" class="btn btn-primary pull-right e-sort">排序</button>
+        <button type="button" class="btn btn-primary pull-right e-change">修改标题</button>
         <button type="button" class="btn btn-success pull-right e-submit">确定</button>
         <button type="button" class="btn btn-danger pull-right e-cancel">取消</button>
       </div>
@@ -30,11 +42,19 @@
 @endsection
 
 @section('css')
+  <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/plugins/colorpicker/bootstrap-colorpicker.min.css") }}">
   <link rel="stylesheet" href="{{ asset("/packages/admin/sweetalert/sweetalert.css") }}">
   <link rel="stylesheet" href="{{ asset("/packages/admin/dragula/dragula.min.css") }}">
   <style>
     .sort-box {
       margin: 0 20px 20px;
+    }
+    .sort-box.active .color,
+    .sort-box.active .bold {
+      display: none;
+    }
+    .sort-box.active .e-drag {
+      display: block;
     }
     .sort-news {
       margin-bottom: 5px;
@@ -45,20 +65,46 @@
       border-radius: 5px;
       font-size: 15px;
       color: #333;
-      font-weight: bold;
       background-color: #fff;
     }
     .sort-news:last-child {
       margin-bottom: 0;
     }
+    .sort-news .bold {
+      float: right;
+      margin-right: 15px;
+    }
+    .sort-news .e-bold {
+      vertical-align: top;
+      margin-top: 17px;
+      font-size: 16px;
+    }
+    .sort-news .color {
+      float: right;
+    }
+    .sort-news .color-picker {
+      display: inline-block;
+      vertical-align: top;
+      margin-top: 17px;
+      padding: 0;
+      width: auto;
+      border: none;
+      background-color: transparent;
+    }
+    .sort-news .color-ipt {
+      display: inline-block;
+      vertical-align: top;
+      margin-top: 8px;
+      padding: 0;
+      width: 60px;
+      line-height: 34px;
+      border: none;
+    }
     .e-drag {
       float: right;
       margin-top: 17px;
       cursor: move;
-      visibility: hidden;
-    }
-    .sort-box.active .e-drag {
-      visibility: visible;
+      display: none;
     }
     .box-footer {
       padding-right: 30px;
@@ -88,11 +134,30 @@
 @endsection
 
 @section('admin_js')
+  <script src="{{ asset ("/packages/admin/AdminLTE/plugins/colorpicker/bootstrap-colorpicker.min.js") }}"></script>
   <script src="{{ asset("/packages/admin/sweetalert/sweetalert.min.js") }}"></script>
   <script src="{{ asset("/packages/admin/dragula/dragula.min.js") }}"></script>
   <script>
     $(function () {
       var $sortBox = $('#sortBox');
+
+      /**
+       * 颜色
+       */
+      $sortBox.find('.color').each(function() {
+        $(this).colorpicker()
+        .on('changeColor', function(e) {
+          $(this).siblings('.title').css('color', e.color.toHex());
+        });
+      });
+
+      /**
+       * 粗体
+       */
+      $sortBox.on('change', '.e-bold', function(){
+        $(this).parent().siblings('.title').css('font-weight', this.checked ? 'bold' : 'normal');
+      });
+
       /**
        * 绑定拖拽事件
        */
@@ -123,7 +188,7 @@
       }).on('click', '.e-cancel', function (e) {
         $sortBox.removeClass('active');
         e.delegateTarget.classList.remove('action-sort');
-        $sortBox.html('').append(orgElList);
+        $sortBox.append(orgElList);
       });
 
       function submitSort(){
