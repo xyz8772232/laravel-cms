@@ -10,8 +10,8 @@
   <section class="content">
     <div class="box">
       <div class="box-header">
-        <input type="checkbox" class="e-select-all"> 全选
-        <a class="e-delete btn btn-sm btn-danger">删除</a>
+        {{--<input type="checkbox" class="e-select-all"> 全选
+        <a class="e-delete btn btn-sm btn-danger">删除</a>--}}
         <a class="e-add btn btn-sm btn-success">添加关键词</a>
       </div>
       <div class="box-body">

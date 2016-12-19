@@ -23,39 +23,45 @@
                   @endforeach
                 </select>
               </div>
-              <select class="form-control" name="is_important">
-                <option value="">是否重要</option>
-                @foreach( $options['is_important'] as $key => $option)
-                  <option value="{{ $key }}" @if(isset($filterValues['is_important']) && $filterValues['is_important'] == $key) selected @endif>{{ $option }}</option>
-                @endforeach
-              </select>
-              <select class="form-control" name="state">
-                <option value="">状态</option>
-                @foreach( $options['state'] as $key => $option)
-                  <option value="{{ $key }}" @if(isset($filterValues['state']) && $filterValues['state'] == $key) selected @endif>{{ $option }}</option>
-                @endforeach
-              </select>
-              <select class="form-control" name="attribute">
-                <option value="">属性</option>
-                @foreach( $options['attribute'] as $key => $option)
-                  <option value="{{ $key }}" @if(isset($filterValues['attribute']) && $filterValues['attribute'] == $key) selected @endif>{{ $option }}</option>
-                @endforeach
-              </select>
+              <div class="input-group input-group-sm">
+                <select class="select-line normal-select" name="is_important" style="width:80px">
+                  <option value="">是否重要</option>
+                  @foreach( $options['is_important'] as $key => $option)
+                    <option value="{{ $key }}" @if(isset($filterValues['is_important']) && $filterValues['is_important'] == $key) selected @endif>{{ $option }}</option>
+                  @endforeach
+                </select>
+              </div>
+              <div class="input-group input-group-sm">
+                <select class="select-line normal-select" name="state" style="width:70px">
+                  <option value="">状态</option>
+                  @foreach( $options['state'] as $key => $option)
+                    <option value="{{ $key }}" @if(isset($filterValues['state']) && $filterValues['state'] == $key) selected @endif>{{ $option }}</option>
+                  @endforeach
+                </select>
+              </div>
+              <div class="input-group input-group-sm">
+                <select class="select-line normal-select" name="attribute" style="width:70px">
+                  <option value="">属性</option>
+                  @foreach( $options['attribute'] as $key => $option)
+                    <option value="{{ $key }}" @if(isset($filterValues['attribute']) && $filterValues['attribute'] == $key) selected @endif>{{ $option }}</option>
+                  @endforeach
+                </select>
+              </div>
               <div class="input-group input-group-sm">
                 <span class="input-group-addon"><strong>发布者</strong></span>
-                <input type="text" class="form-control" name="author" value="{{ $filterValues['author'] ?? null }}">
+                <input type="text" class="form-control" name="author" value="{{ $filterValues['author'] ?? null }}" style="width:65px">
               </div>
               <div class="input-group input-group-sm">
                 <span class="input-group-addon"><strong>标题</strong></span>
-                <input type="text" class="form-control" name="title" value="{{ $filterValues['title'] ?? null }}">
+                <input type="text" class="form-control" name="title" value="{{ $filterValues['title'] ?? null }}" style="width:110px">
               </div>
               <div class="input-group input-group-sm">
-                <span class="input-group-addon"><strong>创建时间</strong></span>
+                <span class="input-group-addon"><strong>时间</strong></span>
                 <input type="text" class="form-control" id="createdAtStart"
-                       name="created_at[start]" value="{{ $filterValues['created_at']['start'] ?? null }}">
+                       name="created_at[start]" value="{{ $filterValues['created_at']['start'] ?? null }}" style="width:135px">
                 <span class="input-group-addon" style="border-left: 0; border-right: 0;">-</span>
                 <input type="text" class="form-control" id="createdAtEnd"
-                       name="created_at[end]" value="{{ $filterValues['created_at']['end'] ?? null }}">
+                       name="created_at[end]" value="{{ $filterValues['created_at']['end'] ?? null }}" style="width:135px">
               </div>
               <div class="input-group input-group-sm">
                 <div class="input-group-btn">

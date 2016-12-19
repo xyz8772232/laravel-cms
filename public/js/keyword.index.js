@@ -4,33 +4,37 @@ $(function () {
   .on('click', '.e-delete', deleteKeyword);
 
   function editKeyword() {
-    var $ipt = $(this).siblings('.ipt');
+    var id = this.parentNode.parentNode.getAttribute('data-id');
+    var $ipt = $(this.parentNode).siblings('.ipt');
     var orgVal = $ipt.val();
 
-    $ipt.focus()
+    $ipt.removeAttr('readonly').focus()
     .on('blur', function () {
-      commonAlert('确认修改', commonPost('修改', '/admin/photos/', {
-       val: this.value
-      }, function (isSuccess) {
+      commonAlert('确认修改', commonPost('修改', '/admin/keywords/' + id, {
+        name: this.value,
+        _method: 'PUT'
+      }), function (isSuccess) {
         if (isSuccess) {
           location.reload();
         } else {
-          $ipt.off('blur').val(orgVal);
+          $ipt.off('blur').val(orgVal).attr('readonly', '');
         }
-      }));
+      });
     });
   }
 
-  function deleteKeyword(e) {
-    commonAlert('确认删除', commonPost('删除', '/admin/photos/', {
-    }, function (isSuccess) {
+  function deleteKeyword() {
+    var id = this.parentNode.parentNode.getAttribute('data-id');
+    commonAlert('确认删除', commonPost('删除', '/admin/keywords/' + id, {
+      _method: 'DELETE'
+    }), function (isSuccess) {
       if (isSuccess) {
         location.reload();
       }
-    }));
+    });
   }
 
-  function commonAlert(noticeText, confirmCallback) {
+  function commonAlert(noticeText, confirmCallback, callback) {
     swal({
       title: noticeText,
       type: 'warning',
@@ -40,12 +44,16 @@ $(function () {
       showLoaderOnConfirm: true,
       closeOnConfirm: false
     }, function (isConfirm) {
-      isConfirm && confirmCallback && confirmCallback();
+      if (isConfirm) {
+        confirmCallback(callback);
+      } else {
+        callback(false);
+      }
     });
   }
 
-  function commonPost(actionName, postUrl, postData, callback) {
-    return function () {
+  function commonPost(actionName, postUrl, postData) {
+    return function (callback) {
       $.post(postUrl, postData)
       .done(function (res) {
         if (res && res.result.status.code === 0) {
@@ -56,15 +64,15 @@ $(function () {
             callback(true);
           });
         } else {
-          failHandler(res && res.result.status.msg);
+          failHandler(res && res.result.status.msg, callback);
         }
       })
       .fail(function () {
-        failHandler();
+        failHandler(null, callback);
       });
     };
 
-    function failHandler(failMsg) {
+    function failHandler(failMsg, callback) {
       swal({
         title: actionName + '失败',
         text: failMsg || '',

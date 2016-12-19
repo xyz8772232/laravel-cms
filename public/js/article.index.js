@@ -104,20 +104,27 @@ $(function () {
 
 
   /**
-   * 页数选择
+   * 是否重要、状态、属性选择
    */
-  $("#perPage").select2({
+  $('.box-header .normal-select').select2({
     minimumResultsForSearch: -1,
     allowClear: false
-  }).on("select2:select", function() {
-    location.href = this.value;
   });
 
+  /**
+   * 页数选择
+   */
+  $('#perPage').select2({
+    minimumResultsForSearch: -1,
+    allowClear: false
+  }).on('select2:select', function () {
+    location.href = this.value;
+  });
 
   /**
    * 频道选择
    */
-  $("#channelId").select2({
+  $('#channelId').select2({
     allowClear: false
   });
 

@@ -5,12 +5,26 @@
 .box-header .select-line {
   width: 120px;
 }
-.box-header .select2-selection {
+.box-header .select2-selection--single {
+  padding: 0;
   height: 30px;
-  border-radius: 0 3px 3px 0;
+  border-radius: 0;
   border-color: #ccc;
   color: #555;
   font-size: 12px;
+}
+.box-header .select2-selection--single .select2-selection__rendered {
+  margin-top: 0;
+  height: 100%;
+  line-height: 30px;
+}
+.box-header .select2-selection--single .select2-selection__arrow {
+  top: 0;
+  right: 0;
+  height: 100%;
+}
+.box-header .form-control {
+  border-radius: 0;
 }
 .select2-search__field {
   outline: none;
@@ -59,6 +73,7 @@
 .box-footer .page-info .select2-selection--single {
   padding: 0;
   height: 25px;
+  border-radius: 0;
 }
 .box-footer .page-info .select2-selection--single .select2-selection__rendered {
   margin-top: 0;

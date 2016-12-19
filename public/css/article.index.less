@@ -7,12 +7,26 @@
   .select-line {
     width: 120px;
   }
-  .select2-selection {
+  .select2-selection--single {
+    padding: 0;
     height: 30px;
-    border-radius: 0 3px 3px 0;
+    border-radius: 0;
     border-color: #ccc;
     color: #555;
     font-size: 12px;
+    .select2-selection__rendered{
+      margin-top: 0;
+      height: 100%;
+      line-height: 30px;
+    }
+    .select2-selection__arrow {
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  }
+  .form-control{
+    border-radius: 0;
   }
 }
 
@@ -69,6 +83,7 @@
     .select2-selection--single {
       padding: 0;
       height: 25px;
+      border-radius: 0;
       .select2-selection__rendered{
         margin-top: 0;
         height: 100%;
