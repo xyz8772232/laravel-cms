@@ -4,17 +4,13 @@ namespace App\Admin\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Keyword;
-use Encore\Admin\Controllers\ModelForm;
-use Encore\Admin\Form;
-use Encore\Admin\Grid;
+use App\Tool;
 use Encore\Admin\Facades\Admin;
-use Encore\Admin\Layout\Content;
 use Illuminate\Support\Facades\Input;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class KeywordController extends Controller
 {
-    use ModelForm;
     /**
      * Index interface.
      * @return Content
@@ -68,8 +64,9 @@ class KeywordController extends Controller
         if (!$keyword || $keyword->name == $name) {
             return Tool::showError('参数错误');
         }
-        $keyword = Keyword::where('name', $name)->first();
-        if ($keyword) {
+
+        $duplicateKeyword = Keyword::where('name', $name)->first();
+        if ($duplicateKeyword) {
             return Tool::showError('名称已存在');
         }
         $keyword->name = $name;

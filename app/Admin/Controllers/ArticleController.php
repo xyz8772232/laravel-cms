@@ -145,13 +145,9 @@ class ArticleController extends Controller
         $attribute = Input::get('attribute', '');
         if ($attribute !== '') {
             if ($attribute == 0) {
-                $conditions[] = ['whereHas' => ['sortLink', function($query) {
-                    $query->withTrashed();
-                }]];
+                $conditions[] = ['has' => ['sortLink']];
             } else {
-                $conditions[] = ['whereHas' => ['sortPhoto', function($query) {
-                    $query->withTrashed();
-                }]];
+                $conditions[] = ['has' => ['sortPhoto']];
             }
         }
         //作者
@@ -685,8 +681,6 @@ class ArticleController extends Controller
                 $article->state = 2;
                 $article->auditor_id = $auditor_id;
                 $article->save();
-                Tool::handleSortLink($article, 'online');
-                Tool::handleSortPhoto($article, 'online');
             }
         }
         return Tool::showSuccess('审核通过成功');
@@ -728,11 +722,7 @@ class ArticleController extends Controller
             }
             $article = Article::find($id);
             if ($article) {
-                if ($article->online) {
-                    Tool::handleSortLink($article, 'online');
-                } else {
-                    Tool::handleSortLink($article, 'add');
-                }
+                Tool::handleSortLink($article, 'add');
             }
         }
         return Tool::showSuccess('设置头条成功');

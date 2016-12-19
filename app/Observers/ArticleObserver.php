@@ -13,6 +13,7 @@ use App\ArticleInfo;
 use App\ArticleLog;
 use App\Tool;
 use Encore\Admin\Facades\Admin;
+
 class ArticleObserver
 {
     /**
@@ -40,8 +41,8 @@ class ArticleObserver
      */
     public function deleting(Article $article)
     {
-        Tool::handleSortLink($article, 'offline');
-        Tool::handleSortPhoto($article, 'offline');
+        Tool::handleSortLink($article, 'delete');
+        Tool::handleSortPhoto($article, 'delete');
     }
 
     /**

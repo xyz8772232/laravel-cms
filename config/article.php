@@ -15,11 +15,16 @@ return
         'move' => 5, //转移频道
         'pass' => 6, //审核通过
         'outline' => 7, //下线
+        'addSortLink' => 8, //设置头条
+        'delSortLink' => 9, //取消头条
+        'addSortPhoto' => 10, //设置幻灯片
+        'delSortPhoto' => 11, //取消幻灯片
     ],
     'state' => [
 
     ],
     'sortPhotoMaxNum' => 8,
+    'sortLinkMaxNum' => 100,
 
     'ballotType' => [
         '单选',
