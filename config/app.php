@@ -173,7 +173,6 @@ return [
         Intervention\Image\ImageServiceProvider::class,
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
         Laracasts\Utilities\JavaScript\JavaScriptServiceProvider::class,
-        Unicodeveloper\Emoji\EmojiServiceProvider::class,
         Mews\Captcha\CaptchaServiceProvider::class,
         Barryvdh\Cors\ServiceProvider::class,
 
@@ -239,7 +238,6 @@ return [
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
         'Image' => Intervention\Image\Facades\Image::class,
-        'Emoji' => Unicodeveloper\Emoji\Facades\Emoji::class,
         'Captcha' => Mews\Captcha\Facades\Captcha::class,
 
         'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,

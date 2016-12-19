@@ -59,7 +59,7 @@ class CommentController extends BaseController
         ]);
         if ($result) {
 		return $result;
-            //return $this->response->created();
+            //return $this->response->created(null, $result);
         } else {
             return $this->response->errorInternal();
         }

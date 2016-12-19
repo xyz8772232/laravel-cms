@@ -26,6 +26,7 @@ class KeywordController extends Controller
      */
     public function index()
     {
+        return view('admin.keyword.index', []);
         return Admin::content(function(Content $content) {
             $content->header('系统');
             $content->description('关键词');

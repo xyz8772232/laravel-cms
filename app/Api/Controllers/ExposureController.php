@@ -18,7 +18,7 @@ class ExposureController extends BaseController
         $rules = [
             'title' => 'required',
             'desc' => 'required',
-            'link' => 'required|url',
+            'link' => 'required',
             'uname' => 'required',
             'pics.*' => 'image',
         ];
@@ -32,10 +32,9 @@ class ExposureController extends BaseController
         $uname = Input::get('uname', '');
         $contact = Input::get('contact', '');
         $wechat = Input::get('wechat', '');
+        //dd(Input::all());
 
         $pics = Input::file('pics');
-
-
 
         $exposure = [
             'title' => $title,
@@ -58,7 +57,7 @@ class ExposureController extends BaseController
 
         $result = Exposure::create($exposure);
         if ($result) {
-            return $this->response->created();
+            return $result;
         } else {
             return $this->response->errorInternal();
         }
