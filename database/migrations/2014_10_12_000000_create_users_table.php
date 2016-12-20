@@ -14,8 +14,8 @@ class CreateUsersTable extends Migration
     public function up()
     {
         $databaseName = env('DB_DATABASE');
-        DB::statement("CREATE DATABASE `$databaseName` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
-        //DB::statement("ALTER DATABASE `$databaseName`` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+        //DB::statement("CREATE DATABASE `$databaseName` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+        DB::statement("ALTER DATABASE `$databaseName`` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
