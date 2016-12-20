@@ -32,7 +32,6 @@ class ChannelsTableSeeder extends Seeder
         );
         \App\Channel::create(
             ['name' => '社会', 'admin_user_id' => 2, 'grade' => 4, 'parent_id' => 5]
-
         );
     }
 }
