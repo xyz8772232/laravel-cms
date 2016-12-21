@@ -25,7 +25,7 @@ class WatermarkController extends Controller
         $header = '系统';
         $description = '水印';
         $watermark = Watermark::find(1);
-        $image['path'] = asset('upload/'.$watermark->path);
+        $image['path'] = image_url($watermark->path);
         $image['caption'] = pathinfo($watermark->path, PATHINFO_BASENAME);
         return view('admin.watermark.index', ['header' => $header, 'description' => $description, 'watermark' => $image]);
 
@@ -46,6 +46,9 @@ class WatermarkController extends Controller
         $uid = Admin::user()->id;
 
         $path = app('fileUpload')->prepare($file);
+        if (empty($path)) {
+            return back()->withErrors('上传失败');
+        }
         $watermark = Watermark::where('status', 1)->first();
         if ($watermark) {
             $watermark->path = $path;

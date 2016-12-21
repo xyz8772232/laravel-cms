@@ -19,10 +19,10 @@
         <div class="photo-box" id="photoBox">
         @foreach($photos as $photo)
           <div class="photo e-select" data-id="{{ $photo->id }}" data-index="{{ $loop->index }}">
-            <img class="pic" src="{{ asset('upload/'.$photo->path) }}" alt="">
+            <img class="pic" src="{{ image_url($photo->path) }}" alt="">
             <div class="footer">
               <i class="fa fa-check-circle icon-check"></i>
-              <span class="e-copy" data-clipboard-text="{{ asset('upload/'.$photo->path) }}">复制地址</span>
+              <span class="e-copy" data-clipboard-text="{{ image_url($photo->path) }}">复制地址</span>
             </div>
           </div>
         @endforeach

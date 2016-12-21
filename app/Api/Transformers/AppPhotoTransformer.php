@@ -15,7 +15,7 @@ class AppPhotoTransformer extends TransformerAbstract
     {
         //return $appPhoto->toArray();
         return [
-            'path' => $appPhoto->path ? cms_local_to_web($appPhoto->path) : null,
+            'path' => $appPhoto->path ? image_url($appPhoto->path) : null,
         ];
     }
 

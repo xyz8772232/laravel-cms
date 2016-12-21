@@ -274,7 +274,7 @@ class ArticleController extends Controller
     {
         $contentPics = collect(json_decode($article->content, true))->map(function($value) {
             return [
-                'img' => cms_local_to_web($value['img']),
+                'img' => image_url($value['img']),
                 'title' => $value['title'],
             ];
         })->all();
@@ -307,7 +307,7 @@ class ArticleController extends Controller
             $contentPic = $request->contentPic;
             $contentPic = json_encode(collect($contentPic)->values()->sortBy('order')->map(function($value) {
                 return [
-                    'img' => cms_web_to_local($value['img']),
+                    'img' => image_str($value['img']),
                     'title' => $value['title'],
                 ];
             })->all());
@@ -492,7 +492,7 @@ class ArticleController extends Controller
             $contentPic = $request->contentPic;
             $contentPic = json_encode(collect($contentPic)->values()->sortBy('order')->map(function($value) {
                 return [
-                    'img' => cms_web_to_local($value['img']),
+                    'img' => image_str($value['img']),
                     'title' => $value['title'],
                 ];
             })->all());
@@ -859,7 +859,7 @@ class ArticleController extends Controller
         if ($article->type == 1) {
             $contentPics = collect(json_decode($article->content, true))->map(function($value) {
                 return [
-                    'img' => cms_local_to_web($value['img']),
+                    'img' => image_url($value['img']),
                      'title' => $value['title'],
                         ];
             })->all();
@@ -885,7 +885,7 @@ class ArticleController extends Controller
 
         if (!empty($article->cover_pic)) {
             $coverPic = [
-                'img' => $article->cover_pic ? cms_local_to_web($article->cover_pic) : null,
+                'img' => $article->cover_pic ? image_url($article->cover_pic) : null,
                 'title' => $article->cover_pic ? basename($article->cover_pic) : null,
             ];
         }

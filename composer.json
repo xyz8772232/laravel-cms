@@ -16,7 +16,9 @@
         "sunra/php-simple-html-dom-parser": "^1.5",
         "laracasts/utilities": "~2.0",
         "mews/captcha": "~2.0",
-        "barryvdh/laravel-cors": "^0.8.2"
+        "barryvdh/laravel-cors": "^0.8.2",
+        "spatie/laravel-backup": "^4.3",
+        "guzzlehttp/guzzle": "~6.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

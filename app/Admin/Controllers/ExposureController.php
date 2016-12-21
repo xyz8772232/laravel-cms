@@ -60,7 +60,7 @@ class ExposureController extends Controller
                 if (!empty($pics)) {
                     $pics = json_decode($pics, true);
                     foreach ($pics as $pic) {
-                        $src = cms_local_to_web($pic);
+                        $src = image_url($pic);
                         $result .= "<img src='$src' style='max-width:100px;max-height:100px' class='img img-thumbnail' /><br>";
                     }
                 }

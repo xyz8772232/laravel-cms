@@ -54,7 +54,7 @@ class ArticleController extends Controller
     {
         $contentPics = collect(json_decode($article->content, true))->map(function($value) {
             return [
-                'img' => cms_local_to_web($value['img']),
+                'img' => image_url($value['img']),
                 'title' => $value['title'],
             ];
         })->all();

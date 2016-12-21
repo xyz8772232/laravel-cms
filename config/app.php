@@ -169,6 +169,7 @@ return [
         Dingo\Api\Provider\LaravelServiceProvider::class,
         Encore\Admin\Providers\AdminServiceProvider::class,
         //Barryvdh\Debugbar\ServiceProvider::class,
+        //Spatie\Backup\BackupServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,

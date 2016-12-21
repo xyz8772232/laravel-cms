@@ -44,6 +44,13 @@ $api->version('v1', function ($api) {
         $api->get('favorites/user/{user_id}/article/{article_id}', 'FavoriteController@isFavorite');
         $api->get('favorites/user/{user_id}', 'FavoriteController@userList');
 
+        //上传
+        $api->post('upload/image', 'UploadController@image');
+
+        $api->get('test', function(Request $request){
+            dd($request->root());
+        });
+
     });
 });
 

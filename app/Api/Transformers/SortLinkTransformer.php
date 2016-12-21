@@ -13,7 +13,7 @@ class SortLinkTransformer extends TransformerAbstract
 {
     public function transform(SortLink $sortLink)
     {
-        $sortLink->article->cover_pic = $sortLink->article->cover_pic ? cms_local_to_web($sortLink->article->cover_pic) : null;
+        $sortLink->article->cover_pic = $sortLink->article->cover_pic ? image_url($sortLink->article->cover_pic) : null;
         $sortLink->article->url = route('articles.show', ['id' => $sortLink->article->id]);
         return $sortLink->article->makeVisible('comment_num')->toArray();
     }

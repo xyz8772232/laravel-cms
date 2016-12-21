@@ -27,7 +27,7 @@ class SortLinkController extends BaseController
         if (Input::get('page', 1) <= 1) {
             $sortPhotos =  SortPhoto::online()->get();
             $photoArticles = $sortPhotos->map(function($sortPhoto) {
-                $sortPhoto->article->cover_pic = $sortPhoto->article->cover_pic ? cms_local_to_web($sortPhoto->article->cover_pic) : null;
+                $sortPhoto->article->cover_pic = $sortPhoto->article->cover_pic ? image_url($sortPhoto->article->cover_pic) : null;
                 $sortPhoto->article->url = route('articles.show', ['id' => $sortPhoto->article->id]);
                 return $sortPhoto->article->toArray();
             })->all();

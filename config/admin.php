@@ -92,6 +92,11 @@ return [
     'version'   => '1.0',
 
     'local_uri_str' => '<!--CMS_LOCAL_URI-->',
+    'image_str' => '<!--IMAGE_PATH-->',
+    //'image_url' => 'http://img.app/upload/',
+    //'image_host' => 'http://img.app',
+    'image_url' => 'http://59.110.23.172/upload/',
+    'image_host' => 'http://59.110.23.172',
 
     'admin_editors' => ['administrator', 'responsible_editor'],
 

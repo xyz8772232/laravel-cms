@@ -61,18 +61,25 @@ class PhotoController extends Controller
         return Tool::showError();
     }
 
-    public function upload(Request $request)
+    public function upload()
     {
-        $this->validate($request, [
-            'photo' => 'required|image']);
+        $rules = [
+            'photo' => 'required|image',
+        ];
 
-        $photo = $request->file('photo');
+        $validator = Validator::make(Input::all(), $rules);
+
+        if ($validator->fails()) {
+            return Tool::showError('图片不符合格式');
+        }
+
+        $photo = Input::file('photo');
         $uid = Admin::user()->id;
         $path = app('fileUpload')->prepare($photo);
         $result = Photo::create(['admin_user_id' => $uid, 'path' => $path]);
 
         if ($result) {
-            return Tool::showSuccess('上传成功', ['path' => cms_local_to_web($path)]);
+            return Tool::showSuccess('上传成功', ['path' => image_url($path)]);
         }
         return Tool::showError();
     }

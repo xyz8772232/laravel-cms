@@ -3,6 +3,7 @@
 namespace App;
 
 use Encore\Admin\Form\Field;
+use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -25,8 +26,15 @@ class FileUpload
 
     protected $storage = '';
 
+    protected $imageServer = false;
+
     public function __construct()
     {
+
+        if (app('request')->root() == config('admin.image_host')) {
+            $this->imageServer = true;
+        }
+
         $this->initStorage();
     }
 
@@ -49,10 +57,14 @@ class FileUpload
         return $this;
     }
 
-    public function prepare(UploadedFile $file = null, $addWatermark = false)
+    public function prepare(UploadedFile $file = null, $watermark = false)
     {
         if (is_null($file)) {
             return '';
+        }
+
+        if(!$this->imageServer) {
+            return $this->uploadToRemote($file, $watermark);
         }
 
         $this->directory = $this->directory ?: $this->defaultStorePath();
@@ -61,27 +73,45 @@ class FileUpload
 
         $this->original = $file->getRealPath();
 
-        $originalPicPath =  $this->uploadAndDeleteOriginal($file, $addWatermark);
+        $originalPicPath =  $this->uploadAndDeleteOriginal($file, $watermark);
 
         return $originalPicPath;
     }
 
+    protected function uploadToRemote(UploadedFile $file, $watermark = false)
+    {
+        $client = new Client([
+            'base_uri' => config('admin.image_host'),
+            'timeout' => 20,
+        ]);
+
+        $response = $client->request('POST', '/api/upload/image',
+            ['multipart' => [
+                ['name' => 'file', 'contents' => fopen($file->getRealPath(), 'r'), 'filename' => $file->getClientOriginalName(), ],
+                ['name' => 'watermark', 'contents' => $watermark,],
+            ]]);
+        if ($response->getStatusCode() == 200) {
+            return (string)$response->getBody();
+        }
+        return '';
+    }
+
     /**
      * @param $file
-     * @param $addWatermark
+     * @param $watermark
      *
      * @return mixed
      */
-    protected function uploadAndDeleteOriginal(UploadedFile $file, $addWatermark = false)
+    protected function uploadAndDeleteOriginal(UploadedFile $file, $watermark = false)
     {
         $this->renameIfExists($file);
 
         $target = $this->directory.'/'.$this->name;
 
-        if ($addWatermark) {
-            $watermark = Watermark::where('status', 1)->orderBy('id')->first();
-            if ($watermark) {
-                $watermarkResource = $this->storage->get($watermark->path);
+        if ($watermark) {
+            $watermarkObject = Watermark::where('status', 1)->orderBy('id')->first();
+            if ($watermarkObject) {
+                $watermarkResource = $this->storage->get($watermarkObject->path);
                 $img = Image::make($file->getRealPath());
                 $img->insert($watermarkResource, 'bottom-right', 2, 2);
                 $img->save();

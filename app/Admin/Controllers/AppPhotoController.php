@@ -21,7 +21,7 @@ class AppPhotoController extends Controller
         $initPhotos= [];
         $photos =  AppPhoto::orderByRaw('`order` = 0,`order`')->get()->map(function($photo) use(&$initPhotos) {
             $initPhotos[$photo['order']] = [
-                'url' => cms_local_to_web($photo['path']),
+                'url' => image_url($photo['path']),
                 'title' => basename($photo['path']),
             ];
         });
