@@ -26,8 +26,8 @@ class CreateCommentsTable extends Migration
             $table->string('user_avatar', 255)->comment('评论者投票');
             $table->unsignedInteger('reply_to_id')->comment('被评论的id');
             $table->unsignedTinyInteger('blocked')->comment('是否被屏蔽');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->index('article_id');
             $table->index('reply_to_id');

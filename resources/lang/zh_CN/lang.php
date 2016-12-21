@@ -8,6 +8,8 @@ return [
     'channel' => '频道',
     'menu' => '菜单',
     'user' => '用户',
+    'app' => 'APP',
+    'exposure' => '网友报料',
     'error_params' => '参数错误',
     'delete' => '删除',
     'audit' => '提交审核',

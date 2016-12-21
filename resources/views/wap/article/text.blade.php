@@ -2,8 +2,8 @@
 
 @section('css')
     <link rel="stylesheet" href="{{ asset("/wap/css/reset.css") }}">
-    <link rel="stylesheet" href="{{ asset("/wap/css/comments.css?ver=201612101116") }}">
-    <link rel="stylesheet" href="{{ asset("/wap/css/show.css?ver=201612101116") }}">
+    <link rel="stylesheet" href="{{ asset_with_version("/wap/css/comments.css") }}">
+    <link rel="stylesheet" href="{{ asset_with_version("/wap/css/show.css") }}">
 @endsection
 
 @section('title')

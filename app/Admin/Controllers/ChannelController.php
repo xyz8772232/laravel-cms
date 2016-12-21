@@ -52,15 +52,6 @@ class ChannelController extends Controller
         return Tool::showError('参数错误');
     }
 
-
-
-
-    /**
-     * Create interface.
-     * @param $id
-     * @return Content
-     */
-
     public function update($id)
     {
         Validator::make(Input::all(), [

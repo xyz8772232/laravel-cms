@@ -39,6 +39,11 @@ $api->version('v1', function ($api) {
         //爆料
         $api->post('exposures', 'ExposureController@store');
 
+        //收藏
+        $api->post('favorites', 'FavoriteController@store');
+        $api->get('favorites/user/{user_id}/article/{article_id}', 'FavoriteController@isFavorite');
+        $api->get('favorites/user/{user_id}', 'FavoriteController@userList');
+
     });
 });
 

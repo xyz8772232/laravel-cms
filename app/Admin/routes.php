@@ -23,16 +23,11 @@ $router->resource('articles', ArticleController::class, ['as' => 'admin']);
 $router->resource('logs', ArticleLogController::class, ['as' => 'admin']);
 $router->resource('keywords', KeywordController::class, ['as' => 'admin']);
 
-//Route::group([
-//    'prefix'        => config('admin.prefix'),
-//    'namespace'     => Admin::controllerNamespace(),
-//    'middleware'    => ['web', 'admin.auth', 'admin.pjax'],
-//], function ($router) {
-//    $router->post('comments/block/{$id}', 'CommentController@block')->name('comments.block');
-//});
 $router->post('comments/block/{id}', ['uses' => 'CommentController@block', 'as' => 'comments.block']);
 
 $router->resource('comments', CommentController::class, ['as' => 'admin']);
+
+$router->resource('exposures', ExposureController::class, ['as' => 'admin']);
 
 $router->post('ballots/choice/{$id}', 'BallotController@addChoice');
 $router->resource('ballots', BallotController::class, ['as' => 'admin']);

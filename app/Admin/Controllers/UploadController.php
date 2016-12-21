@@ -13,7 +13,7 @@ class UploadController extends Controller
 {
     public function ueditorUpload()
     {
-        \Debugbar::disable();
+        //\Debugbar::disable();
         $config = json_decode(preg_replace("/\/\*[\s\S]+?\*\//", "", file_get_contents(public_path('packages/admin/ueditor-utf8-php/php/config.json'))), true);
         $action = Input::get('action');
         switch ($action) {

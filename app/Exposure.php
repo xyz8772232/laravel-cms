@@ -9,6 +9,8 @@ class Exposure extends Model
 
     public $timestamps = false;
 
+    protected $dates = ['created_at'];
+
     protected $fillable = ['title', 'desc', 'link', 'uname', 'contact', 'pics', 'wechat'];
 
     public static function boot()

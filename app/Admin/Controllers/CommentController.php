@@ -90,11 +90,11 @@ class CommentController extends Controller
     {
         return Admin::grid(Comment::class, function (Grid $grid) {
 
-            $grid->id('ID')->sortable();
+            //$grid->id('ID')->sortable();
             $grid->article_id('文章ID');
-            $grid->reply_to_id('被评论的ID')->value(function($id) {
-                return $id ? $id : '';
-            });
+//            $grid->reply_to_id('被评论的ID')->value(function($id) {
+//                return $id ? $id : '';
+//            });
             $grid->content('内容')->display(function($text) {
                 return '<p style="width: 300px">'.$text.'</p>';
             });
@@ -116,9 +116,12 @@ class CommentController extends Controller
             });
 
             $grid->filter(function($filter) {
-                $filter->is('article_id', '文章id');
+                $filter->disableIdFilter();
+                $filter->is('article_id', '文章ID');
+                $filter->is('user_id', '评论者ID');
+                $filter->is('IP', '评论者IP');
                 $filter->like('content', '内容');
-                $filter->between('created_at', trans('admin::lang.created_at'))->datetime();
+                //$filter->between('created_at', trans('admin::lang.created_at'))->datetime();
             });
 
             $grid->disableCreation();
