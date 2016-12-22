@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0aa421bcc46b17eb254911c6917461fb",
-    "content-hash": "92a4fb4513457ea1c0de3c5d100d8582",
+    "hash": "ff19fe1d49ac71695ce84840874e8f9f",
+    "content-hash": "7cd0ef51451ac68d47c23e22bb9bb285",
     "packages": [
         {
             "name": "barryvdh/laravel-cors",
@@ -469,15 +469,15 @@
         },
         {
             "name": "encore/laravel-admin",
-            "version": "v1.3.0",
+            "version": "dev-cms",
             "source": {
                 "type": "git",
-                "url": "https://github.com/z-song/laravel-admin.git",
+                "url": "https://github.com/xyz8772232/laravel-admin.git",
                 "reference": "be82144f810da84b36d242366d9fef1e3ec47879"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://packagist.phpcomposer.com/files/z-song/laravel-admin/be82144f810da84b36d242366d9fef1e3ec47879.zip",
+                "url": "https://api.github.com/repos/xyz8772232/laravel-admin/zipball/be82144f810da84b36d242366d9fef1e3ec47879",
                 "reference": "be82144f810da84b36d242366d9fef1e3ec47879",
                 "shasum": ""
             },
@@ -502,7 +502,15 @@
                     "src/helpers.php"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "Tests\\Models\\": "tests/models",
+                    "Tests\\Controllers\\": "tests/controllers"
+                },
+                "classmap": [
+                    "tests/TestCase.php"
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -521,6 +529,9 @@
                 "grid",
                 "laravel"
             ],
+            "support": {
+                "source": "https://github.com/xyz8772232/laravel-admin/tree/v1.3.0"
+            },
             "time": "2016-12-05 15:49:18"
         },
         {
@@ -5070,6 +5081,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "encore/laravel-admin": 20,
         "dingo/api": 20
     },
     "prefer-stable": false,
