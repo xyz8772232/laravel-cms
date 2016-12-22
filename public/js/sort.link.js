@@ -94,10 +94,8 @@ $(function () {
   /**
    * 绑定拖拽事件
    */
-  dragula([$sortBox[0]], {
-    moves: function (el, container, handle) {
-      return handle.classList.contains('e-drag');
-    }
+  new Sortable($sortBox[0], {
+    handle: '.e-drag'
   });
 
   /**

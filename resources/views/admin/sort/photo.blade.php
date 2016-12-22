@@ -35,7 +35,6 @@
 
 @section('css')
   <link rel="stylesheet" href="{{ asset("/packages/admin/sweetalert/sweetalert.css") }}">
-  <link rel="stylesheet" href="{{ asset("/packages/admin/dragula/dragula.min.css") }}">
   <style>
     .sort-pic {
       position: relative;
@@ -100,23 +99,30 @@
       height: 50px;
       background: url('/img/loading.gif') no-repeat;
     }
+
+    .sortable-ghost {
+      opacity: .2;
+    }
   </style>
 @endsection
 
 @section('admin_js')
   <script src="{{ asset("/packages/admin/sweetalert/sweetalert.min.js") }}"></script>
-  <script src="{{ asset("/packages/admin/dragula/dragula.min.js") }}"></script>
+  <script src="{{ asset("/packages/admin/sortable/sortable.min.js") }}"></script>
   <script>
     $(function () {
       var $sortBox = $('#sortBox');
       /**
        * 绑定拖拽事件
        */
-      dragula([$sortBox[0]], {
-        moves: function (el, container, handle) {
-          return handle.classList.contains('e-drag');
-        }
+      new Sortable($sortBox[0], {
+        handle: '.e-drag'
       });
+//      dragula([$sortBox[0]], {
+//        moves: function (el, container, handle) {
+//          return handle.classList.contains('e-drag');
+//        }
+//      });
 
       /**
        * 绑定排序事件

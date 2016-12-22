@@ -249,8 +249,7 @@
   <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/plugins/colorpicker/bootstrap-colorpicker.min.css") }}">
   <link rel="stylesheet" href="{{ asset("/packages/admin/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css") }}">
   <link rel="stylesheet" href="{{ asset("/packages/admin/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css") }}">
-  <link rel="stylesheet" href="{{ asset("/packages/admin/dragula/dragula.min.css") }}">
-  <link rel="stylesheet" href="{{ asset("/css/article.edit.css") }}">
+  <link rel="stylesheet" href="{{ asset_with_version("/css/article.edit.css") }}">
 @endsection
 
 @section('admin_js')
@@ -260,12 +259,12 @@
   <script src="{{ asset ("/packages/admin/moment/min/moment-with-locales.min.js") }}"></script>
   <script src="{{ asset ("/packages/admin/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js") }}"></script>
   <script src="{{ asset ("/packages/admin/bootstrap-switch/dist/js/bootstrap-switch.min.js") }}"></script>
-  <script src="{{ asset("/packages/admin/dragula/dragula.min.js") }}"></script>
+  <script src="{{ asset("/packages/admin/sortable/sortable.min.js") }}"></script>
   <script src="{{ asset("/packages/admin/ueditor-utf8-php/ueditor.config.js") }}"></script>
   <script src="{{ asset("/packages/admin/ueditor-utf8-php/ueditor.all.min.js") }}"></script>
   <script>
     var CHANNEL = {!! json_encode($channels) !!};
     var INIT_CONFIG = {!! json_encode($initConfig) !!};
   </script>
-  <script src="{{ asset ("/js/article.edit.js") }}"></script>
+  <script src="{{ asset_with_version ("/js/article.edit.js") }}"></script>
 @endsection

@@ -43,7 +43,6 @@
 @section('css')
   <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/plugins/colorpicker/bootstrap-colorpicker.min.css") }}">
   <link rel="stylesheet" href="{{ asset("/packages/admin/sweetalert/sweetalert.css") }}">
-  <link rel="stylesheet" href="{{ asset("/packages/admin/dragula/dragula.min.css") }}">
   <style>
     .sort-box {
       margin: 0 20px 20px;
@@ -65,6 +64,9 @@
       font-size: 15px;
       color: #333;
       background-color: #fff;
+    }
+    .sort-news.sortable-ghost {
+      background-color: #ffeebc;
     }
     .sort-news:last-child {
       margin-bottom: 0;
@@ -130,6 +132,6 @@
 @section('admin_js')
   <script src="{{ asset ("/packages/admin/AdminLTE/plugins/colorpicker/bootstrap-colorpicker.min.js") }}"></script>
   <script src="{{ asset("/packages/admin/sweetalert/sweetalert.min.js") }}"></script>
-  <script src="{{ asset("/packages/admin/dragula/dragula.min.js") }}"></script>
-  <script src="{{ asset ("/js/sort.link.js") }}"></script>
+  <script src="{{ asset("/packages/admin/sortable/sortable.min.js") }}"></script>
+  <script src="{{ asset_with_version ("/js/sort.link.js") }}"></script>
 @endsection
