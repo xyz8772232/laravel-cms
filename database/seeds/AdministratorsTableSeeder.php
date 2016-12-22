@@ -2,6 +2,8 @@
 
 use Illuminate\Database\Seeder;
 use Encore\Admin\Auth\Database\Administrator;
+use Encore\Admin\Auth\Database\Role;
+use Encore\Admin\Auth\Database\Menu;
 
 class AdministratorsTableSeeder extends Seeder
 {
@@ -205,6 +207,7 @@ class AdministratorsTableSeeder extends Seeder
 
         // add role to menu.
         Menu::find(6)->roles()->save(Role::first());
-        Menu::find(4)->roles()->save(Role::whereIn('id', [1, 2])->get());
+        Menu::find(4)->roles()->save(Role::first());
+        Menu::find(4)->roles()->save(Role::find(2));
     }
 }

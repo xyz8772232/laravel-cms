@@ -11,7 +11,7 @@
     <div>
       <div class="box col-md-12">
         <!-- form start -->
-        <form action="/admin/watermarks/save" method="post" accept-charset="UTF-8" class="form-horizontal"
+        <form action="{{ route('admin.watermarks.save') }}" method="post" accept-charset="UTF-8" class="form-horizontal"
               enctype="multipart/form-data" pjax-container>
           <div class="box-body">
             <div class="form-group 1">
@@ -53,8 +53,8 @@
         "showUpload": false,
         "language": "zh_CN",
         "allowedFileTypes": ["image"],
-        "initialCaption": "{{ $watermark['caption'] }}",
-        "initialPreview": "<img src=\"{!!  trim(json_encode($watermark['path']),'"')!!}\" class=\"file-preview-image\">"
+        "initialCaption": "{{ $image['caption'] ?? null }}",
+        "initialPreview": "{!! $image['preview'] ??  null !!}"
       });
  
       $("#path").on('filecleared', function (event) {

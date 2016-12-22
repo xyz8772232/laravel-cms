@@ -24,16 +24,16 @@ class WatermarkController extends Controller
     {
         $header = '系统';
         $description = '水印';
-        $watermark = Watermark::find(1);
-        $image['path'] = image_url($watermark->path);
-        $image['caption'] = pathinfo($watermark->path, PATHINFO_BASENAME);
-        return view('admin.watermark.index', ['header' => $header, 'description' => $description, 'watermark' => $image]);
+        $watermark = Watermark::where('status', 1)->first();
+        $image = [];
 
-//        return Admin::content(function(Content $content) {
-//            $content->header('header');
-//            $content->description('description');
-//            $content->body($this->grid());
-//        });
+        if ($watermark) {
+            $image['caption'] = pathinfo($watermark->path, PATHINFO_BASENAME);
+            $src = empty($watermark->path) ? null : image_url($watermark->path);
+            $image['preview'] = $src ? trim(json_encode("<img src=\"$src\" class=\"file-preview-image\">"), '"'): null;
+        }
+        return view('admin.watermark.index', compact('header', 'description', 'image'));
+
     }
 
     public function save(Request $request)
@@ -55,7 +55,7 @@ class WatermarkController extends Controller
             $watermark->admin_user_id = $uid;
             $result = $watermark->save();
         } else {
-            $result = $watermark->create(['path' => $path, 'admin_user_id' => $uid, 'status' => 1]);
+            $result = Watermark::create(['path' => $path, 'admin_user_id' => $uid, 'status' => 1]);
         }
 
         if (!$result) {
@@ -63,12 +63,6 @@ class WatermarkController extends Controller
         } else {
             return back();
         }
-
-
-//        if ($result) {
-//            return Tool::showSuccess();
-//        }
-//        return Tool::showError();
     }
 
     /**

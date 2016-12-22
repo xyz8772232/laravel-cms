@@ -23,7 +23,7 @@ $router->resource('articles', ArticleController::class, ['as' => 'admin']);
 $router->resource('logs', ArticleLogController::class, ['as' => 'admin']);
 $router->resource('keywords', KeywordController::class, ['as' => 'admin']);
 
-$router->post('comments/block/{id}', ['uses' => 'CommentController@block', 'as' => 'comments.block']);
+$router->post('comments/block/{id}', ['uses' => 'CommentController@block', 'as' => 'admin.comments.block']);
 
 $router->resource('comments', CommentController::class, ['as' => 'admin']);
 
@@ -36,7 +36,7 @@ $router->post('photos/upload', 'PhotoController@upload');
 $router->post('photos/batch_upload', 'PhotoController@batchUpload');
 $router->resource('photos', PhotoController::class, ['as' => 'admin']);
 $router->get('watermarks', 'WatermarkController@index');
-$router->post('watermarks/save', 'WatermarkController@save');
+$router->post('watermarks/save', ['uses' => 'WatermarkController@save', 'as' => 'admin.watermarks.save']);
 $router->get('watermarks/create', 'WatermarkController@create');
 
 $router->any('ueditor', 'UploadController@ueditorUpload');
