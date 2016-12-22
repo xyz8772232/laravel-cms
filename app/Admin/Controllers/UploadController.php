@@ -48,7 +48,7 @@ class UploadController extends Controller
                 Input::merge(['page' => intval(floor($start/$size))+1]);
                 $photos = Photo::orderBy('id', 'desc')->paginate($size, ['path']);
                 $lists = collect($photos->toArray()['data'])->map(function($val) {
-                    return ['url' => asset('upload/'.$val['path'])];
+                    return ['url' => image_url($val['path'])];
                 })->all();
 
                 /* 获取文件列表 */

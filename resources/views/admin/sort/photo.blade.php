@@ -17,7 +17,7 @@
           @if ($photo->article)
             <div class="sort-pic" data-id="{{$photo->id}}">
               <i class="fa fa-arrows-alt e-drag"></i>
-              <img class="pic" src="{{asset('/upload/'.$photo->article->cover_pic)}}" alt="">
+              <img class="pic" src="{{image_url($photo->article->cover_pic)}}" alt="">
               <div class="title">{{$photo->article->title}}</div>
             </div>
           @endif

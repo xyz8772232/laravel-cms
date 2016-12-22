@@ -21,11 +21,9 @@ class Keyword extends Model
      *
      * @var array
      */
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'admin_user_id'];
 
     public function articles() {
         return $this->belongsToMany('\App\Article')->withTimestamps();
     }
-
-
 }

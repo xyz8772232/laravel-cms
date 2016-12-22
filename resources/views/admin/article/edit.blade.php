@@ -122,8 +122,8 @@
               <div class="form-group">
                 {!! Form::label('pk', 'PK', ['class' => 'col-sm-2 control-label']) !!}
                 <div class="col-sm-6">
-                  {!! Form::checkbox('pk[effective]', 1, isset($ballot->type) && $ballot->type == 2, ['id' => 'pkSFS', 'class' => 'sub-form-switch', 'readonly' => 'readonly']) !!}
-                  @if(isset($ballot->type) && $ballot->type == 2)
+                  {!! Form::checkbox('pk[effective]', 1, isset($ballot->type) && $ballot->pk, ['id' => 'pkSFS', 'class' => 'sub-form-switch', 'readonly' => 'readonly']) !!}
+                  @if(isset($ballot->type) && $ballot->pk)
                     {!! Form::hidden('pk[id]', $ballot->id) !!}
                   @endif
                   <div class="sub-form" id="pkSubForm">
@@ -132,17 +132,19 @@
                         <label class="control-label">标题</label>
                         <div class="input-group">
                           <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
-                            {!! Form::text('pk[title]', isset($ballot->type) && $ballot->type == 2 ? $ballot->title : null, ['class'=> 'form-control', 'readonly' => 'readonly']) !!}
+                            {!! Form::text('pk[title]', isset($ballot->type) && $ballot->pk ? $ballot->title : null, ['class'=> 'form-control', 'readonly' => 'readonly']) !!}
                         </div>
                         <label class="control-label">选项</label>
                         <div class="input-group">
                           <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
-                          {!! Form::text('pk[options][]', isset($ballot->type) && $ballot->type == 2 ? $ballot->choices->first()->content : null, ['class'=> 'form-control', 'readonly' => 'readonly']) !!}
+                          <input type="text" name="pk[options][]" class="form-control" readonly value="{{(isset($ballot->type) && $ballot->pk) ? $ballot->choices->first()->content : ''}}">
+                          {{--{!! Form::text('pk[options][0]', (isset($ballot->type) && $ballot->pk) ? $ballot->choices->first()->content : null, ['class'=> 'form-control', 'readonly' => 'readonly']) !!}--}}
                         </div>
                         <label class="control-label">选项</label>
                         <div class="input-group">
                           <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
-                          {!! Form::text('pk[options][]', isset($ballot->type) && $ballot->type == 2 ? $ballot->choices->last()->content : null, ['class'=> 'form-control', 'readonly' => 'readonly']) !!}
+                          <input type="text" name="pk[options][]" class="form-control" readonly value="{{(isset($ballot->type) && $ballot->pk) ? $ballot->choices->first()->content : ''}}">
+                          {{--{!! Form::text('pk[options][]', (isset($ballot->type) && $ballot->pk) ? $ballot->choices->last()->content : null, ['class'=> 'form-control', 'readonly' => 'readonly']) !!}--}}
                         </div>
                       </div>
                     </div>

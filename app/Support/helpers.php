@@ -43,8 +43,8 @@ if (! function_exists('image_str')) {
      */
     function image_str($url)
     {
-        if (strpos($url, config('admin.image_path')) === 0) {
-            return str_replace(config('admin.image_str'), config('admin.image_path'), $url);
+        if (strpos($url, config('admin.image_url')) === 0) {
+            return str_replace(config('admin.image_url'), config('admin.image_str'), $url);
         }
         return config('admin.image_str').$url;
     }

@@ -26,9 +26,16 @@ return
     'sortPhotoMaxNum' => 8,
     'sortLinkMaxNum' => 100,
 
-    'ballotType' => [
-        '单选',
-        '多选',
-        'PK',
+    'ballot' => [
+        'type' => [
+            1 => '单选',
+            '多选',
+            'PK',
+        ],
+        'status' => [
+            1 => '未开始',
+            '进行中',
+            '已结束',
+        ],
     ],
 ];

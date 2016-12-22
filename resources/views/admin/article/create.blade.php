@@ -54,7 +54,7 @@
               <div class="form-group">
                 <label for="cover_pic" class="col-sm-2 control-label">封面图</label>
                 <div class="col-sm-6">
-                  <input type="file" id="coverPic" name="cover_pic"/>
+                  <input type="file" id="coverPic" name="cover_pic" value="{{old('cover_pic')}}"/>
                 </div>
               </div>
               <div class="form-group">
@@ -69,7 +69,7 @@
                   <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                     <input type="text" id="publishedAt" name="published_at"
-                           value="{{ date('Y-m-d H:i:s') }}"
+                           value="{{ old('published_at') ?: date('Y-m-d H:i:s') }}"
                            class="form-control" placeholder="输入发布时间" style="width: 160px"/>
                     <button type="button" id="restPublishedAt" class="btn btn-default">设为当前时间</button>
                   </div>
@@ -126,24 +126,24 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">PK</label>
                 <div class="col-sm-6">
-                  <input type="checkbox" name="pk[effective]" class="sub-form-switch" id="pkSFS" value="1"/>
+                  <input type="checkbox" name="pk[effective]" class="sub-form-switch" id="pkSFS" value="1" @if(old('pk.effective'))checked @endif/>
                   <div class="sub-form" id="pkSubForm">
                     <div class="sub-form-group clearfix">
                       <div class="sub-form-group-l">
                         <label class="control-label">标题</label>
                         <div class="input-group">
                           <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
-                          <input class="form-control" type="text" name="pk[title]">
+                          <input class="form-control" type="text" name="pk[title]" value="{{ old('pk.title') }}">
                         </div>
                         <label class="control-label">选项</label>
                         <div class="input-group">
                           <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
-                          <input class="form-control" type="text" name="pk[options][]">
+                          <input class="form-control" type="text" name="pk[options][]" value="{{ old('pk.options.0') }}">
                         </div>
                         <label class="control-label">选项</label>
                         <div class="input-group">
                           <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
-                          <input class="form-control" type="text" name="pk[options][]">
+                          <input class="form-control" type="text" name="pk[options][]" value="{{ old('pk.options.1') }}">
                         </div>
                       </div>
                     </div>
@@ -153,18 +153,18 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">投票</label>
                 <div class="col-sm-6">
-                  <input type="checkbox" name="vote[effective]" class="sub-form-switch" id="voteSFS" value="1"/>
+                  <input type="checkbox" name="vote[effective]" class="sub-form-switch" id="voteSFS" value="1" @if(old('vote.effective'))checked @endif/>
                   <div class="sub-form" id="voteSubForm">
                     <div class="vote-type">
-                      <input class="vote-type-radio" type="radio" name="vote[type]" value="0" checked>单选
-                      <input class="vote-type-radio" type="radio" name="vote[type]" value="1">多选(最多可选<input class="vote-type-text" type="text" name="vote[limit]">票)
+                      <input class="vote-type-radio" type="radio" name="vote[type]" value="0" @if(empty(old('vote.type')))checked @endif>单选
+                      <input class="vote-type-radio" type="radio" name="vote[type]" value="1" @if(old('vote.type'))checked @endif>多选(最多可选<input class="vote-type-text" type="text" name="vote[limit]" value="{{old('vote.limit')}}">票)
                     </div>
                     <div class="sub-form-group clearfix">
                       <div class="sub-form-group-l">
                         <label class="control-label">标题</label>
                         <div class="input-group">
                           <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
-                          <input class="form-control" type="text" name="vote[title]">
+                          <input class="form-control" type="text" name="vote[title]" value="{{ old('vote.title') }}">
                         </div>
                       </div>
                     </div>

@@ -20,22 +20,22 @@ class Ballot extends Model
 
     public function getPkAttribute()
     {
-        return $this->type == 2;
+        return $this->type == array_flip(config('article.ballot.type'))['PK'];
     }
 
     public function getVoteAttribute()
     {
-        return $this->type == 0 || $this->type == 1;
+        return $this->getSingleVoteAttribute() || $this->getMultiVoteAttribute();
     }
 
     public function getSingleVoteAttribute()
     {
-        return $this->type == 0;
+        return $this->type == array_flip(config('article.ballot.type'))[trans('lang.singleVote')];
     }
 
     public function getMultiVoteAttribute()
     {
-        return $this->type == 1;
+        return $this->type == array_flip(config('article.ballot.type'))[trans('lang.multiVote')];
     }
 
     /**

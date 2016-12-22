@@ -95,7 +95,7 @@ class KeywordController extends Controller
      */
     public function destroy($id)
     {
-        $rs = Keyword::destory($id);
+        $rs = Keyword::destroy($id);
         if ($rs) {
             return Tool::showSuccess();
         }

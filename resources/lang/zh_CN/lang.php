@@ -23,4 +23,7 @@ return [
     'delSortLink' => '取消头条',
     'addSortPhoto' => '设为幻灯片',
     'delSortPhoto' => '取消幻灯片',
+    'singleVote' => '单选',
+    'multiVote' => '多选',
+    'pk' => 'PK',
 ];

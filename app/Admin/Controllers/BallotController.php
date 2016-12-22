@@ -80,8 +80,7 @@ class BallotController extends Controller
             //$grid->id('ID')->sortable();
             $grid->article_id('文章id');
             $grid->type('种类')->value(function($id) {
-                $names = ['投票-单选','投票-多选', 'PK'];
-                return $names[$id];
+                return config('article.ballot.type')[$id];
             });
 
             $grid->status('状态')->value(function($id) {
@@ -101,14 +100,25 @@ class BallotController extends Controller
                 return implode('', $choiceStr);
             });
 
-            $grid->created_at(trans('admin::lang.created_at'));
+            //$grid->created_at(trans('admin::lang.created_at'));
 
             $grid->filter(function($filter) {
                 $filter->disableIdFilter();
-                $filter->is('article_id', '文章id');
+                $filter->is('article_id', '文章ID');
+                $filter->is('type', '种类')->select(config('article.ballot.type'));
+                $filter->is('status', '状态')->select(config('article.ballot.status'));
+                $filter->between('start_at', '开始时间')->datetime();
+                $filter->useModal();
             });
 
+            if ($created_at = app('request')->get('created_at')) {
+                $created_at['start'] =  $created_at['start'] ? $created_at['start'].' 00:00:00' : '';
+                $created_at['end'] = $created_at['end'] ?  $created_at['end'].' 23:59:00' : '';
+                app('request')->merge(['created_at'=> $created_at]);
+            }
+
             $grid->disableExport();
+            //$grid->disablePerPageSelector();
             $grid->disableBatchDeletion();
             $grid->disableActions();
             $grid->disableCreation();

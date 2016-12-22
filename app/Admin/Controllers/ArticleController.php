@@ -11,7 +11,6 @@ use App\Content;
 use App\Filter;
 use App\Model;
 use App\Keyword;
-use App\SortLink;
 use App\Tool;
 use App\Permission;
 use Carbon\Carbon;
@@ -330,16 +329,12 @@ class ArticleController extends Controller
             'channel_id' => 'required|integer|exists:channels,id',
         ];
 
-
-
-
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return redirect()->to('/admin/articles/create?channel_id='.$request->channel_id)
+            return redirect()->to(route('admin.articles.create', ['channel_id' => $request->channel_id]))
                 ->withInput($request->input())
                 ->withErrors($validator->errors());
         }
-
 
         $insertFields = [
             'title',
@@ -366,14 +361,10 @@ class ArticleController extends Controller
 
         $content = $request->content;
 
-
-
-
         //封面图处理
         if (!empty($request->file('cover_pic'))) {
             $coverFile = $request->file('cover_pic');
-            $coverName = uniqid('cover_').'.'.$coverFile->guessExtension();
-            $article->cover_pic = $coverFile->storeAs('cover_pic', $coverName, 'admin');
+            $article->cover_pic = app('fileUpload')->prepare($coverFile);
         }
 
         //作者处理
@@ -390,13 +381,13 @@ class ArticleController extends Controller
 
         $ballot = $ballotChoices = [];
         if (!empty($pk['effective'])) {
-            $ballot = ['title' => $pk['title'], 'type' => 2];
+            $ballot = ['title' => $pk['title'], 'type' => array_flip(config('article.ballot.type'))['PK']];
             foreach ($pk['options'] as $val) {
                 $ballotChoices[] = ['content' => $val];
             }
         } elseif (!empty($vote['effective'])) {
             $ballot = ['title' => $vote['title'], 'type' => $vote['type'], ];
-            if ($vote['type'] == 2 && $vote['limit'] > 1) {
+            if ($vote['type'] == array_flip(config('article.ballot.type'))['多选'] && $vote['limit'] > 1) {
                 $ballot['max_num'] = $vote['limit'];
             }
             foreach ($vote['options'] as $val) {
@@ -443,23 +434,6 @@ class ArticleController extends Controller
                     }
                     Article::insert($newsLinks);
                 }
-
-                if (Admin::user()->isRole(config('admin.admin_editors'))) {
-                    $now = Carbon::now()->toDateTimeString();
-
-                    if ($request->is_headline) {
-                        $article->sortLink()->create([
-                            'deleted_at' => $now,
-                        ]);
-                    }
-
-                    if ($request->is_slide) {
-                        $article->sortPhoto()->create([
-                            'deleted_at' => $now,
-                        ]);
-                    }
-                }
-
             });
 
             $result = is_null($exception) ? true : $exception;
@@ -469,15 +443,25 @@ class ArticleController extends Controller
         }
 
         if ($result) {
+            if (Admin::user()->isRole(config('admin.admin_editors'))) {
+                //headline处理
+                if ($request->is_headline) {
+                    Tool::handleSortLink($article, 'add');
+                }
+                //slide处理
+                if ($request->is_slide) {
+                    Tool::handleSortLink($article, 'delete');
+                }
+            }
             return redirect(route('admin.articles.index'))
-                ->withSuccess('发表文章成功.');
+                ->withSuccess('发表文章成功');
         }
 
-        return redirect(route('admin.articles.create'))->withInput()->withErrors('发表文章失败');
+        return redirect(route('admin.articles.create', ['channel_id' => $request->channel_id]))->withInput()->withErrors('发表文章失败');
     }
 
     /**
-     * 更新文章
+     * 修改文章
      *
      * @param                          $id
      * @param \Illuminate\Http\Request $request
@@ -522,8 +506,7 @@ class ArticleController extends Controller
 
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return redirect(route('admin.articles.update', ['id' => $id]))
-                ->withInput($request->input())
+            return redirect(route('admin.articles.edit', ['id' => $id]))->withInput()
                 ->withErrors($validator->errors());
         }
 
@@ -555,8 +538,7 @@ class ArticleController extends Controller
         //封面图处理
         if (!empty($request->file('cover_pic'))) {
             $coverFile = $request->file('cover_pic');
-            $coverName = uniqid('cover_').'.'.$coverFile->guessExtension();
-            $article->cover_pic = $coverFile->storeAs('cover_pic', $coverName, 'admin');
+            $article->cover_pic = app('fileUpload')->prepare($coverFile);
         } elseif(empty($request->cover_pic_old)){
             $article->cover_pic = null;
         }
@@ -600,9 +582,9 @@ class ArticleController extends Controller
 
         if ($result) {
             return redirect(route('admin.articles.edit', ['id' => $id]))
-                ->withSuccess('更新文章成功');
+                ->withSuccess('修改文章成功');
         }
-        return redirect(route('admin.articles.edit', ['id' => $id]))->withInput()->withErrors('更新文章失败');
+        return redirect(route('admin.articles.edit', ['id' => $id]))->withInput()->withErrors('修改文章失败');
     }
 
     /**
@@ -851,8 +833,8 @@ class ArticleController extends Controller
      */
     public function edit($id)
     {
-        $header = '编辑文章';
-        $description = '';
+        $header = '新闻';
+        $description = '文章编辑';
         $article = Article::with('keywords', 'content')->findOrFail($id);
         $keywords = Keyword::pluck('name', 'id');
         $channels = Channel::toTree([], 0);
@@ -873,7 +855,6 @@ class ArticleController extends Controller
 
         $ballot = $article->ballot;
 
-        $slide = SortLink::where('article_id', $id)->first();
         if ($ballot->vote ?? false) {
             $voteOptions = $ballot->choices->map(function($val) {
                 return [
@@ -911,7 +892,6 @@ class ArticleController extends Controller
             'keywords' => $keywords,
             'channels' => $channels,
             'ballot' => $ballot,
-            'slide' => $slide,
             'initConfig' => $initConfig,
             ]
         );

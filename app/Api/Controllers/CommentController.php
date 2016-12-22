@@ -51,7 +51,7 @@ class CommentController extends BaseController
         $result = Comment::create([
             'article_id' => $article_id,
             'content' => $content,
-            'ip' => Request::ip(),
+            'ip' => Request::getClientIp(),
             'user_id' => $user_id,
             'user_nick' => $user_nick,
             'user_avatar' => $user_avatar,

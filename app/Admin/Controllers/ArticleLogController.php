@@ -40,23 +40,20 @@ class ArticleLogController extends Controller
         return Admin::grid(ArticleLog::class, function (Grid $grid) {
 
             //$grid->id('ID')->sortable();
-            $grid->article_id('文章id')->value(function ($articleId) {
+            $grid->created_at('时间')->sortable();
+            $grid->administrator()->name('操作人');
+            $grid->operation('操作行为')->value(function($id) {
+                $operation = array_flip(config('article.operation'))[$id];
+                return trans("lang.$operation");
+            });
+            $grid->article_id('文章ID')->value(function ($articleId) {
                 if (Article::find($articleId)) {
                     $editUrl = route('admin.articles.edit', $articleId);
                     return "<a href='$editUrl'>$articleId</a>";
                 }
                 return $articleId;
             });
-//            $grid->admin_user_id('操作者')->value(function($userId) {
-//                return Administrator::find($userId)->name;
-//            });
-            $grid->administrator()->name('操作者');
-            $grid->operation('操作')->value(function($id) {
-                    $operation = array_flip(config('article.operation'))[$id];
-                    return trans("lang.$operation");
-                });
 
-            $grid->created_at('时间');
 //            $grid->created_at('时间')->value(function($date) {
 //                if (Carbon::now() < Carbon::parse($date)->addDays(1)) {
 //                    return  Carbon::parse($date)->toDateTimeString();
@@ -99,13 +96,17 @@ class ArticleLogController extends Controller
 
                 $filter->disableIdFilter();
                 // sql: ... WHERE `user.name` LIKE "%$name%";
-                $filter->is('article_id', '文章id');
-                $filter->where(function($query) {
-                    $input = $this->input;
-                    $query->whereHas('administrator', function ($query) use ($input) {
-                        $query->where('name', 'like', "%{$input}%");
-                    });
-                }, '操作者');
+                $filter->is('article_id', '文章ID');
+                $filter->is('operation', '操作行为')->select(array_map(function($value) {
+                    return trans("lang.$value");
+                }, array_flip(config('article.operation'))));
+                $filter->like('administrator.name', '操作人');
+//                $filter->where(function($query) {
+//                    $input = $this->input;
+//                    $query->whereHas('administrator', function ($query) use ($input) {
+//                        $query->where('name', 'like', "%{$input}%");
+//                    });
+//                }, '操作人');
                 $filter->between('created_at', trans('时间'))->datetime();
             });
 
