@@ -180,7 +180,7 @@ textarea {
 .imgup-item.error .imgup-title {
   display: none;
 }
-.imgup-item.gu-transit {
+.imgup-item.sortable-ghost {
   background-color: #ffeebc;
 }
 .imgup-l {

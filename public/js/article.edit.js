@@ -256,11 +256,10 @@ $(function () {
         });
       });
       // 排序
-      this._dragulaInstance = dragula([this._$root.find('.imgup-list')[0]], {
-        moves: function (el, container, handle) {
-          return handle.classList.contains('e-sort');
-        }
-      }).on('drop', updateSort);
+      this._dragInstance = new Sortable(this._$root.find('.imgup-list')[0], {
+        handle: '.e-sort',
+        onUpdate: updateSort
+      });
 
       // 更改排序表单
       function updateSort() {
@@ -346,7 +345,7 @@ $(function () {
     destroy: function () {
       this.$root.find('.e-add').off();
       this._$root.off();
-      this._dragulaInstance.destroy();
+      this._dragInstance.destroy();
     }
   };
 

@@ -81,7 +81,7 @@ $(function () {
           this.innerText = '取消';
           self.elGroup.classList.add('sort');
           $(self.channelElList).children('channel-ipt').prop('readonly', true);
-          self.drake = dragula([self.elBox]);
+          self.drake = new Sortable(self.elBox);
         }
       }).on('click', '.channel-done', function () {
         self._sort(restSort);

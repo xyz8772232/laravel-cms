@@ -47,6 +47,7 @@
   height: 100%;
   border: none;
   outline: none;
+  background-color: transparent;
 }
 
 .channel-del {
@@ -57,9 +58,13 @@
   cursor: pointer;
 }
 
+.channel.sortable-ghost {
+  background-color: #ffeebc;
+}
+
 .channel-group.sort .channel-del,
-.channel.gu-mirror .channel-del {
-  visibility: hidden;
+.channel.sortable-ghost .channel-del {
+  display: none;
 }
 
 .channel-group.sort .channel-add {
@@ -76,7 +81,7 @@
 
 .channel-group.sort .channel,
 .channel-group.sort .channel-ipt,
-.channel.gu-mirror,
-.channel.gu-mirror .channel-ipt {
+.channel.sortable-ghost,
+.channel.sortable-ghost .channel-ipt {
   cursor: move;
 }
