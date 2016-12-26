@@ -93,10 +93,10 @@ return [
 
     'local_uri_str' => '<!--CMS_LOCAL_URI-->',
     'image_str' => '<!--IMAGE_PATH-->',
-    'image_url' => 'http://img.yunapp.mobi/upload/',
-    'image_host' => 'http://img.yunapp.mobi',
-    //'image_url' => 'http://59.110.23.172/upload/',
-    //'image_host' => 'http://59.110.23.172',
+    //'image_url' => 'http://img.yunapp.mobi/upload/',
+    //'image_host' => 'http://img.yunapp.mobi',
+    'image_url' => 'http://59.110.23.172/upload/',
+    'image_host' => 'http://59.110.23.172',
 
     'admin_editors' => ['administrator', 'responsible_editor'],
 
