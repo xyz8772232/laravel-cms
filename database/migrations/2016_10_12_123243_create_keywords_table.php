@@ -15,7 +15,7 @@ class CreateKeywordsTable extends Migration
     {
         Schema::create('keywords', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
+            $table->string('name', 191);
             $table->unsignedInteger('admin_user_id')->comment('创建人id');
             $table->timestamps();
             $table->softDeletes();
