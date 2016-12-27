@@ -31,10 +31,10 @@ class ArticleController extends Controller
         $header = '待审核文章';
         $description = '列表';
         $channel_id = (int)Input::get('channel_id', 0);
-
+        //dd(\App\Admin::user()->visible([]));
         //查询条件处理
         $model = new Model(Admin::getModel(Article::class));
-        $model->audit();
+        $model->publish();
 
         //头条,幻灯片
         $attribute = Input::get('attribute', '');
@@ -140,6 +140,7 @@ class ArticleController extends Controller
         $channelIds = array_merge(Channel::branchIds([], $channel_id), [$channel_id]);
 
         $conditions[] = ['whereIn' => ['channel_id', $channelIds]];
+        $conditions[] = ['whereIn' => ['state', [1, 2]]];
         //头条,幻灯片
         $attribute = Input::get('attribute', '');
         if ($attribute !== '') {
@@ -660,7 +661,7 @@ class ArticleController extends Controller
             }
             $article = Article::find($id);
             if ($article) {
-                $article->state = 2;
+                $article->state = 1;
                 $article->auditor_id = $auditor_id;
                 $article->save();
             }
@@ -669,12 +670,13 @@ class ArticleController extends Controller
     }
 
     /**
-     * 提交审核
+     * 上线
      * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function online($id)
     {
+        Permission::allow(['administrator', 'responsible_editor']);
         $ids = explode(',', $id);
         foreach ($ids as $id) {
             if (empty($id)) {
@@ -682,11 +684,11 @@ class ArticleController extends Controller
             }
             $article = Article::find($id);
             if ($article) {
-                $article->state = 1;
+                $article->state = 2;
                 $article->save();
             }
         }
-        return Tool::showSuccess('提交审核成功');
+        return Tool::showSuccess('上线成功');
     }
 
     /**

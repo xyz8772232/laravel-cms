@@ -178,7 +178,7 @@ class AdministratorsTableSeeder extends Seeder
                 'parent_id' => 0,
                 'order' => 19,
                 'title' => 'APP',
-                'icon' => 'fa-bars',
+                'icon' => 'fa-android',
                 'uri' => '',
 
             ],

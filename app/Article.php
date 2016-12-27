@@ -91,11 +91,34 @@ class Article extends Model
         return $this->hasOne('App\SortPhoto');
     }
 
+    /**
+     *刚发布,待审核
+     * @param $query
+     *
+     * @return mixed
+     */
+    public function scopePublish($query)
+    {
+        return $query->where('state', 0);
+    }
+
+    /**
+     * 提交审核
+     * @param $query
+     *
+     * @return mixed
+     */
     public function scopeAudit($query)
     {
         return $query->where('state', 1);
     }
 
+    /**
+     * 上线
+     * @param $query
+     *
+     * @return mixed
+     */
     public function scopeOnline($query)
     {
         return $query->where('state', 2);

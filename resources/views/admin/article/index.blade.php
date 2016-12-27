@@ -81,26 +81,24 @@
                 @endforeach
                 <th>编辑</th>
               </tr>
+              @define($inRole = Admin::user()->InRoles(config('admin.admin_editors')))
                 @foreach($articles as $article)
                   <tr >
                     <td><input type="checkbox" class="grid-item e-select" data-id="{{ $article->id }}"></td>
                     <td><i class="fa @if($article->is_important) fa-star @else fa-star-o @endif text-danger"></i></td>
                     <td>{{ $article->id }}</td>
-                    <td>@if($article->online)<i class="fa fa-check" style="color:red"></i>@elseif($article->state==0) <span class="badge bg-green">未提交</span> @else <span class="badge bg-red">待审核</span> @endif</td>
+                    <td>@if($article->online)<i class="fa fa-check" style="color:red"></i>@else<i class="fa fa-remove" style="color:green"></i>@endif</td>
                     <td class="news-title">@if($article->link_id)<i class="fa fa-link text-danger"></i> @endif @if($article->is_headline)<span class="news-sign text-danger">[头]</span> @endif @if($article->is_slide)<span class="news-sign text-danger">[幻]</span> @endif @if($article->type == 1) <i class="fa fa-file-image-o text-danger"></i> @endif <a class="e-preview" href="javascript:;" data-href="{{ route('admin.articles.preview', ['id' => $article->id]) }}">{{ $article->title }}</a></td>
                     <td>{{ $article->author_name }}</td>
                     <td>{{ $article->created_at }}</td>
                     <td>{{ $article->view_num }}</td>
                     <td>{{ $article->comment_num }}</td>
                     <td>
-                      {{--
-                      <a href='/url/1'><i class='fa fa-eye'></i></a> <a href='/url/1'><i class='fa fa-gear'></i>
-                      <a href="{{route('articles.show', [$article->id])}}"><i class='fa fa-eye'></i></a>
-                      <a href="javascript:void(0);" data-id="{{ $article->id }}" class="_delete"><i class="fa fa-trash"></i></a>
-                      --}}
                       @unless ($article->link_id)
                       <a href="{{route('admin.articles.edit', [$article->id])}}"><i class="fa fa-edit"></i></a>
-                      <i class="fa fa-link e-link" data-id="{{ $article->id }}"></i>
+                        @if($inRole)
+                          <i class="fa fa-link e-link" data-id="{{ $article->id }}"></i>
+                        @endif
                       @endunless
                     </td>
                   </tr>
@@ -109,14 +107,12 @@
           </div>
           <div class="box-footer clearfix">
             <div class="actions" id="batchActions">
-              <span class="btn btn-sm btn-danger e-delete">删除</span>
-              @if(Admin::user()->isRole(config('admin.admin_editors')))
-                <span class="btn btn-sm btn-success e-audit">上线</span>
-              @else
-                <span class="btn btn-sm btn-success e-publish">提交审核</span>
+              @if($inRole)
+                <span class="btn btn-sm btn-danger e-delete">删除</span>
+                <span class="btn btn-sm btn-success e-publish">上线</span>
+                <span class="btn btn-sm btn-default e-top">设置头条</span>
+                <span class="btn btn-sm btn-default e-transfer">转移</span>
               @endif
-              <span class="btn btn-sm btn-default e-top">设置头条</span>
-              <span class="btn btn-sm btn-default e-transfer">转移</span>
               <div class="page-info pull-right">
                 共 <span class="text-primary">{{ $articles->total() }}</span> 篇文章,每页显示
                 <select id="perPage">

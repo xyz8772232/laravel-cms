@@ -232,6 +232,35 @@ class Admin
     }
 
     /**
+     * Get admin title.
+     *
+     * @return Config
+     */
+    public static function title()
+    {
+        return config('admin.title');
+    }
+
+    /**
+     * @return mixed
+     */
+    public static function user()
+    {
+        return Auth::guard('admin')->user();
+    }
+
+    public static function visible($roles)
+    {
+        if (empty($roles)) {
+            return true;
+        }
+        $userRoles = static::user()->roles->pluck('slug')->all();
+        $roles = array_column($roles, 'slug');
+
+        return (bool)array_intersect($userRoles, $roles);
+    }
+
+    /**
      * Left sider-bar menu.
      *
      * @return array
@@ -248,25 +277,6 @@ class Admin
             $menu[config('admin.news_column.order')]['children'] = $newsMenu;
             return $menu;
         });
-    }
-
-
-    /**
-     * Get admin title.
-     *
-     * @return Config
-     */
-    public static function title()
-    {
-        return config('admin.title');
-    }
-
-    /**
-     * @return mixed
-     */
-    public static function user()
-    {
-        return Auth::guard('admin')->user();
     }
 
     public static function activeSidebar()

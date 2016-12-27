@@ -38,9 +38,11 @@ class AppServiceProvider extends ServiceProvider
             return "<?php $expression; ?>";
         });
         View::composer(['admin.partials.sidebar',], function($view) {
-            //dd(Admin::menu(), Admin::activeSidebar());
-            $view->with('active_sidebar', Admin::activeSidebar());
             $view->with('menu', Admin::menu());
+        });
+        View::composer(['layouts.admin', 'layouts.auto'], function($view) {
+            //dd(Admin::activeSidebar());
+            $view->with('active_sidebar', Admin::activeSidebar());
         });
     }
 
