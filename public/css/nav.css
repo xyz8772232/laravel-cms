@@ -213,6 +213,12 @@
 .mini-nav .content-wrapper {
   margin-left: 40px;
 }
+.no-sidebar2 .skykiwi-main-sidebar .sidebar-r {
+  display: none;
+}
+.no-sidebar2 .content-wrapper {
+  margin-left: 100px;
+}
 .nav-fold-animation {
   -webkit-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
