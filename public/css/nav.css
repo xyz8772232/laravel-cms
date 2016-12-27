@@ -210,8 +210,14 @@
 .mini-nav .skykiwi-main-header .logo-text {
   display: none;
 }
-.mini-nav .content-wrapper {
+.mini-nav .wrapper .content-wrapper {
   margin-left: 40px;
+}
+.no-sidebar2 .skykiwi-main-sidebar .sidebar-r {
+  display: none;
+}
+.no-sidebar2 .content-wrapper {
+  margin-left: 100px;
 }
 .nav-fold-animation {
   -webkit-transition: all 0.3s ease-in-out;

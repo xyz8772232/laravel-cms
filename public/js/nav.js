@@ -20,6 +20,7 @@ $(function () {
   var $menu2List = $('.menu-2');
   var $curMenu1 = $('.menu-1 .active');
   var $curMenu2 = $menu2List.filter('.active');
+  var $body = $('body');
   $('#eMenu1').on('click', '.e-select', function () {
     var $this = $(this);
     var index = +this.getAttribute('data-index');
@@ -32,6 +33,8 @@ $(function () {
       $curMenu2 = $menu2List.eq(index);
       $curMenu2.addClass('active');
     }
+
+    !!+$this.attr('data-sub') && $body.removeClass('no-sidebar2');
   });
 
   // 二级菜单
