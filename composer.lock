@@ -473,12 +473,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/xyz8772232/laravel-admin.git",
-                "reference": "bf7959a381279bdfba6aaf512cc8a36c4e5306b0"
+                "reference": "88ff65511ee05538fb8eeb330ee5a19c67fbd53c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/xyz8772232/laravel-admin/zipball/bf7959a381279bdfba6aaf512cc8a36c4e5306b0",
-                "reference": "bf7959a381279bdfba6aaf512cc8a36c4e5306b0",
+                "url": "https://api.github.com/repos/xyz8772232/laravel-admin/zipball/88ff65511ee05538fb8eeb330ee5a19c67fbd53c",
+                "reference": "88ff65511ee05538fb8eeb330ee5a19c67fbd53c",
                 "shasum": ""
             },
             "require": {
@@ -532,7 +532,7 @@
             "support": {
                 "source": "https://github.com/xyz8772232/laravel-admin/tree/cms"
             },
-            "time": "2016-12-22 07:08:14"
+            "time": "2016-12-27 07:29:29"
         },
         {
             "name": "guzzlehttp/guzzle",

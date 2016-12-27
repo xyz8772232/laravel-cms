@@ -136,11 +136,11 @@ class ArticleController extends Controller
 
         //查询条件处理
         $model = new Model(Admin::getModel(Article::class));
+        $model->admin();
         //频道
         $channelIds = array_merge(Channel::branchIds([], $channel_id), [$channel_id]);
 
         $conditions[] = ['whereIn' => ['channel_id', $channelIds]];
-        $conditions[] = ['whereIn' => ['state', [1, 2]]];
         //头条,幻灯片
         $attribute = Input::get('attribute', '');
         if ($attribute !== '') {
@@ -228,7 +228,7 @@ class ArticleController extends Controller
 
         $channelOptions = [1 => '新闻'] + Channel::buildSelectOptions([], 1, str_repeat('&nbsp;', 1));
         $isImportantOptions = [0 =>'不重要', 1 => '重要'];
-        $stateOptions = [0 => '未提交', 1 => '待审核', 2 => '上线'];
+        $stateOptions = [1 => '未上线', 2 => '上线'];
         $attributeOptions = [0 => '头条', 1 => '幻灯片'];
         //$channelOptions = [0 => '全部'] + Channel::buildSelectOptions([], 0, str_repeat('&nbsp;', 2));
 

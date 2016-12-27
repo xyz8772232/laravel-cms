@@ -113,6 +113,12 @@ class Article extends Model
         return $query->where('state', 1);
     }
 
+    public function scopeAdmin($query)
+    {
+        return $query->whereIn('state', [1, 2]);
+    }
+
+
     /**
      * 上线
      * @param $query
