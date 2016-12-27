@@ -42,13 +42,13 @@ class CountArticles extends Command
     {
         $grade4Channels = Channel::where('grade', 4)->get();
         foreach ($grade4Channels as $grade4Channel) {
-            $articleNums[$grade4Channel->id] = Article::where('channel_id', $grade4Channel->id)->count();
+            $articleNums[$grade4Channel->id] = Article::admin()->where('channel_id', $grade4Channel->id)->count();
         }
 
         foreach (range(3, 1) as $grade) {
             $channels  = Channel::where('grade', $grade)->get();
             foreach ($channels as $channel) {
-                !isset($articleNums[$channel->id]) && $articleNums[$channel->id] = Article::where('channel_id', $channel->id)->count();
+                !isset($articleNums[$channel->id]) && $articleNums[$channel->id] = Article::admin()->where('channel_id', $channel->id)->count();
                 if ($channel->children_channel) {
                     foreach ($channel->children_channel as $child) {
                         $articleNums[$channel->id] += $articleNums[$child->id];
@@ -58,7 +58,7 @@ class CountArticles extends Command
         }
 
         $articleNums['soft'] = Article::where('is_soft', 1)->count();
-        $articleNums['unaudited'] = Article::whereIn('state', [0, 1])->count();
+        $articleNums['unaudited'] = Article::publish()->count();
 
         Cache::put(config('redis.articleNums'), $articleNums, 10);
     }
