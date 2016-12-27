@@ -1,251 +1,225 @@
-There is no no-color option ("less --help" for help)
 .skykiwi-main-sidebar {
   position: absolute;
   top: 60px;
   left: 0;
   height: 100%;
   color: #333;
-  .sidebar-l {
-    float: left;
-    height: 100%;
-    width: 100px;
-    background-color: #e6e6e6;
-  }
-  .sidebar-r {
-    float: left;
-    height: 100%;
-    width: 200px;
-    background-color: #ececec;
-  }
-  .sidebar-unfold {
-    height: 50px;
-    line-height: 50px;
-    text-align: center;
-    font-size: 22px;
-    font-weight: bold;
-    cursor: pointer;
-  }
-  .menu-1 {
-    .menu-item {
-      cursor: pointer;
-      &:hover {
-        background-color: #555;
-        color: #ffffff;
-      }
-      &.active {
-        background-color: #333;
-        color: #ffffff;
-        cursor: default;
-      }
-    }
-    .menu-icon {
-      margin-right: 5px;
-      margin-left: 15px;
-    }
-    .menu-a {
-      display: block;
-    }
-  }
-  .menu-2 {
-    display: none;
-    &.active {
-      display: block;
-    }
-    .menu-item {
-      cursor: pointer;
-      text-indent: 15px;
-      &.active {
-        .menu-icon {
-          -webkit-transform: rotate(90deg);
-          transform: rotate(90deg);
-        }
-      }
-      &.selected {
-        border-left: 4px solid #f97717;
-        color: #f97717;
-        cursor: pointer;
-      }
-    }
-    .menu-icon {
-      float: right;
-      margin-right: 15px;
-      text-indent: 0;
-      font-size: 18px;
-      margin-top: 16px;
-      -webkit-transition: -webkit-transform .25s;
-      transition: transform .25s;
-    }
-    .menu-text {
-      display: block;
-    }
-  }
-  .menu-3 {
-    display: none;
-    background-color: #e6e6e6;
-    .menu-item {
-      border-left: 4px solid transparent;
-      cursor: pointer;
-      text-indent: 15px;
-      &:hover {
-        color: #f97717;
-      }
-      &.active {
-        border-color: #f97717;
-        color: #f97717;
-      }
-    }
-    .menu-text {
-      display: block;
-    }
-  }
-  .menu-item {
-    line-height: 50px;
-    white-space: nowrap;
-    &:hover,
-    &.active,
-    &.selected {
-      .menu-text,
-      .menu-a {
-        color: inherit;
-      }
-    }
-  }
-  .menu-text,
-  .menu-a {
-    color: #3c3c3c;
-    text-overflow: ellipsis;
-    overflow: hidden;
-  }
-  ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
 }
-
+.skykiwi-main-sidebar .sidebar-l {
+  float: left;
+  height: 100%;
+  width: 100px;
+  background-color: #e6e6e6;
+}
+.skykiwi-main-sidebar .sidebar-r {
+  float: left;
+  height: 100%;
+  width: 200px;
+  background-color: #ececec;
+}
+.skykiwi-main-sidebar .sidebar-unfold {
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  font-size: 22px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.skykiwi-main-sidebar .menu-1 .menu-item {
+  cursor: pointer;
+}
+.skykiwi-main-sidebar .menu-1 .menu-item:hover {
+  background-color: #555;
+  color: #ffffff;
+}
+.skykiwi-main-sidebar .menu-1 .menu-item.active {
+  background-color: #333;
+  color: #ffffff;
+  cursor: default;
+}
+.skykiwi-main-sidebar .menu-1 .menu-icon {
+  margin-right: 5px;
+  margin-left: 15px;
+}
+.skykiwi-main-sidebar .menu-1 .menu-a {
+  display: block;
+}
+.skykiwi-main-sidebar .menu-2 {
+  display: none;
+}
+.skykiwi-main-sidebar .menu-2.active {
+  display: block;
+}
+.skykiwi-main-sidebar .menu-2 .menu-item {
+  cursor: pointer;
+  text-indent: 15px;
+}
+.skykiwi-main-sidebar .menu-2 .menu-item.active .menu-icon {
+  -webkit-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+.skykiwi-main-sidebar .menu-2 .menu-item.selected {
+  border-left: 4px solid #f97717;
+  color: #f97717;
+  cursor: pointer;
+}
+.skykiwi-main-sidebar .menu-2 .menu-icon {
+  float: right;
+  margin-right: 15px;
+  text-indent: 0;
+  font-size: 18px;
+  margin-top: 16px;
+  -webkit-transition: -webkit-transform 0.25s;
+  transition: transform .25s;
+}
+.skykiwi-main-sidebar .menu-2 .menu-text {
+  display: block;
+}
+.skykiwi-main-sidebar .menu-3 {
+  display: none;
+  background-color: #e6e6e6;
+}
+.skykiwi-main-sidebar .menu-3 .menu-item {
+  border-left: 4px solid transparent;
+  cursor: pointer;
+  text-indent: 15px;
+}
+.skykiwi-main-sidebar .menu-3 .menu-item:hover {
+  color: #f97717;
+}
+.skykiwi-main-sidebar .menu-3 .menu-item.active {
+  border-color: #f97717;
+  color: #f97717;
+}
+.skykiwi-main-sidebar .menu-3 .menu-text {
+  display: block;
+}
+.skykiwi-main-sidebar .menu-item {
+  line-height: 50px;
+  white-space: nowrap;
+}
+.skykiwi-main-sidebar .menu-item:hover .menu-text,
+.skykiwi-main-sidebar .menu-item.active .menu-text,
+.skykiwi-main-sidebar .menu-item.selected .menu-text,
+.skykiwi-main-sidebar .menu-item:hover .menu-a,
+.skykiwi-main-sidebar .menu-item.active .menu-a,
+.skykiwi-main-sidebar .menu-item.selected .menu-a {
+  color: inherit;
+}
+.skykiwi-main-sidebar .menu-text,
+.skykiwi-main-sidebar .menu-a {
+  color: #3c3c3c;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.skykiwi-main-sidebar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
 .skykiwi-main-header {
   position: relative;
   z-index: 9;
   height: 60px;
   border-bottom: 5px solid #f97717;
   background-color: #333;
-  // logo
-  .logo {
-    float: left;
-    width: 175px;
-    text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-  }
-  .icon {
-    display: inline-block;
-    margin-top: 10px;
-    vertical-align: top;
-    height: 35px;
-  }
-  .logo-icon {
-    width: 39px;
-    background: url('/img/logo-icon.png') no-repeat;
-  }
-  .logo-text {
-    width: 107px;
-    background: url('/img/logo-text.png') no-repeat;
-  }
-  // user
-  .user {
-    float: right;
-    position: relative;
-    margin-right: 30px;
-    height: 100%;
-    line-height: 55px;
-  }
-  .user-name {
-    color: #fff;
-    cursor: pointer;
-    .fa {
-      margin: 0 2px 0 5px;
-      font-size: 18px;
-      vertical-align: middle;
-    }
-  }
-  .user-menu {
-    display: none;
-    position: absolute;
-    top: 55px;
-    right: 0;
-    margin: 0;
-    padding: 0;
-    width: 120px;
-    background-color: #f97717;
-    list-style: none;
-  }
-  .menu-item {
-    height: 30px;
-    line-height: 30px;
-    text-align: center;
-  }
-  .menu-a {
-    display: block;
-    color: #ffffff;
-  }
 }
-
+.skykiwi-main-header .logo {
+  float: left;
+  width: 175px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.skykiwi-main-header .icon {
+  display: inline-block;
+  margin-top: 10px;
+  vertical-align: top;
+  height: 35px;
+}
+.skykiwi-main-header .logo-icon {
+  width: 39px;
+  background: url('/img/logo-icon.png') no-repeat;
+}
+.skykiwi-main-header .logo-text {
+  width: 107px;
+  background: url('/img/logo-text.png') no-repeat;
+}
+.skykiwi-main-header .user {
+  float: right;
+  position: relative;
+  margin-right: 30px;
+  height: 100%;
+  line-height: 55px;
+}
+.skykiwi-main-header .user-name {
+  color: #fff;
+  cursor: pointer;
+}
+.skykiwi-main-header .user-name .fa {
+  margin: 0 2px 0 5px;
+  font-size: 18px;
+  vertical-align: middle;
+}
+.skykiwi-main-header .user-menu {
+  display: none;
+  position: absolute;
+  top: 55px;
+  right: 0;
+  margin: 0;
+  padding: 0;
+  width: 120px;
+  background-color: #f97717;
+  list-style: none;
+}
+.skykiwi-main-header .menu-item {
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+}
+.skykiwi-main-header .menu-a {
+  display: block;
+  color: #ffffff;
+}
 .content-wrapper {
   margin-left: 300px;
 }
-
-.mini-nav {
-  .skykiwi-main-sidebar {
-    .sidebar-l {
-      width: 40px;
-    }
-    .sidebar-r {
-      display: none;
-    }
-    .menu-1 {
-      .menu-item {
-        text-align: center;
-      }
-      .menu-text {
-        display: none;
-      }
-      .menu-icon {
-        margin: 0;
-      }
-    }
-    .sidebar-unfold {
-      font-size: 20px;
-      -webkit-transform: rotate(180deg);
-      transform: rotate(180deg);
-    }
-  }
-  .skykiwi-main-header {
-    .logo {
-      width: 80px;
-    }
-    .logo-text {
-      display: none;
-    }
-  }
-  .wrapper {
-    .content-wrapper {
-      margin-left: 40px;
-    }
-  }
+.mini-nav .skykiwi-main-sidebar .sidebar-l {
+  width: 40px;
 }
-
-.no-sidebar2 {
-  .skykiwi-main-sidebar {
-    .sidebar-r {
-      display: none;
-    }
-  }
-  .content-wrapper {
-    margin-left: 100px;
-  }
+.mini-nav .skykiwi-main-sidebar .sidebar-r {
+  display: none;
 }
-
+.mini-nav .skykiwi-main-sidebar .menu-1 .menu-item {
+  text-align: center;
+}
+.mini-nav .skykiwi-main-sidebar .menu-1 .menu-text {
+  display: none;
+}
+.mini-nav .skykiwi-main-sidebar .menu-1 .menu-icon {
+  margin: 0;
+}
+.mini-nav .skykiwi-main-sidebar .sidebar-unfold {
+  font-size: 20px;
+  -webkit-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
+.mini-nav .skykiwi-main-header .logo {
+  width: 80px;
+}
+.mini-nav .skykiwi-main-header .logo-text {
+  display: none;
+}
+.mini-nav .wrapper .content-wrapper {
+  margin-left: 40px;
+}
+.no-sidebar2 .skykiwi-main-sidebar .sidebar-r {
+  display: none;
+}
+.no-sidebar2 .content-wrapper {
+  margin-left: 100px;
+}
 .nav-fold-animation {
-  -webkit-transition: all .3s ease-in-out;
-  transition: all .3s ease-in-out;
+  -webkit-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
 }
