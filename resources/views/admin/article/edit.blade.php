@@ -229,7 +229,7 @@
               @foreach($articleLogs as $articleLog)
                 <tr>
                   <td>{{ $articleLog->created_at }}</td>
-                  <td>{{ $articleLog->administrator->name }}</td>
+                  <td>@if($articleLog->administrator){{ $articleLog->administrator->name }} @else @endif </td>
                   @define($operation = array_flip(config('article.operation'))[$articleLog->operation])
                   <td>{{trans("lang.$operation") }}</td>
                 </tr>
