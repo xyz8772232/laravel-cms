@@ -17,7 +17,7 @@ class CreateExposuresTable extends Migration
             $table->increments('id');
             $table->string('title');
             $table->string('desc', 2000);
-            $table->string('link', 255);
+            $table->string('link', 255)->nullable();
             $table->string('contact')->nullable();
             $table->string('uname')->nullable();
             $table->string('wechat')->nullable();
