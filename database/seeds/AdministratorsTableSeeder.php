@@ -21,11 +21,6 @@ class AdministratorsTableSeeder extends Seeder
             'password'  => env('ADMIN_PASSWORD') ? : bcrypt('admin'),
             'name'      => 'Administrator',
         ]);
-        Administrator::create([
-            'username' => '812250076@qq.com',
-            'password' => bcrypt('xiaotie'),
-            'name' => 'xiaotie',
-        ]);
 
         // create a role.
         Role::truncate();
