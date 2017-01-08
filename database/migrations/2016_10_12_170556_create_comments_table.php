@@ -23,7 +23,7 @@ class CreateCommentsTable extends Migration
             $table->string('user_nick')->comment('评论者昵称');
             $table->string('user_avatar', 255)->comment('评论者投票');
             $table->unsignedInteger('reply_to_id')->comment('被评论的id');
-            $table->unsignedTinyInteger('blocked')->comment('是否被屏蔽');
+            $table->unsignedTinyInteger('blocked')->default(0)->comment('是否被屏蔽');
             $table->timestamps();
             $table->softDeletes();
 
