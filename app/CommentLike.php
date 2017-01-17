@@ -4,14 +4,13 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Favorite extends Model
+class CommentLike extends Model
 {
 
-    protected $fillable = ['article_id', 'user_id'];
+    protected $fillable = ['comment_id', 'user_id'];
 
-    public function article()
+    public function comment()
     {
-        return $this->belongsTo('App\Article');
+        return $this->belongsTo('App\Comment');
     }
-
 }

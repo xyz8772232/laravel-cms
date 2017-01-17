@@ -6,6 +6,7 @@ use App\Admin;
 use App\Article;
 use App\BallotAnswer;
 use App\Comment;
+use App\CommentLike;
 use App\SortLink;
 use App\SortPhoto;
 use View;
@@ -14,6 +15,7 @@ use App\FileUpload;
 use App\Observers\ArticleObserver;
 use App\Observers\BallotAnswerObserver;
 use App\Observers\CommentObserver;
+use App\Observers\CommentLikeObserver;
 use App\Observers\SortLinkObserver;
 use App\Observers\SortPhotoObserver;
 use Carbon\Carbon;
@@ -32,6 +34,7 @@ class AppServiceProvider extends ServiceProvider
         Article::observe(ArticleObserver::class);
         BallotAnswer::observe(BallotAnswerObserver::class);
         Comment::observe(CommentObserver::class);
+        CommentLike::observe(CommentLikeObserver::class);
         SortLink::observe(SortLinkObserver::class);
         SortPhoto::observe(SortPhotoObserver::class);
         Blade::directive('define', function($expression) {
