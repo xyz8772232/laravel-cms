@@ -639,7 +639,7 @@ class ArticleController extends Controller
      */
     public function destroy($id)
     {
-        Permission::allow(['administrator', 'responsible_editor']);
+        Permission::allow(config('admin.admin_editors'));
         $ids = explode(',', $id);
         Article::destroy($ids);
         return Tool::showSuccess('删除成功');
@@ -652,7 +652,7 @@ class ArticleController extends Controller
      */
     public function audit($id)
     {
-        Permission::allow(['administrator', 'responsible_editor']);
+        Permission::allow(config('admin.admin_editors'));
         $ids = explode(',', $id);
         $auditor_id = Admin::user()->id;
         foreach ($ids as $id) {
@@ -676,7 +676,7 @@ class ArticleController extends Controller
      */
     public function online($id)
     {
-        Permission::allow(['administrator', 'responsible_editor']);
+        Permission::allow(config('admin.admin_editors'));
         $ids = explode(',', $id);
         foreach ($ids as $id) {
             if (empty($id)) {
@@ -698,7 +698,7 @@ class ArticleController extends Controller
      */
     public function headline($id)
     {
-        Permission::allow(['administrator', 'responsible_editor']);
+        Permission::allow(config('admin.admin_editors'));
         $ids = explode(',', $id);
         foreach ($ids as $id) {
             if (empty($id)) {
@@ -720,7 +720,7 @@ class ArticleController extends Controller
      */
     public function transfer($id)
     {
-        Permission::allow(['administrator', 'responsible_editor']);
+        Permission::allow(config('admin.admin_editors'));
         $serialize = Input::get('channels');
         $channels = json_decode($serialize, true);
         if (json_last_error() != JSON_ERROR_NONE) {
@@ -755,7 +755,7 @@ class ArticleController extends Controller
      */
     public function link($article_id)
     {
-        Permission::allow('administrator', 'responsible_editor');
+        Permission::allow(config('admin.admin_editors'));
 
         $rules = [
             'article_id' => 'integer|exists:articles,id,link_id,0',
