@@ -21,11 +21,11 @@ class CreateCommentsTable extends Migration
             $table->ipAddress('ip')->nullable();
             $table->unsignedInteger('user_id')->comment('评论者id');
             $table->string('user_nick')->comment('评论者昵称');
-            $table->string('user_avatar', 255)->comment('评论者投票');
+            $table->unsignedInteger('like_num')->default(0)->comment('点赞数');
+            $table->string('user_avatar', 255)->comment('评论者头像');
             $table->unsignedInteger('reply_to_id')->comment('被评论的id');
             $table->unsignedTinyInteger('blocked')->default(0)->comment('是否被屏蔽');
             $table->timestamps();
-            $table->softDeletes();
 
             $table->index('article_id');
             $table->index('reply_to_id');

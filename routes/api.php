@@ -17,9 +17,18 @@ $api = app('Dingo\Api\Routing\Router');
 
 $api->version('v1', function ($api) {
     $api->group(['namespace' => 'App\Api\Controllers'], function($api) {
+        //获取文章评论列表
         $api->get('comments', 'CommentController@index');
+        //获取评论的回复列表,点赞数排序
+        $api->get('comments/reply_list', 'CommentController@replyList');
         //发表评论
         $api->post('comments', 'CommentController@store');
+        //回复评论
+        $api->post('comments/reply', 'CommentController@reply');
+
+        //点赞
+        $api->post('comments/like', 'CommentController@like');
+
 
         $api->get('channels', 'ChannelController@index');
 
