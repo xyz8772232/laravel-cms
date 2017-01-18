@@ -89,7 +89,16 @@ class CommentController extends BaseController
             return $this->response->errorBadRequest(trans('lang.error_params'));
         }
 
-        $result = CommentLike::create(['comment_id' => $comment_id, 'user_id' => $user_id]);
+        $commentLike = CommentLike::where([
+                ['comment_id', '=', $comment_id],
+                ['user_id', '=', $user_id],
+            ])->first();
+        if ($commentLike) {
+            return ['已点赞'];
+        }
+
+
+        $result = CommentLike::create(['comment_id' => $comment_id, 'user_id' => $user_id, 'user_nick' => $user_nick, 'user_avatar' => $user_avatar]);
 
         if ($result) {
             return $this->response->created();

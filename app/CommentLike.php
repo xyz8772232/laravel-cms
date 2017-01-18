@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class CommentLike extends Model
 {
 
-    protected $fillable = ['comment_id', 'user_id'];
+    protected $fillable = ['comment_id', 'user_id', 'user_nick', 'user_avatar'];
 
     public function comment()
     {
