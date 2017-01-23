@@ -108,7 +108,7 @@
 
 @section('admin_js')
   <script src="{{ asset("/packages/admin/sweetalert/sweetalert.min.js") }}"></script>
-//  <script src="{{ asset("/packages/admin/sortable/sortable.min.js") }}"></script>
+<!--  <script src="{{ asset("/packages/admin/sortable/sortable.min.js") }}"></script>-->
   <script src="{{ asset("/packages/admin/sortable/jquery.fn.sortable.js") }}"></script>
   <script>
     $(function () {
