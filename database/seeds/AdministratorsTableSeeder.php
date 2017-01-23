@@ -109,91 +109,77 @@ class AdministratorsTableSeeder extends Seeder
             [
                 'parent_id' => 8,
                 'order' => 10,
-                'title' => '角色',
-                'icon' => 'fa-user',
-                'uri' => 'auth/roles',
-            ],
-            [
-                'parent_id' => 8,
-                'order' => 11,
-                'title' => '权限',
-                'icon' => 'fa-user',
-                'uri' => 'auth/permissions',
-            ],
-            [
-                'parent_id' => 8,
-                'order' => 12,
                 'title' => '菜单',
                 'icon' => 'fa-bars',
                 'uri' => 'auth/menu',
             ],
             [
                 'parent_id' => 7,
-                'order' => 13,
+                'order' => 11,
                 'title' => '频道',
                 'icon' => 'fa-tasks',
                 'uri' => 'channels',
             ],
             [
                 'parent_id' => 7,
-                'order' => 14,
+                'order' => 12,
                 'title' => '关键词',
                 'icon' => 'fa-info',
                 'url' => 'keywords',
             ],
             [
                 'parent_id' => 7,
-                'order' => 15,
+                'order' => 13,
                 'title' => '水印',
                 'icon' => 'fa-image',
                 'url' => 'watermarks',
             ],
             [
                 'parent_id' => 7,
-                'order' => 16,
+                'order' => 14,
                 'title' => '投票',
                 'icon' => 'fa-calculator',
                 'uri' => 'ballots',
             ],
             [
                 'parent_id' => 7,
-                'order' => 17,
+                'order' => 15,
                 'title' => '文章日志',
                 'icon' => 'fa-history',
                 'uri' => 'logs',
             ],
             [
                 'parent_id' => 7,
-                'order' => 18,
+                'order' => 16,
                 'title' => '评论',
                 'uri' => 'comments',
                 'icon' => 'fa-comment',
             ],
             [
                 'parent_id' => 0,
-                'order' => 19,
+                'order' => 17,
                 'title' => 'APP',
                 'icon' => 'fa-android',
                 'uri' => '',
 
             ],
             [
-                'parent_id' => 19,
-                'order' => 20,
+                'parent_id' => 17,
+                'order' => 18,
                 'title' => '消息推送',
                 'icon' => 'fa-bars',
                 'uri' => 'app_messages',
             ],
             [
-                'parent_id' => 19,
-                'order' => 21,
+                'parent_id' => 17,
+                'order' => 19,
                 'title' => '启动幻灯片',
                 'icon' => 'fa-bars',
                 'uri' => 'app_photos',
             ],
             [
-                'parent_id' => 19,
-                'order' => 22,
+                'parent_id' => 17,
+                'order' => 20,
                 'title' => '网友报料',
                 'icon' => 'fa-bars',
                 'uri' => 'exposures',
@@ -201,8 +187,8 @@ class AdministratorsTableSeeder extends Seeder
         ]);
 
         // add role to menu.
-        Menu::find(6)->roles()->save(Role::first());
-        Menu::find(4)->roles()->save(Role::first());
-        Menu::find(4)->roles()->save(Role::find(2));
+        Menu::find(7)->roles()->save(Role::first());
+        Menu::find(7)->roles()->save(Role::find(2));
+        Menu::find(8)->roles()->save(Role::first());
     }
 }

@@ -209,6 +209,7 @@
       </div>
     </div>
   </section>
+  @if(Admin::user()->InRoles(config('admin.admin_editors')))
   <section class="content">
     <div class="row">
       <h2 class="col-md-2 col-md-offset-5">操作日志</h2>
@@ -241,6 +242,7 @@
       </div>
     </div>
   </section>
+  @endif
 @endsection
 
 @section('css')
@@ -260,7 +262,7 @@
   <script src="{{ asset ("/packages/admin/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js") }}"></script>
   <script src="{{ asset ("/packages/admin/bootstrap-switch/dist/js/bootstrap-switch.min.js") }}"></script>
   <script src="{{ asset("/packages/admin/sortable/sortable.min.js") }}"></script>
-  <script src="{{ asset("/packages/admin/ueditor-utf8-php/ueditor.config.js") }}"></script>
+  <script src="{{ asset("/packages/admin/ueditor-utf8-php/ueditor.config.js?v=0.1") }}"></script>
   <script src="{{ asset("/packages/admin/ueditor-utf8-php/ueditor.all.min.js") }}"></script>
   <script>
     var CHANNEL = {!! json_encode($channels) !!};
