@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="{{ asset("/packages/admin/bootstrap3-editable/css/bootstrap-editable.css") }}">
     <link rel="stylesheet" href="{{ asset("/packages/admin/google-fonts/fonts.css") }}">
     <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/dist/css/AdminLTE.min.css") }}">
-    <link rel="stylesheet" href="{{ asset("/css/nav.css") }}">
+    <link rel="stylesheet" href="{{ asset_with_version("/css/nav.css") }}">
     @yield('css')
 
     <!-- REQUIRED JS SCRIPTS -->
@@ -27,7 +27,7 @@
     <script src="{{ asset ("/packages/admin/AdminLTE/bootstrap/js/bootstrap.min.js") }}"></script>
     <script src="{{ asset ("/packages/admin/AdminLTE/plugins/slimScroll/jquery.slimscroll.min.js") }}"></script>
     <script src="{{ asset ("/packages/admin/AdminLTE/dist/js/app.min.js") }}"></script>
-    <script src="{{ asset ("/js/nav.js") }}"></script>
+    <script src="{{ asset_with_version("/js/nav.js") }}"></script>
     <script>
       // 设置X-CSRF-TOKEN
       $.ajaxSetup({
@@ -43,7 +43,7 @@
     <![endif]-->
 </head>
 
-<body class="hold-transition skin-custom {{join(' ', config('admin.layout'))}}">
+<body class="hold-transition skin-custom {{join(' ', config('admin.layout'))}} @if(count(array_first($active_sidebar)) < 2)no-sidebar2 @endif">
 <div class="wrapper">
 
     @include('admin.partials.header')

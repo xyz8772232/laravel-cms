@@ -13,7 +13,7 @@ class CommentTransformer extends TransformerAbstract
 {
     public function transform(Comment $comment)
     {
-        return $comment->toArray();
+        return $comment->makeVisible('reply_num')->toArray();
     }
 
 }

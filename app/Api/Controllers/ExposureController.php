@@ -18,7 +18,6 @@ class ExposureController extends BaseController
         $rules = [
             'title' => 'required',
             'desc' => 'required',
-            'link' => 'required',
             'uname' => 'required',
             'pics.*' => 'image',
         ];

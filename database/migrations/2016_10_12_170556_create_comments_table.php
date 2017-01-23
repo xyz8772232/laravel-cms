@@ -17,15 +17,14 @@ class CreateCommentsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('article_id');
             $table->string('content', 2000)->charset('utf8mb4')->collate('utf8mb4_unicode_ci');
-            //$table->string('content');
             $table->ipAddress('ip')->nullable();
+            $table->unsignedInteger('like_num')->default(0)->comment('点赞数');
             $table->unsignedInteger('user_id')->comment('评论者id');
             $table->string('user_nick')->comment('评论者昵称');
-            $table->string('user_avatar', 255)->comment('评论者投票');
-            $table->unsignedInteger('reply_to_id')->comment('被评论的id');
-            $table->unsignedTinyInteger('blocked')->comment('是否被屏蔽');
+            $table->string('user_avatar', 255)->comment('评论者头像');
+            $table->unsignedInteger('reply_to_id')->default(0)->comment('被评论的id');
+            $table->unsignedTinyInteger('blocked')->default(0)->comment('是否被屏蔽');
             $table->timestamps();
-            $table->softDeletes();
 
             $table->index('article_id');
             $table->index('reply_to_id');

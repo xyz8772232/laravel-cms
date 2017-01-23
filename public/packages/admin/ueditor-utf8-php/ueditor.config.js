@@ -35,19 +35,26 @@
 
 		//工具栏上的所有的功能按钮和下拉框，可以在new编辑器的实例时选择自己需要的从新定义
 		, toolbars: [[
-			'bold', //加粗
-			//'underline', //下划线
+			'undo', 'redo',
 			'|',
-			//'blockquote', //引用
-			'insertunorderedlist', //无序列表
-			'insertorderedlist', //有序列表
-			//'justifyleft', //居左对齐
-			'justifycenter', //居中对齐
-			//'justifyright', //居右对齐
+			'paragraph', 'fontfamily', 'fontsize',
 			'|',
-			'insertimage', //多图上传
+			'bold', 'underline', 'italic',
 			'|',
-			'removeformat', //清除格式
+			'blockquote', 'horizontal',
+			'|',
+			'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify',
+			'|',
+			'rowspacingtop', 'rowspacingbottom', 'lineheight',
+			'|',
+			'insertorderedlist', 'insertunorderedlist',
+			'|',
+			'insertimage',
+			'|',
+			'imagenone', 'imageleft', 'imageright', 'imagecenter',
+			'|',
+			'removeformat',
+			'formatmatch',
 			'myautosave'
 
 		]]

@@ -31,10 +31,10 @@ class ArticleController extends Controller
         $header = '待审核文章';
         $description = '列表';
         $channel_id = (int)Input::get('channel_id', 0);
-
+        //dd(\App\Admin::user()->visible([]));
         //查询条件处理
         $model = new Model(Admin::getModel(Article::class));
-        $model->audit();
+        $model->publish();
 
         //头条,幻灯片
         $attribute = Input::get('attribute', '');
@@ -136,6 +136,7 @@ class ArticleController extends Controller
 
         //查询条件处理
         $model = new Model(Admin::getModel(Article::class));
+        $model->admin();
         //频道
         $channelIds = array_merge(Channel::branchIds([], $channel_id), [$channel_id]);
 
@@ -227,7 +228,7 @@ class ArticleController extends Controller
 
         $channelOptions = [1 => '新闻'] + Channel::buildSelectOptions([], 1, str_repeat('&nbsp;', 1));
         $isImportantOptions = [0 =>'不重要', 1 => '重要'];
-        $stateOptions = [0 => '未提交', 1 => '待审核', 2 => '上线'];
+        $stateOptions = [1 => '未上线', 2 => '上线'];
         $attributeOptions = [0 => '头条', 1 => '幻灯片'];
         //$channelOptions = [0 => '全部'] + Channel::buildSelectOptions([], 0, str_repeat('&nbsp;', 2));
 
@@ -638,7 +639,7 @@ class ArticleController extends Controller
      */
     public function destroy($id)
     {
-        Permission::allow(['administrator', 'responsible_editor']);
+        Permission::allow(config('admin.admin_editors'));
         $ids = explode(',', $id);
         Article::destroy($ids);
         return Tool::showSuccess('删除成功');
@@ -651,7 +652,7 @@ class ArticleController extends Controller
      */
     public function audit($id)
     {
-        Permission::allow(['administrator', 'responsible_editor']);
+        Permission::allow(config('admin.admin_editors'));
         $ids = explode(',', $id);
         $auditor_id = Admin::user()->id;
         foreach ($ids as $id) {
@@ -660,7 +661,7 @@ class ArticleController extends Controller
             }
             $article = Article::find($id);
             if ($article) {
-                $article->state = 2;
+                $article->state = 1;
                 $article->auditor_id = $auditor_id;
                 $article->save();
             }
@@ -669,12 +670,13 @@ class ArticleController extends Controller
     }
 
     /**
-     * 提交审核
+     * 上线
      * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function online($id)
     {
+        Permission::allow(config('admin.admin_editors'));
         $ids = explode(',', $id);
         foreach ($ids as $id) {
             if (empty($id)) {
@@ -682,11 +684,11 @@ class ArticleController extends Controller
             }
             $article = Article::find($id);
             if ($article) {
-                $article->state = 1;
+                $article->state = 2;
                 $article->save();
             }
         }
-        return Tool::showSuccess('提交审核成功');
+        return Tool::showSuccess('上线成功');
     }
 
     /**
@@ -696,7 +698,7 @@ class ArticleController extends Controller
      */
     public function headline($id)
     {
-        Permission::allow(['administrator', 'responsible_editor']);
+        Permission::allow(config('admin.admin_editors'));
         $ids = explode(',', $id);
         foreach ($ids as $id) {
             if (empty($id)) {
@@ -718,7 +720,7 @@ class ArticleController extends Controller
      */
     public function transfer($id)
     {
-        Permission::allow(['administrator', 'responsible_editor']);
+        Permission::allow(config('admin.admin_editors'));
         $serialize = Input::get('channels');
         $channels = json_decode($serialize, true);
         if (json_last_error() != JSON_ERROR_NONE) {
@@ -753,7 +755,7 @@ class ArticleController extends Controller
      */
     public function link($article_id)
     {
-        Permission::allow('administrator', 'responsible_editor');
+        Permission::allow(config('admin.admin_editors'));
 
         $rules = [
             'article_id' => 'integer|exists:articles,id,link_id,0',
