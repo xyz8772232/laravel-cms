@@ -75,13 +75,16 @@ $(function () {
           self.elGroup.classList.remove('sort');
           restSort();
           $(self.channelElList).children('channel-ipt').prop('readonly', false);
-          self.drake.destroy();
+          //self.drake.destroy();
+          $(self.elBox).sortable('destroy');
           self.drake = null;
         } else {
           this.innerText = '取消';
           self.elGroup.classList.add('sort');
           $(self.channelElList).children('channel-ipt').prop('readonly', true);
-          self.drake = new Sortable(self.elBox);
+          //self.drake = new Sortable(self.elBox);
+          $(self.elBox).sortable();
+          self.drake = true;
         }
       }).on('click', '.channel-done', function () {
         self._sort(restSort);
@@ -143,7 +146,7 @@ $(function () {
       });
 
       function restSort() {
-        $(self.elBox).html('').append(self.channelElList);
+        $(self.elBox).append(self.channelElList);
       }
     },
     _unbindEvents: function () {
@@ -277,134 +280,135 @@ $(function () {
       return elChannel;
     },
     destroy: function () {
-      this.drake && this.drake.destroy();
+      //this.drake && this.drake.destroy();
+      this.drake && $(this.elBox).sortable('destroy');
       this._unbindEvents();
     }
   };
 
-  function ChannelEdit(root) {
-    this.root = root;
-    this.toBeAddedChannelList = [];
-    this.toBeDeletedChannelList = [];
-    this._init();
-  }
-
-  ChannelEdit.prototype = {
-    _init: function () {
-      this.elEditBtn = this.root.getElementsByClassName('channel-edit')[0];
-      this.elBox = this.root.getElementsByClassName('channel-box')[0];
-
-      this._cacheChannelInfo();
-      this._switchModel(true);
-      this._bindEvents();
-    },
-    _cacheChannelInfo: function () {
-      var channelKeySplit = this.elBox.channelKey.split('_');
-      var channelInfoList = CHANNEL;
-
-      channelKeySplit.slice(1).reduce(function (key, id) {
-        var subKey = key + '_' + id;
-        channelInfoList = channelInfoList[subKey];
-        return subKey;
-      }, channelKeySplit[0]);
-
-      this.channelInfoList = channelInfoList;
-    },
-    _bindEvents: function () {
-      var self = this;
-      this.drake = dragula([this.elBox], {
-        moves: function (el, source) {
-          return source.classList.contains('editable');
-        }
-      });
-      $(this.elBox).on('click', '.channel-btn-del', function () {
-        var elChannel = this.parentNode;
-        self._delChannel(elChannel);
-        elChannel.parentNode.removeChild(elChannel);
-      }).on('click', '.channel-btn-add', function () {
-        var newChannelName = prompt('请输入新的频道名称');
-        var checkRes = self._checkChannel(newChannelName);
-        if (checkRes.pass) {
-          var elChannel = self._insertChannel(checkRes.val);
-          self._addChannel(elChannel);
-        } else {
-          alert(checkRes.msg);
-        }
-      }).on('blur', '.channel-ipt', function () {
-        var checkRes = self._checkChannel(this.value);
-        if (!checkRes.pass) {
-          alert(checkRes.msg);
-          this.focus();
-        }
-      });
-    },
-    _addChannel: function (el) {
-      var tempKey = Date.now();
-      el.channelKey = tempKey;
-      this.toBeAddedChannelList.push({
-        key: tempKey,
-        el: el
-      });
-    },
-    _delChannel: function (el) {
-      this.toBeDeletedChannelList.push({
-        key: el.channelKey,
-        el: el
-      });
-    },
-    _modifyChannel: function () {
-
-    },
-    _insertChannel: function (name, key) {
-      if (!this.channelOriginalNode) {
-        var strHtml = '<div class="channel">'
-          + '<input type="text" class="channel-ipt">'
-          + '<i class="fa fa-minus-circle text-danger channel-btn-del"></i>'
-          + '</div>';
-        this.channelOriginalNode = $(strHtml)[0];
-      }
-      var elChannel = this.channelOriginalNode.cloneNode(true);
-
-      this.elBox.appendChild(elChannel);
-      elChannel.channelKey = key;
-      return elChannel;
-    },
-    _insertAddBtn: function () {
-      var strHtml = '<div class="channel channel-add">'
-        + '<i class="fa fa-plus fa-lg channel-btn-add"></i>'
-        + '</div>';
-      var elAddBtn = $(strHtml)[0];
-
-      this.elBox.appendChild(elAddBtn);
-      return elAddBtn;
-    },
-    _switchModel: function (editable) {
-      if (editable) {
-        this.elEditBtn.classList.add('btn-success');
-        this.elEditBtn.innerText = '完成';
-        this.elBox.classList.add('editable');
-        this.elAddBtn = this._insertAddBtn();
-      } else {
-        this.elEditBtn.classList.remove('btn-success');
-        this.elEditBtn.innerText = '编辑';
-        this.elBox.classList.remove('editable');
-        this.elAddBtn && this.elBox.removeChild(this.elAddBtn);
-      }
-    },
-    _checkChannel: function () {
-
-    },
-    save: function () {
-      return this;
-    },
-    destroy: function () {
-      // 修改模式
-      this._switchModel(false);
-      // 卸载拖拽实例
-      this.drake.destroy();
-      return this;
-    }
-  };
+  //function ChannelEdit(root) {
+  //  this.root = root;
+  //  this.toBeAddedChannelList = [];
+  //  this.toBeDeletedChannelList = [];
+  //  this._init();
+  //}
+  //
+  //ChannelEdit.prototype = {
+  //  _init: function () {
+  //    this.elEditBtn = this.root.getElementsByClassName('channel-edit')[0];
+  //    this.elBox = this.root.getElementsByClassName('channel-box')[0];
+  //
+  //    this._cacheChannelInfo();
+  //    this._switchModel(true);
+  //    this._bindEvents();
+  //  },
+  //  _cacheChannelInfo: function () {
+  //    var channelKeySplit = this.elBox.channelKey.split('_');
+  //    var channelInfoList = CHANNEL;
+  //
+  //    channelKeySplit.slice(1).reduce(function (key, id) {
+  //      var subKey = key + '_' + id;
+  //      channelInfoList = channelInfoList[subKey];
+  //      return subKey;
+  //    }, channelKeySplit[0]);
+  //
+  //    this.channelInfoList = channelInfoList;
+  //  },
+  //  _bindEvents: function () {
+  //    var self = this;
+  //    this.drake = dragula([this.elBox], {
+  //      moves: function (el, source) {
+  //        return source.classList.contains('editable');
+  //      }
+  //    });
+  //    $(this.elBox).on('click', '.channel-btn-del', function () {
+  //      var elChannel = this.parentNode;
+  //      self._delChannel(elChannel);
+  //      elChannel.parentNode.removeChild(elChannel);
+  //    }).on('click', '.channel-btn-add', function () {
+  //      var newChannelName = prompt('请输入新的频道名称');
+  //      var checkRes = self._checkChannel(newChannelName);
+  //      if (checkRes.pass) {
+  //        var elChannel = self._insertChannel(checkRes.val);
+  //        self._addChannel(elChannel);
+  //      } else {
+  //        alert(checkRes.msg);
+  //      }
+  //    }).on('blur', '.channel-ipt', function () {
+  //      var checkRes = self._checkChannel(this.value);
+  //      if (!checkRes.pass) {
+  //        alert(checkRes.msg);
+  //        this.focus();
+  //      }
+  //    });
+  //  },
+  //  _addChannel: function (el) {
+  //    var tempKey = Date.now();
+  //    el.channelKey = tempKey;
+  //    this.toBeAddedChannelList.push({
+  //      key: tempKey,
+  //      el: el
+  //    });
+  //  },
+  //  _delChannel: function (el) {
+  //    this.toBeDeletedChannelList.push({
+  //      key: el.channelKey,
+  //      el: el
+  //    });
+  //  },
+  //  _modifyChannel: function () {
+  //
+  //  },
+  //  _insertChannel: function (name, key) {
+  //    if (!this.channelOriginalNode) {
+  //      var strHtml = '<div class="channel">'
+  //        + '<input type="text" class="channel-ipt">'
+  //        + '<i class="fa fa-minus-circle text-danger channel-btn-del"></i>'
+  //        + '</div>';
+  //      this.channelOriginalNode = $(strHtml)[0];
+  //    }
+  //    var elChannel = this.channelOriginalNode.cloneNode(true);
+  //
+  //    this.elBox.appendChild(elChannel);
+  //    elChannel.channelKey = key;
+  //    return elChannel;
+  //  },
+  //  _insertAddBtn: function () {
+  //    var strHtml = '<div class="channel channel-add">'
+  //      + '<i class="fa fa-plus fa-lg channel-btn-add"></i>'
+  //      + '</div>';
+  //    var elAddBtn = $(strHtml)[0];
+  //
+  //    this.elBox.appendChild(elAddBtn);
+  //    return elAddBtn;
+  //  },
+  //  _switchModel: function (editable) {
+  //    if (editable) {
+  //      this.elEditBtn.classList.add('btn-success');
+  //      this.elEditBtn.innerText = '完成';
+  //      this.elBox.classList.add('editable');
+  //      this.elAddBtn = this._insertAddBtn();
+  //    } else {
+  //      this.elEditBtn.classList.remove('btn-success');
+  //      this.elEditBtn.innerText = '编辑';
+  //      this.elBox.classList.remove('editable');
+  //      this.elAddBtn && this.elBox.removeChild(this.elAddBtn);
+  //    }
+  //  },
+  //  _checkChannel: function () {
+  //
+  //  },
+  //  save: function () {
+  //    return this;
+  //  },
+  //  destroy: function () {
+  //    // 修改模式
+  //    this._switchModel(false);
+  //    // 卸载拖拽实例
+  //    this.drake.destroy();
+  //    return this;
+  //  }
+  //};
 
   /**
    * main

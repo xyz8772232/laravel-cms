@@ -108,21 +108,20 @@
 
 @section('admin_js')
   <script src="{{ asset("/packages/admin/sweetalert/sweetalert.min.js") }}"></script>
-  <script src="{{ asset("/packages/admin/sortable/sortable.min.js") }}"></script>
+//  <script src="{{ asset("/packages/admin/sortable/sortable.min.js") }}"></script>
+  <script src="{{ asset("/packages/admin/sortable/jquery.fn.sortable.js") }}"></script>
   <script>
     $(function () {
       var $sortBox = $('#sortBox');
       /**
        * 绑定拖拽事件
        */
-      new Sortable($sortBox[0], {
+//      new Sortable($sortBox[0], {
+//        handle: '.e-drag'
+//      });
+      $sortBox.sortable({
         handle: '.e-drag'
       });
-//      dragula([$sortBox[0]], {
-//        moves: function (el, container, handle) {
-//          return handle.classList.contains('e-drag');
-//        }
-//      });
 
       /**
        * 绑定排序事件
@@ -145,7 +144,7 @@
       }).on('click', '.e-cancel', function (e) {
         $sortBox.removeClass('active');
         e.delegateTarget.classList.remove('action-sort');
-        $sortBox.html('').append(orgElList);
+        $sortBox.append(orgElList);
       });
 
       function submitSort(){

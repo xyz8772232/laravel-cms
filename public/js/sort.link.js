@@ -94,7 +94,11 @@ $(function () {
   /**
    * 绑定拖拽事件
    */
-  new Sortable($sortBox[0], {
+  //new Sortable($sortBox[0], {
+  //  handle: '.e-drag',
+  //  forceFallback: false
+  //});
+  $sortBox.sortable({
     handle: '.e-drag'
   });
 
@@ -128,7 +132,6 @@ $(function () {
     $sortBox.children().each(function () {
       tree.push(this.getAttribute('data-id'));
     });
-    setTimeout(function() {})
     $.post('/admin/sort_links/save', {
       _tree: JSON.stringify(tree)
     })

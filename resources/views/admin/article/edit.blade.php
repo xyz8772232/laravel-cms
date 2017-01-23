@@ -259,7 +259,8 @@
   <script src="{{ asset ("/packages/admin/moment/min/moment-with-locales.min.js") }}"></script>
   <script src="{{ asset ("/packages/admin/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js") }}"></script>
   <script src="{{ asset ("/packages/admin/bootstrap-switch/dist/js/bootstrap-switch.min.js") }}"></script>
-  <script src="{{ asset("/packages/admin/sortable/sortable.min.js") }}"></script>
+//  <script src="{{ asset("/packages/admin/sortable/sortable.min.js") }}"></script>
+  <script src="{{ asset("/packages/admin/sortable/jquery.fn.sortable.js") }}"></script>
   <script src="{{ asset("/packages/admin/ueditor-utf8-php/ueditor.config.js") }}"></script>
   <script src="{{ asset("/packages/admin/ueditor-utf8-php/ueditor.all.min.js") }}"></script>
   <script>

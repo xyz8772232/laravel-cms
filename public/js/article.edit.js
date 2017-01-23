@@ -256,7 +256,11 @@ $(function () {
         });
       });
       // 排序
-      this._dragInstance = new Sortable(this._$root.find('.imgup-list')[0], {
+      //this._dragInstance = new Sortable(this._$root.find('.imgup-list')[0], {
+      //  handle: '.e-sort',
+      //  onUpdate: updateSort
+      //});
+      this._$root.find('.imgup-list').sortable({
         handle: '.e-sort',
         onUpdate: updateSort
       });
@@ -345,7 +349,8 @@ $(function () {
     destroy: function () {
       this.$root.find('.e-add').off();
       this._$root.off();
-      this._dragInstance.destroy();
+      //this._dragInstance.destroy();
+      this._$root.find('.imgup-list').sortable("destroy");
     }
   };
 
