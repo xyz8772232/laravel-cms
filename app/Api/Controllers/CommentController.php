@@ -87,7 +87,7 @@ class CommentController extends BaseController
         $result = Comment::where([
             ['id', '=', $id],
             ['user_id', '=', $user_id],
-        ])->delete();
+        ])->get()->each(function($comment) {$comment->delete();});
         if ($result) {
             return $this->response->created();
         } else {
