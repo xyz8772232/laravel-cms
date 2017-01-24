@@ -187,7 +187,7 @@ class CommentController extends BaseController
         $comment = Comment::find($comment_id);
         $article_id = $comment->article_id;
         $content = Input::get('content');
-        $user_id = Input::get('user_id');
+        $user_id = (int)Input::get('user_id');
         $user_nick = Input::get('user_nick');
         $user_avatar = Input::get('user_avatar', '');
 
