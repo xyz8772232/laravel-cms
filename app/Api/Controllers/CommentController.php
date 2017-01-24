@@ -3,6 +3,7 @@
 namespace App\Api\Controllers;
 
 use App\Api\Transformers\CommentTransformer;
+use App\Api\Transformers\CommentLikeTransformer;
 use App\Comment;
 use App\CommentLike;
 use Illuminate\Support\Facades\Input;
@@ -48,7 +49,7 @@ class CommentController extends BaseController
         }
         $article_id = Input::get('article_id');
         $content = Input::get('content');
-        $user_id = Input::get('user_id');
+        $user_id = (int)Input::get('user_id');
         $user_nick = Input::get('user_nick');
         $user_avatar = Input::get('user_avatar', '');
 
@@ -63,6 +64,32 @@ class CommentController extends BaseController
         if ($result) {
 		return $result;
             //return $this->response->created(null, $result);
+        } else {
+            return $this->response->errorInternal();
+        }
+    }
+
+    /**
+     * 删除评论或回复
+     */
+    public function destroy()
+    {
+        $rules = [
+            'comment_id' => 'required|integer|exists:comments,id,blocked,0',
+            'user_id' => 'required|integer',
+        ];
+        $validator = Validator::make(Input::all(), $rules);
+        if ($validator->fails()) {
+            return $this->response->errorBadRequest(trans('lang.error_params'));
+        }
+        $id = Input::get('comment_id');
+        $user_id = Input::get('user_id');
+        $result = Comment::where([
+            ['id', '=', $id],
+            ['user_id', '=', $user_id],
+        ])->delete();
+        if ($result) {
+            return $this->response->created();
         } else {
             return $this->response->errorInternal();
         }
@@ -104,6 +131,25 @@ class CommentController extends BaseController
             return $this->response->created();
         }
         return $this->response->errorInternal();
+    }
+
+    /**
+     * 点赞人列表
+     */
+    public function likeUsers()
+    {
+        $pageSize = Input::get('pageSize', 20);
+        $comment_id = Input::get('comment_id', 0);
+        $rules = ['comment_id' => 'required|integer|exists:comments,id,blocked,0'];
+        $validator = Validator::make(['comment_id' => $comment_id], $rules);
+        if ($validator->fails()) {
+            return $this->response->errorBadRequest(trans('lang.error_params'));
+        }
+        $commentLikes = CommentLike::where([
+                ['comment_id', '=', $comment_id],
+            ])->orderBy('id', 'DESC')->paginate($pageSize);
+
+        return $this->paginator($commentLikes, new CommentLikeTransformer());
     }
 
     //评论的回复列表

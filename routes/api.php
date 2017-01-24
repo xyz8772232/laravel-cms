@@ -26,8 +26,14 @@ $api->version('v1', function ($api) {
         //回复评论
         $api->post('comments/reply', 'CommentController@reply');
 
+        //删除评论
+        $api->delete('comments', 'CommentController@destroy');
+
         //点赞
         $api->post('comments/like', 'CommentController@like');
+
+        //点赞人列表
+        $api->get('comments/like_users', 'CommentController@likeUsers');
 
 
         $api->get('channels', 'ChannelController@index');
